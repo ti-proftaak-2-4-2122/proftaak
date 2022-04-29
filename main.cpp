@@ -3,32 +3,32 @@
 #include "tigl.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
+
 using tigl::Vertex;
 
 // #pragma comment(lib, "glfw3.lib")
 // #pragma comment(lib, "glew32s.lib")
 // #pragma comment(lib, "opengl32.lib")
 
-GLFWwindow* window;
+GLFWwindow *window;
 
 void init();
+
 void update();
+
 void draw();
 
-int main()
-{
+int main() {
     if (!glfwInit())
         throw "Could not initialize glwf";
     window = glfwCreateWindow(1400, 800, "Hello World", nullptr, nullptr);
-    if (!window)
-    {
+    if (!window) {
         glfwTerminate();
         throw "Could not initialize glwf";
     }
     glfwMakeContextCurrent(window);
 
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
+    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
@@ -37,8 +37,7 @@ int main()
 
     init();
 
-    while (!glfwWindowShouldClose(window))
-    {
+    while (!glfwWindowShouldClose(window)) {
         update();
         draw();
         glfwSwapBuffers(window);
@@ -52,22 +51,18 @@ int main()
 }
 
 
-void init()
-{
-    glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
-    {
+void init() {
+    glfwSetKeyCallback(window, [](GLFWwindow *window, int key, int scancode, int action, int mods) {
         if (key == GLFW_KEY_ESCAPE)
             glfwSetWindowShouldClose(window, true);
     });
 }
 
 
-void update()
-{
+void update() {
 }
 
-void draw()
-{
+void draw() {
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     float width = 1400;
