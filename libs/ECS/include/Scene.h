@@ -6,9 +6,14 @@
 #define PROFTAAK24_SCENE_H
 
 
+#include <vector>
+#include "GameObject.h"
+
 class Scene
 {
-
+public:
+    std::vector<GameObject> gameobjects;
+    float deltaTime;
 };
 
 

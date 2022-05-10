@@ -6,11 +6,12 @@
 #define PROFTAAK24_COMPONENT_H
 
 
-
-class Component {
-
+class Component
+{
+public:
+    virtual void Awake();
+    virtual void Update();
 };
-
 
 
 #endif //PROFTAAK24_COMPONENT_H

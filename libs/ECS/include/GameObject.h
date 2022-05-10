@@ -6,9 +6,16 @@
 #define PROFTAAK24_GAMEOBJECT_H
 
 
+#include "Component.h"
+#include "Vector3.h"
+#include "Transform.h"
+
+
 class GameObject
 {
-
+public:
+    std::vector<Component> components;
+    Transform transform;
 };
 
 
