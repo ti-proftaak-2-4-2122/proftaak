@@ -3,3 +3,7 @@
 //
 
 #include "../include/GameObject.h"
+
+void GameObject::AddComponent(Component *component) {
+    components.push_back(component);
+}

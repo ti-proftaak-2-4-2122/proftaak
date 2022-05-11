@@ -3,3 +3,7 @@
 //
 
 #include "../include/Scene.h"
+
+void Scene::AddGameobject(GameObject gameObject) {
+    gameobjects.push_back(gameObject);
+}

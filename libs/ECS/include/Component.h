@@ -5,12 +5,11 @@
 #ifndef PROFTAAK24_COMPONENT_H
 #define PROFTAAK24_COMPONENT_H
 
-
 class Component
 {
 public:
-    virtual void Awake();
-    virtual void Update();
+    virtual void Awake(){};
+    virtual void Update(){};
 };
 
 

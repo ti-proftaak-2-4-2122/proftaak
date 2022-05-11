@@ -1,22 +1,19 @@
 //
-// Created by Daan van Donk on 10/05/2022.
+// Created by Daan van Donk on 11/05/2022.
 //
+
+#include "Transform.h"
+#include "vector"
+#include "Component.h"
 
 #ifndef PROFTAAK24_GAMEOBJECT_H
 #define PROFTAAK24_GAMEOBJECT_H
 
-
-#include "Component.h"
-#include "Vector3.h"
-#include "Transform.h"
-
-
-class GameObject
-{
+class GameObject {
 public:
-    std::vector<Component> components;
+    std::vector<Component*> components;
     Transform transform;
+
+    void AddComponent(Component* component);
 };
-
-
 #endif //PROFTAAK24_GAMEOBJECT_H

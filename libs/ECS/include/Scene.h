@@ -14,6 +14,8 @@ class Scene
 public:
     std::vector<GameObject> gameobjects;
     float deltaTime;
+
+    void AddGameobject(GameObject gameObject);
 };
 
 
