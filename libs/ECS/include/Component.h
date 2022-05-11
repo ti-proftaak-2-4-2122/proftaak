@@ -10,6 +10,8 @@ class Component
 public:
     virtual void Awake(){};
     virtual void Update(){};
+    //Dont touch Draw method, is only for scenemanager
+    virtual void Draw(){};
 };
 
 

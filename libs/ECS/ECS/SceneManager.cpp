@@ -27,6 +27,7 @@ void UpdatePoll(Scene scene) {
             for (Component *component: gameObject.components)
             {
                 component->Update();
+                component->Draw();
             }
         }
     }
