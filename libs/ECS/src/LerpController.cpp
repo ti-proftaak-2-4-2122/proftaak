@@ -4,7 +4,9 @@
 
 #include <iostream>
 #include "LerpController.h"
-void LerpController::Move(Vector3 startPos, Vector3 endPos, float speed) {
+#include "glm/vec3.hpp"
+
+void LerpController::Move(glm::vec3 startPos, glm::vec3 endPos, float speed) {
 
 }
 

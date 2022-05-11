@@ -11,11 +11,14 @@
 
 class Scene
 {
+protected:
+    static float deltaTime;
 public:
     std::vector<GameObject> gameobjects;
-    float deltaTime;
-
-    void AddGameobject(GameObject gameObject);
+    void AddGameObject(GameObject gameObject);
+    static float GetDeltaTime() {
+        return deltaTime;
+    };
 };
 
 
