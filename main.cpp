@@ -4,6 +4,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
+#include "ObjModel.h"
+
 using tigl::Vertex;
 
 // #pragma comment(lib, "glfw3.lib")
@@ -37,8 +39,19 @@ int main()
     }
 
     tigl::init();
-
     init();
+
+    std::string str = "../resource/models/suzanne.obj";
+
+    ObjModel henk = ObjModel(str);
+
+    for (int i = 0; i < henk.faces.size(); ++i)
+    {
+        std::cout << henk.faces[i].toString()  << std::endl;
+    }
+
+
+
 
     while (!glfwWindowShouldClose(window))
     {
