@@ -4,14 +4,15 @@
 
 #include <future>
 #include "SceneManager.h"
+#include "Component.h"
 
 void UpdatePoll(Scene scene);
 
 void SceneManager::LoadScene(Scene scene)
 {
-    for (GameObject gameObject: scene.gameobjects)
+    for (auto gameObject: scene.gameobjects)
     {
-        for (Component *component: gameObject.components)
+        for (auto* component: gameObject.components)
         {
             component->Awake();
         }
@@ -22,9 +23,9 @@ void SceneManager::LoadScene(Scene scene)
 
 void UpdatePoll(Scene scene) {
     while(1) {
-        for (GameObject gameObject: scene.gameobjects)
+        for (auto gameObject: scene.gameobjects)
         {
-            for (Component *component: gameObject.components)
+            for (auto* component: gameObject.components)
             {
                 component->Update();
                 component->Draw();

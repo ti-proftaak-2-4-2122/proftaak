@@ -5,13 +5,15 @@
 #ifndef PROFTAAK24_TRANSFORM_H
 #define PROFTAAK24_TRANSFORM_H
 
-#include "Vector3.h"
+#include "Component.h"
+#include <glm/gtc/matrix_transform.hpp>
 
-struct Transform{
+class Transform : public Component
+{
 public:
-    Vector3 position = Vector3(0, 0, 0);
-    Vector3 rotation = Vector3(0, 0, 0);
-    Vector3 scale = Vector3(0, 0, 0);
+    glm::vec3 position;
+    glm::vec3 rotation;
+    glm::vec3 scale;
 };
 #endif //PROFTAAK24_TRANSFORM_H
 

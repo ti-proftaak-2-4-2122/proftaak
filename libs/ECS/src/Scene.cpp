@@ -4,6 +4,6 @@
 
 #include "../include/Scene.h"
 
-void Scene::AddGameobject(GameObject gameObject) {
+void Scene::AddGameObject(GameObject gameObject) {
     gameobjects.push_back(gameObject);
 }

@@ -5,13 +5,13 @@
 #ifndef PROFTAAK24_LERPCONTROLLER_H
 #define PROFTAAK24_LERPCONTROLLER_H
 
-#include "Vector3.h"
 #include "Component.h"
+#include <glm/fwd.hpp>
 
 class LerpController : public Component
 {
 public:
-    void Move(Vector3 startPos, Vector3 endPos, float speed);
+    void Move(glm::vec3 startPos, glm::vec3 endPos, float speed);
     void Awake() override;
     void Update() override;
 };
