@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.21)
 
 
 file(GLOB ECS_SRC
-        "ECS/*.cpp"
+        "src/*.cpp"
         "include/*.h"
         )
 
