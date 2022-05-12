@@ -12,6 +12,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: install cppunit
         run: sudo apt install -y libcppunit-dev
+      - name: Grant execute permission for gradlew
+        run: chmod +x configure
       - name: configure
         run: ./configure
       - name: make
