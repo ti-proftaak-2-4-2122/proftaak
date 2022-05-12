@@ -7,10 +7,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include <GameObject.h>
+#include <Mesh.h>
 
 #include "ObjModel.h"
-
-using tigl::Vertex;
 
 // #pragma comment(lib, "glfw3.lib")
 // #pragma comment(lib, "glew32s.lib")
@@ -26,38 +25,44 @@ void draw();
 
 int main()
 {
-    glm::vec3 test;
-    Scene scene;
-    GameObject gameObject;
-    auto *lerpController = new LerpController;
-    gameObject.AddComponent(lerpController);
-    scene.AddGameObject(gameObject);
+//    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
+//    {
+//        std::cout << "Failed to initialize GLAD" << std::endl;
+//        return -1;
+//    }
 
-    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
-    {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
+    //tigl::init();
+
+    std::string str = "D:\\proftaak\\resources\\box.obj";
+
+    ObjModel objModel = ObjModel(str);
+
+    for(auto face : objModel.faces) {
+        std::cout << face.toString();
     }
+//    Scene scene;
+//    GameObject gameObject;
+//
+//    std::vector<Vertex> vertices;
 
-    tigl::init();
-    init();
+//    for(auto position : objModel.positions){
+//        for(auto normal : objModel.normals)
+//        {
+//            Vertex vertex;
+//            vertex.Normal = normal;
+//            vertex.Position = position;
+//
+//            vertices.push_back(vertex);
+//        }
+//    }
 
-    std::string str = "../resource/models/suzanne.obj";
-
-    ObjModel henk = ObjModel(str);
-
-    for (int i = 0; i < henk.faces.size(); ++i)
-    {
-        std::cout << henk.faces[i].toString()  << std::endl;
-    }
-
-
-
+//    auto* mesh = new Mesh(vertices, objModel.faces)
+//            gameObject.AddComponent();
+//    scene.AddGameObject(gameObject);
 
     while (!glfwWindowShouldClose(window))
     {
-        update();
-        draw();
+
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
