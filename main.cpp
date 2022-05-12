@@ -18,41 +18,41 @@ void update();
 
 void draw();
 
-int main()
-{
-    if (!glfwInit())
-        throw "Could not initialize glwf";
-    window = glfwCreateWindow(1400, 800, "Hello World", nullptr, nullptr);
-    if (!window)
-    {
-        glfwTerminate();
-        throw "Could not initialize glwf";
-    }
-    glfwMakeContextCurrent(window);
-
-    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
-    {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
-    }
-
-    tigl::init();
-
-    init();
-
-    while (!glfwWindowShouldClose(window))
-    {
-        update();
-        draw();
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
-
-    glfwTerminate();
-
-
-    return 0;
-}
+//int main()
+//{
+//    if (!glfwInit())
+//        throw "Could not initialize glwf";
+//    window = glfwCreateWindow(1400, 800, "Hello World", nullptr, nullptr);
+//    if (!window)
+//    {
+//        glfwTerminate();
+//        throw "Could not initialize glwf";
+//    }
+//    glfwMakeContextCurrent(window);
+//
+//    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
+//    {
+//        std::cout << "Failed to initialize GLAD" << std::endl;
+//        return -1;
+//    }
+//
+//    tigl::init();
+//
+//    init();
+//
+//    while (!glfwWindowShouldClose(window))
+//    {
+//        update();
+//        draw();
+//        glfwSwapBuffers(window);
+//        glfwPollEvents();
+//    }
+//
+//    glfwTerminate();
+//
+//
+//    return 0;
+//}
 
 
 void init()
