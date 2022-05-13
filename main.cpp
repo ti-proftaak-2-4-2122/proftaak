@@ -1,8 +1,12 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "tigl.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
+#include "tigl.h"
+
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
 
 using tigl::Vertex;
 
@@ -11,6 +15,9 @@ using tigl::Vertex;
 // #pragma comment(lib, "opengl32.lib")
 
 GLFWwindow *window;
+
+cv::VideoCapture* capture;
+cv::Mat* captureImage;
 
 void init();
 
@@ -22,6 +29,7 @@ int main()
 {
     if (!glfwInit())
         throw "Could not initialize glwf";
+
     window = glfwCreateWindow(1400, 800, "Hello World", nullptr, nullptr);
     if (!window)
     {
@@ -62,11 +70,18 @@ void init()
         if (key == GLFW_KEY_ESCAPE)
             glfwSetWindowShouldClose(window, true);
     });
+
+    tigl::shader->enableTexture(true);
+
+    // Init OpenCV
+    capture = new cv::VideoCapture(2);
+    captureImage = new cv::Mat();
 }
 
 
 void update()
 {
+    capture->read(*captureImage);
 }
 
 void draw()
@@ -81,9 +96,32 @@ void draw()
     tigl::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
     tigl::shader->setModelMatrix(glm::mat4(1.0f));
-    tigl::begin(GL_TRIANGLES);
-    tigl::addVertex(Vertex::P(glm::vec3(-1, 0, 0)));
-    tigl::addVertex(Vertex::P(glm::vec3(1, 0, 0)));
-    tigl::addVertex(Vertex::P(glm::vec3(0, 1, 0)));
+
+    float rectangleSize = 3;
+
+    uint textureId;
+    glGenTextures(1, &textureId);
+    glBindTexture(GL_TEXTURE_2D, textureId);
+
+    glTexImage2D(
+        GL_TEXTURE_2D,
+        0,
+        GL_RGB,
+        captureImage->cols,
+        captureImage->rows,
+        0,
+        GL_BGR,
+        GL_UNSIGNED_BYTE,
+        captureImage->data
+    );
+
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    tigl::begin(GL_QUADS);
+    tigl::addVertex(Vertex::PT(glm::vec3(-rectangleSize, -rectangleSize, 0), glm::vec2(1, 1)));
+    tigl::addVertex(Vertex::PT(glm::vec3(rectangleSize, -rectangleSize, 0), glm::vec2(0, 1)));
+    tigl::addVertex(Vertex::PT(glm::vec3(rectangleSize, rectangleSize, 0), glm::vec2(0, 0)));
+    tigl::addVertex(Vertex::PT(glm::vec3(-rectangleSize, rectangleSize, 0), glm::vec2(1, 0)));
     tigl::end();
 }
