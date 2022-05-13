@@ -24,7 +24,7 @@ add_subdirectory(libs/ECS)
 add_executable(${CMAKE_PROJECT_NAME} main.cpp libs/glad/glad.c libs/tigl/tigl.cpp opencv-main.cpp)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} libglfw3.a )
-target_link_libraries(${CMAKE_PROJECT_NAME} glm )
+target_link_libraries(${CMAKE_PROJECT_NAME} glm)
 target_link_libraries(${CMAKE_PROJECT_NAME} opencv_core opencv_imgproc opencv_highgui opencv_imgcodecs )
 target_link_libraries(${CMAKE_PROJECT_NAME} objLoader)
 target_link_libraries(${CMAKE_PROJECT_NAME} ECS)

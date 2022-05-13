@@ -1,15 +1,13 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "tigl.h"
-#include "Scene.h"
-#include "LerpController.h"
-#include "SceneManager.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
-#include <GameObject.h>
-#include <Mesh.h>
 
 #include "ObjModel.h"
+#include "Mesh.h"
+
+using tigl::Vertex;
 
 // #pragma comment(lib, "glfw3.lib")
 // #pragma comment(lib, "glew32s.lib")
@@ -26,37 +24,30 @@ void draw();
 std::string str =  "../resource/models/suzanne.obj";
 
 ObjModel objModel = ObjModel(str);
+Mesh* mesh = new Mesh(&objModel);
 
 int main()
 {
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    // glfw window creation
-    // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
-    if (window == NULL)
+    if (!glfwInit())
+        throw "Could not initialize glwf";
+    window = glfwCreateWindow(1400, 800, "Hello World", nullptr, nullptr);
+    if (!window)
     {
-        std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
-        return -1;
+        throw "Could not initialize glwf";
     }
     glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, NULL);
 
-    // glad: load all OpenGL function pointers
-    // ---------------------------------------
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
 
     tigl::init();
+    init();
 
-   std::cout << objModel.toString();
+    std::cout << objModel.toString();
 
     while (!glfwWindowShouldClose(window))
     {
@@ -99,16 +90,8 @@ void draw()
     tigl::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
     tigl::shader->setModelMatrix(glm::mat4(1.0f));
-    tigl::begin(GL_TRIANGLES);
 
-    for(auto face : objModel.faces) {
-        for (int i = 0; i < 3; ++i)
-        {
-            auto vertexPosition = objModel.positions[face.pos[i]];
-            auto normalPosition = objModel.normals[face.normal[i]];
-            tigl::addVertex(Vertex::PN(vertexPosition, normalPosition));
-        }
-    }
+    mesh->DrawMesh();
 
     tigl::end();
 }
