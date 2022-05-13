@@ -12,8 +12,6 @@ public:
     public:
         int pos[3];
         int normal[3];
-
-        std::string toString();
     };
 
     std::vector<glm::vec3> positions;
@@ -21,7 +19,6 @@ public:
     std::vector<Face> faces;
 
     ObjModel(const std::string &fileName);
-
-    ObjModel();
+    std::string toString();
 };
 

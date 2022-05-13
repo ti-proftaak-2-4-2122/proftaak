@@ -23,8 +23,9 @@ void update();
 
 void draw();
 
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+std::string str =  "../resource/models/suzanne.obj";
+
+ObjModel objModel = ObjModel(str);
 
 int main()
 {
@@ -55,19 +56,12 @@ int main()
 
     tigl::init();
 
-    Scene scene;
-    GameObject gameObject;
-    Mesh* mesh = new Mesh("D:\\proftaak\\resources\\box.obj");
-    gameObject.AddComponent(mesh);
+   std::cout << objModel.toString();
+
     while (!glfwWindowShouldClose(window))
     {
-        // render
-        mesh->DrawMesh();
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-
-
+        update();
+        draw();
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -76,4 +70,45 @@ int main()
 
 
     return 0;
+}
+
+
+void init()
+{
+    glfwSetKeyCallback(window, [](GLFWwindow *window, int key, int scancode, int action, int mods)
+    {
+        if (key == GLFW_KEY_ESCAPE)
+            glfwSetWindowShouldClose(window, true);
+    });
+}
+
+
+void update()
+{
+}
+
+void draw()
+{
+    glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    float width = 1400;
+    float height = 800;
+
+    tigl::shader->setProjectionMatrix(
+            glm::perspective(glm::radians(70.0f), width / height, 0.1f, 200.0f));
+    tigl::shader->setViewMatrix(
+            glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+    tigl::shader->setModelMatrix(glm::mat4(1.0f));
+    tigl::begin(GL_TRIANGLES);
+
+    for(auto face : objModel.faces) {
+        for (int i = 0; i < 3; ++i)
+        {
+            auto vertexPosition = objModel.positions[face.pos[i]];
+            auto normalPosition = objModel.normals[face.normal[i]];
+            tigl::addVertex(Vertex::PN(vertexPosition, normalPosition));
+        }
+    }
+
+    tigl::end();
 }
