@@ -18,6 +18,7 @@ GLFWwindow *window;
 
 cv::VideoCapture* capture;
 cv::Mat* captureImage;
+uint captureTextureId;
 
 void init();
 
@@ -76,6 +77,9 @@ void init()
     // Init OpenCV
     capture = new cv::VideoCapture(2);
     captureImage = new cv::Mat();
+
+    glGenTextures(1, &captureTextureId);
+    glBindTexture(GL_TEXTURE_2D, captureTextureId);
 }
 
 
@@ -99,9 +103,7 @@ void draw()
 
     float rectangleSize = 3;
 
-    uint textureId;
-    glGenTextures(1, &textureId);
-    glBindTexture(GL_TEXTURE_2D, textureId);
+    glBindTexture(GL_TEXTURE_2D, captureTextureId);
 
     glTexImage2D(
         GL_TEXTURE_2D,
