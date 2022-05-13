@@ -3,6 +3,7 @@
 #include "tigl.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
+#include "vision/include/ImageFilter.h"
 
 using tigl::Vertex;
 

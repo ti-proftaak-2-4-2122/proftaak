@@ -8,16 +8,18 @@ find_package(OpenCV REQUIRED)
 
 link_directories("libs/glfw/lib-mingw-w64")
 link_directories("libs/glm/glm")
+link_directories("modules")
 
 include_directories("libs/glfw/include")
 include_directories("libs/glad/include")
 include_directories("libs/tigl/include")
 include_directories("libs/glm")
+include_directories("modules")
 include_directories(${OpenCV_INCLUDE_DIRS})
 
 add_subdirectory(libs/glm)
 
-add_executable(${CMAKE_PROJECT_NAME} main.cpp libs/glad/glad.c libs/tigl/tigl.cpp modules/vision/src/opencv-main.cpp modules/vision/src/ImageFilter.cpp modules/vision/include/ImageFilter.h)
+add_executable(${CMAKE_PROJECT_NAME} main.cpp libs/glad/glad.c libs/tigl/tigl.cpp modules/vision/src/ImageFilter.cpp modules/vision/include/ImageFilter.h)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} libglfw3.a )
 target_link_libraries(${CMAKE_PROJECT_NAME} glm )
