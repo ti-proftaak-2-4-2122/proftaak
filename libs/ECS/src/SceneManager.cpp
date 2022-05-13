@@ -17,8 +17,10 @@ void SceneManager::LoadScene(Scene scene)
             component->Awake();
         }
     }
+  
+    //auto f = std::async(std::launch::async, UpdatePoll, scene);
+    UpdatePoll(scene);
 
-     auto f = std::async(std::launch::async, UpdatePoll, scene);
 }
 
 void UpdatePoll(Scene scene) {
