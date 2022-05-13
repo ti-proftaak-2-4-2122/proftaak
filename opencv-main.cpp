@@ -10,15 +10,13 @@
 
 #include <string>
 
-using namespace cv;
-
-int main() {
-    VideoCapture cap(1);
-    Mat img;
+int opencv_main() {
+    cv::VideoCapture cap(1);
+    cv::Mat img;
 
     while (true) {
         cap.read(img);
-        imshow("Image", img);
-        waitKey(1);
+        cv::imshow("Image", img);
+        cv::waitKey(1);
     }
 }
