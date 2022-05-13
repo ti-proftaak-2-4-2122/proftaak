@@ -89,7 +89,6 @@ void draw()
             glm::perspective(glm::radians(70.0f), width / height, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
-    tigl::shader->setModelMatrix(glm::mat4(1.0f));
 
     mesh->DrawMesh();
 
