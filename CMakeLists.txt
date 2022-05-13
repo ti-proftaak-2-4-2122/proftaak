@@ -26,6 +26,6 @@ target_link_libraries(${CMAKE_PROJECT_NAME} opencv_core opencv_imgproc opencv_hi
 # Copy opencv dlls to build dir if not exists
 message("-- Copy OpenCV Dll's to output directory")
 file(
-        COPY "libs/opencv/x64/mingw/bin"
+        COPY "libs/opencv/x64/mingw/bin/"
         DESTINATION "${CMAKE_CURRENT_BINARY_DIR}"
 )
