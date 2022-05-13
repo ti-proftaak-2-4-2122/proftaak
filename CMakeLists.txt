@@ -15,6 +15,7 @@ include_directories("libs/tigl/include")
 include_directories("libs/objLoader/include")
 include_directories("libs/glm")
 include_directories("libs/ECS/include")
+include_directories(${OpenCV_INCLUDE_DIRS})
 
 add_subdirectory(libs/ECS)
 add_subdirectory(libs/glm)
