@@ -20,7 +20,7 @@ void update();
 
 void draw();
 
-std::string str = "D:\\proftaak\\resources\\torus.obj";
+std::string str =  "../resource/models/suzanne.obj";
 
 ObjModel objModel = ObjModel(str);
 
@@ -45,10 +45,7 @@ int main()
     tigl::init();
     init();
 
-    for (int i = 0; i < objModel.faces.size(); ++i)
-    {
-        std::cout << objModel.faces[i].toString() << std::endl;
-    }
+   std::cout << objModel.toString();
 
     while (!glfwWindowShouldClose(window))
     {
@@ -94,14 +91,12 @@ void draw()
     tigl::begin(GL_TRIANGLES);
 
     for(auto face : objModel.faces) {
-        tigl::addVertex(Vertex::P(glm::vec3(objModel.positions[face.pos[0]].x,objModel
-        .positions[face.pos[0]].y, objModel.positions[face.pos[0]].z)));
-
-        tigl::addVertex(Vertex::P(glm::vec3(objModel.positions[face.pos[1]].x,objModel
-                .positions[face.pos[1]].y, objModel.positions[face.pos[1]].z)));
-
-        tigl::addVertex(Vertex::P(glm::vec3(objModel.positions[face.pos[2]].x,objModel
-                .positions[face.pos[2]].y, objModel.positions[face.pos[2]].z)));
+        for (int i = 0; i < 3; ++i)
+        {
+            auto vertexPosition = objModel.positions[face.pos[i]];
+            auto normalPosition = objModel.normals[face.normal[i]];
+            tigl::addVertex(Vertex::PN(vertexPosition, normalPosition));
+        }
     }
 
     tigl::end();

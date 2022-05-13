@@ -55,21 +55,28 @@ ObjModel::ObjModel(const std::string &fileName)
     }
 }
 
-
-std::string ObjModel::Face::toString()
+std::string ObjModel::toString()
 {
     std::ostringstream oss;
-    //Todo could be better
 
-    oss << "Position: [";
-    oss << pos[0] << ',';
-    oss << pos[1] << ',';
-    oss << pos[2] << ']';
+    for(auto face : this->faces) {
+        for (int i = 0; i < 3; ++i)
+        {
+            auto vertexPosition = positions[face.pos[i]];
+            auto normalPosition = normals[face.normal[i]];
 
-    oss << "\t Normals: [";
-    oss << normal[0] << ',';
-    oss << normal[1] << ',';
-    oss << normal[2] << ']';
+            oss << "Position: [";
+            oss << vertexPosition[0] << ',';
+            oss << vertexPosition[1] << ',';
+            oss << vertexPosition[2] << ']';
+
+            oss << "\t Normals: [";
+            oss << normalPosition[0] << ',';
+            oss << normalPosition[1] << ',';
+            oss << normalPosition[2] << ']';
+            oss << std::endl;
+        }
+    }
 
     return oss.str();
 
