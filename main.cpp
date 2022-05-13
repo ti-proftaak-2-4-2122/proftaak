@@ -53,52 +53,21 @@ int main()
         return -1;
     }
 
-    //tigl::init();
+    tigl::init();
 
-    std::string str = "D:\\proftaak\\resources\\box.obj";
-
-    ObjModel objModel = ObjModel(str);
-
-    for(auto face : objModel.faces) {
-        std::cout << face.toString();
-    }
     Scene scene;
     GameObject gameObject;
-
-    std::vector<Vertex> vertices;
-
-    for(auto position : objModel.positions){
-        for(auto normal : objModel.normals)
-        {
-            Vertex vertex;
-            vertex.Normal = normal;
-            vertex.Position = position;
-
-            vertices.push_back(vertex);
-        }
-    }
-
-    std::vector<unsigned int> indices;
-
-    for(auto face : objModel.faces){
-        for(int i = 0; i < 3; i++) {
-            unsigned int result = (unsigned int) face.pos[i];
-            indices.push_back(result);
-        }
-    }
-
-    auto* mesh = new Mesh(vertices, indices);
+    Mesh* mesh = new Mesh("D:\\proftaak\\resources\\box.obj");
     gameObject.AddComponent(mesh);
-    scene.AddGameObject(gameObject);
-
     while (!glfwWindowShouldClose(window))
     {
         // render
-        // ------
+        mesh->DrawMesh();
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        mesh->DrawMesh();
+
+
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

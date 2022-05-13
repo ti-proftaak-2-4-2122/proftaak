@@ -55,6 +55,8 @@ ObjModel::ObjModel(const std::string &fileName)
     }
 }
 
+ObjModel::ObjModel() {}
+
 
 std::string ObjModel::Face::toString()
 {
