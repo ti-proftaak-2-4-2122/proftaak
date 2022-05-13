@@ -26,8 +26,6 @@ void init();
 
 void update();
 
-
-
 void draw();
 
 std::string str =  "../resource/models/suzanne.obj";
