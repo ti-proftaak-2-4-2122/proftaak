@@ -12,6 +12,7 @@ void ImageFilter::add_filters(cv::Mat* img)
 
     inRange(hsv_img, hsv_l , hsv_h, mask_img);
     bitwise_and(hsv_img, hsv_img, output_img, mask_img);
+    //cv::resize(hsv_img, hsv_img, cv::Size(), 1000, 1000);
     imshow("output", hsv_img);
 
 }
@@ -19,12 +20,12 @@ void ImageFilter::add_filters(cv::Mat* img)
 void ImageFilter::filter_image()
 {
 
-    std::string path = "resources/hsv.jpg";
+    std::string path = "../resources/hsv.jpg";
     loaded_img = cv::imread(path);
 
     add_filters(&loaded_img);
 
-    //resize(img, img, Size(100, 100));
+
 
 
     //cv::imshow("Image", loaded_img);
