@@ -14,8 +14,10 @@ include_directories("libs/glad/include")
 include_directories("libs/tigl/include")
 include_directories("libs/objLoader/include")
 include_directories("libs/glm")
+include_directories("libs/ECS/include")
 include_directories(${OpenCV_INCLUDE_DIRS})
 
+add_subdirectory(libs/ECS)
 add_subdirectory(libs/glm)
 add_subdirectory(libs/objLoader)
 
@@ -23,6 +25,7 @@ add_executable(${CMAKE_PROJECT_NAME} main.cpp libs/glad/glad.c libs/tigl/tigl.cp
 
 target_link_libraries(${CMAKE_PROJECT_NAME} libglfw3.a )
 target_link_libraries(${CMAKE_PROJECT_NAME} glm )
+target_link_libraries(${CMAKE_PROJECT_NAME} ECS)
 target_link_libraries(${CMAKE_PROJECT_NAME} opencv_core opencv_imgproc opencv_highgui opencv_imgcodecs )
 target_link_libraries(${CMAKE_PROJECT_NAME} objLoader)
 
