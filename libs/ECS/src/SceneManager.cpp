@@ -18,7 +18,7 @@ void SceneManager::LoadScene(Scene scene)
         }
     }
 
-     auto f = std::async(std::launch::async, UpdatePoll, scene);
+     //auto f = std::async(std::launch::async, UpdatePoll, scene);
 }
 
 void UpdatePoll(Scene scene) {
