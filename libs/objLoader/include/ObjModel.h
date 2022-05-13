@@ -19,6 +19,9 @@ public:
     std::vector<Face> faces;
 
     ObjModel(const std::string &fileName);
+
+    ObjModel();
+
     std::string toString();
 };
 

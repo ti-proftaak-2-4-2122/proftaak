@@ -25,9 +25,9 @@ add_executable(${CMAKE_PROJECT_NAME} main.cpp libs/glad/glad.c libs/tigl/tigl.cp
 
 target_link_libraries(${CMAKE_PROJECT_NAME} libglfw3.a )
 target_link_libraries(${CMAKE_PROJECT_NAME} glm )
-target_link_libraries(${CMAKE_PROJECT_NAME} ECS)
 target_link_libraries(${CMAKE_PROJECT_NAME} opencv_core opencv_imgproc opencv_highgui opencv_imgcodecs )
 target_link_libraries(${CMAKE_PROJECT_NAME} objLoader)
+target_link_libraries(${CMAKE_PROJECT_NAME} ECS)
 
 # Copy opencv dlls to build dir if not exists
 message("-- Copy OpenCV Dll's to output directory")
