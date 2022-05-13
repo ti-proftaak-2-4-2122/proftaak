@@ -11,10 +11,10 @@
 
 class GameObject {
 public:
-    std::vector<Component*> components;
+    std::vector<Component*> components{};
     void AddComponent(Component* component);
     GameObject() {
-        this->AddComponent(new Transform);
+//        this->AddComponent(new Transform);
     }
 };
 #endif //PROFTAAK24_GAMEOBJECT_H

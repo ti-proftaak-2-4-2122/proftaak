@@ -5,9 +5,13 @@
 #ifndef PROFTAAK24_COMPONENT_H
 #define PROFTAAK24_COMPONENT_H
 
+#include "GameObject.h"
+
 class Component
 {
 public:
+    GameObject::GameObject* parentGO;
+
     virtual void Awake(){};
     virtual void Update(){};
     virtual void Draw(){};
