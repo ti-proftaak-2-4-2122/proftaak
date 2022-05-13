@@ -9,25 +9,32 @@ find_package(OpenCV REQUIRED)
 link_directories("libs/glfw/lib-mingw-w64")
 link_directories("libs/glm/glm")
 
+#external libaries .h files directory
 include_directories("libs/glfw/include")
 include_directories("libs/glad/include")
 include_directories("libs/tigl/include")
-include_directories("libs/objLoader/include")
+include_directories("libs/opencv/include")
 include_directories("libs/glm")
-include_directories("libs/ECS/include")
 include_directories(${OpenCV_INCLUDE_DIRS})
 
-add_subdirectory(libs/ECS)
-add_subdirectory(libs/glm)
-add_subdirectory(libs/objLoader)
+#internal libaries .h files directory
+include_directories("modules/ECS/include")
+include_directories("modules/objLoader/include")
+include_directories("modules/vision/include")
 
-add_executable(${CMAKE_PROJECT_NAME} main.cpp libs/glad/glad.c libs/tigl/tigl.cpp opencv-main.cpp)
+add_subdirectory(modules/ECS)
+add_subdirectory(modules/vision)
+add_subdirectory(modules/objLoader)
+add_subdirectory(libs/glm)
+
+add_executable(${CMAKE_PROJECT_NAME} main.cpp libs/glad/glad.c libs/tigl/tigl.cpp)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} libglfw3.a )
 target_link_libraries(${CMAKE_PROJECT_NAME} glm )
-target_link_libraries(${CMAKE_PROJECT_NAME} ECS)
+target_link_libraries(${CMAKE_PROJECT_NAME} vision)
 target_link_libraries(${CMAKE_PROJECT_NAME} opencv_core opencv_imgproc opencv_highgui opencv_imgcodecs )
 target_link_libraries(${CMAKE_PROJECT_NAME} objLoader)
+target_link_libraries(${CMAKE_PROJECT_NAME} ECS)
 
 # Copy opencv dlls to build dir if not exists
 message("-- Copy OpenCV Dll's to output directory")

@@ -3,7 +3,8 @@
   <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$" />
   <component name="CidrRootsConfiguration">
     <sourceRoots>
-      <file path="$PROJECT_DIR$/libs/objLoader" />
+      <file path="$PROJECT_DIR$/modules/ECS" />
+      <file path="$PROJECT_DIR$/modules/objLoader" />
     </sourceRoots>
   </component>
 </project>

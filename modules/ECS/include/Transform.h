@@ -6,7 +6,7 @@
 #define PROFTAAK24_TRANSFORM_H
 
 #include "Component.h"
-#include <glm/gtc/matrix_transform.hpp>
+#include "glm/gtc/matrix_transform.hpp"
 
 class Transform : public Component
 {

@@ -6,7 +6,7 @@
 #define PROFTAAK24_LERPCONTROLLER_H
 
 #include "Component.h"
-#include <glm/fwd.hpp>
+#include "glm/fwd.hpp"
 
 class LerpController : public Component
 {
