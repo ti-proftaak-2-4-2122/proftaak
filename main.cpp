@@ -1,9 +1,6 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "tigl.h"
-#include "Scene.h"
-#include "LerpController.h"
-#include "SceneManager.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
@@ -31,13 +28,6 @@ Mesh* mesh = new Mesh(&objModel);
 
 int main()
 {
-    Scene scene;
-    GameObject gameObject;
-    auto *lerpController = new LerpController;
-    gameObject.AddComponent(lerpController);
-    scene.AddGameObject(gameObject);
-
-    SceneManager::LoadScene(scene);
     if (!glfwInit())
         throw "Could not initialize glwf";
     window = glfwCreateWindow(1400, 800, "Hello World", nullptr, nullptr);
