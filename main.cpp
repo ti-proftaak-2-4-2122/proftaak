@@ -26,7 +26,7 @@ Mesh* mesh = new Mesh(&objModel);
 int main()
 {
     ImageFilter* filter = new ImageFilter();
-//    filter->filter_image(); //blocking call
+    filter->filter_image(); //blocking call
 
     if (!glfwInit())
         throw "Could not initialize glwf";

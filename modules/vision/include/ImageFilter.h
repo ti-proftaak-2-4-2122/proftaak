@@ -13,9 +13,9 @@
 class ImageFilter
 {
 private:
-    cv::Mat loaded_img, hsv_img, mask_img, output_img;
+    cv::Mat loaded_img;
 
-    void add_filters(cv::Mat* img);
+    cv::Mat add_filter(cv::Mat* img, cv::Scalar hsv_lowerbound, cv::Scalar hsv_upperbound);
 
 public:
     void filter_image();
