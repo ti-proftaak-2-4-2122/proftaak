@@ -14,6 +14,8 @@ int opencv_main() {
     cv::VideoCapture cap(1);
     cv::Mat img;
 
+
+
     while (true) {
         cap.read(img);
         cv::imshow("Image", img);

@@ -20,6 +20,8 @@ void draw();
 
 int main()
 {
+
+
     if (!glfwInit())
         throw "Could not initialize glwf";
     window = glfwCreateWindow(1400, 800, "Hello World", nullptr, nullptr);

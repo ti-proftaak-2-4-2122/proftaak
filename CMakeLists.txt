@@ -17,7 +17,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 add_subdirectory(libs/glm)
 
-add_executable(${CMAKE_PROJECT_NAME} main.cpp libs/glad/glad.c libs/tigl/tigl.cpp opencv-main.cpp)
+add_executable(${CMAKE_PROJECT_NAME} main.cpp libs/glad/glad.c libs/tigl/tigl.cpp modules/vision/src/opencv-main.cpp modules/vision/src/ImageFilter.cpp modules/vision/include/ImageFilter.h)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} libglfw3.a )
 target_link_libraries(${CMAKE_PROJECT_NAME} glm )
