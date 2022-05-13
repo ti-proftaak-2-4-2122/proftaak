@@ -10,7 +10,7 @@
 #include "glad/glad.h"
 #include "Component.h"
 #include "ObjModel.h"
-#include <glm/gtc/matrix_transform.hpp>
+#include "glm/gtc/matrix_transform.hpp"
 
 
 class Mesh : public Component
