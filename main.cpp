@@ -8,6 +8,9 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 
+#include "ObjModel.h"
+#include "Mesh.h"
+
 using tigl::Vertex;
 
 // #pragma comment(lib, "glfw3.lib")
@@ -25,6 +28,11 @@ void init();
 void update();
 
 void draw();
+
+std::string str =  "../resource/models/suzanne.obj";
+
+ObjModel objModel = ObjModel(str);
+Mesh* mesh = new Mesh(&objModel);
 
 int main()
 {
@@ -46,8 +54,9 @@ int main()
     }
 
     tigl::init();
-
     init();
+
+    std::cout << objModel.toString();
 
     while (!glfwWindowShouldClose(window))
     {
@@ -99,6 +108,9 @@ void draw()
             glm::perspective(glm::radians(70.0f), width / height, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+
+    mesh->DrawMesh();
+
     tigl::shader->setModelMatrix(glm::mat4(1.0f));
 
     float rectangleSize = 3;
