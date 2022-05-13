@@ -9,20 +9,24 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 
+#include <memory>
+
 #include "ObjModel.h"
 #include "Mesh.h"
+#include "OpenCVVideoCapture.h"
 
 using tigl::Vertex;
 
 GLFWwindow *window;
 
-cv::VideoCapture* capture;
-cv::Mat* captureImage;
-uint captureTextureId;
+std::shared_ptr<cv::VideoCapture> capture;
+OpenCVVideoCapture* openCvComponent;
 
 void init();
 
 void update();
+
+
 
 void draw();
 
@@ -79,65 +83,49 @@ void init()
     {
         if (key == GLFW_KEY_ESCAPE)
             glfwSetWindowShouldClose(window, true);
+
     });
 
+
     // Init OpenCV
-    capture = new cv::VideoCapture(2);
-    captureImage = new cv::Mat();
+    capture = std::make_shared<cv::VideoCapture>(2);
 
-    glGenTextures(1, &captureTextureId);
-    glBindTexture(GL_TEXTURE_2D, captureTextureId);
+    openCvComponent = new OpenCVVideoCapture(capture);
+    openCvComponent->Awake();
 }
-
 
 void update()
 {
-    capture->read(*captureImage);
+    openCvComponent->Update();
 }
+
+int width;
+int height;
 
 void draw()
 {
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    float width = 1400;
-    float height = 800;
+
+
+    // Draw Background
+    openCvComponent->Draw();
+
+    int testWidth = width;
+    int testHeight = height;
+
+    glfwGetFramebufferSize(window, &width, &height);
+
+    if(testWidth != width || testHeight != height) {
+        glViewport(0, 0, width, height);
+    }
 
     tigl::shader->setProjectionMatrix(
-            glm::perspective(glm::radians(70.0f), width / height, 0.1f, 200.0f));
+            glm::perspective(glm::radians(70.0f), (float)width / (float)height, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
-    glm::mat4 camModelMatrix = glm::mat4(1.0f);
-    tigl::shader->setModelMatrix(camModelMatrix);
 
-    float rectangleSize = 3;
-
-    glBindTexture(GL_TEXTURE_2D, captureTextureId);
-
-    glTexImage2D(
-        GL_TEXTURE_2D,
-        0,
-        GL_RGB,
-        captureImage->cols,
-        captureImage->rows,
-        0,
-        GL_BGR,
-        GL_UNSIGNED_BYTE,
-        captureImage->data
-    );
-
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    tigl::shader->enableTexture(true);
-    tigl::begin(GL_QUADS);
-
-    tigl::addVertex(Vertex::PT(glm::vec3(-rectangleSize, -rectangleSize, 0), glm::vec2(1, 1)));
-    tigl::addVertex(Vertex::PT(glm::vec3(rectangleSize, -rectangleSize, 0), glm::vec2(0, 1)));
-    tigl::addVertex(Vertex::PT(glm::vec3(rectangleSize, rectangleSize, 0), glm::vec2(0, 0)));
-    tigl::addVertex(Vertex::PT(glm::vec3(-rectangleSize, rectangleSize, 0), glm::vec2(1, 0)));
-
-    tigl::end();
 
     tigl::shader->enableTexture(false);
     mesh->DrawMesh();
