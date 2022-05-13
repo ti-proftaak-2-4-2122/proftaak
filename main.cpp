@@ -10,10 +10,6 @@
 
 using tigl::Vertex;
 
-// #pragma comment(lib, "glfw3.lib")
-// #pragma comment(lib, "glew32s.lib")
-// #pragma comment(lib, "opengl32.lib")
-
 GLFWwindow *window;
 
 void init();
@@ -30,11 +26,11 @@ Mesh* mesh = new Mesh(&objModel);
 int main()
 {
     ImageFilter* filter = new ImageFilter();
-    //filter->filter_image(); //blocking call
+    filter->filter_image(); //blocking call
 
     if (!glfwInit())
         throw "Could not initialize glwf";
-    window = glfwCreateWindow(1400, 800, "Hello World", nullptr, nullptr);
+    //window = glfwCreateWindow(1400, 800, "Hello World", nullptr, nullptr);
     if (!window)
     {
         glfwTerminate();

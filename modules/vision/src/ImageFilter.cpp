@@ -2,7 +2,7 @@
 // Created by tjtle on 13/05/2022.
 //
 
-#include "../include/ImageFilter.h"
+#include "ImageFilter.h"
 
 void ImageFilter::add_filters(cv::Mat* img)
 {
@@ -32,7 +32,6 @@ void ImageFilter::filter_image()
         add_filters(&loaded_img);
         cv::imshow("original", loaded_img);
         cv::waitKey(1);
-
     }
 
 
