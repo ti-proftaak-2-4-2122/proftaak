@@ -20,6 +20,10 @@ void update();
 
 void draw();
 
+std::string str = "D:\\proftaak\\resources\\torus.obj";
+
+ObjModel objModel = ObjModel(str);
+
 int main()
 {
     if (!glfwInit())
@@ -41,17 +45,10 @@ int main()
     tigl::init();
     init();
 
-    std::string str = "../resource/models/suzanne.obj";
-
-    ObjModel henk = ObjModel(str);
-
-    for (int i = 0; i < henk.faces.size(); ++i)
+    for (int i = 0; i < objModel.faces.size(); ++i)
     {
-        std::cout << henk.faces[i].toString()  << std::endl;
+        std::cout << objModel.faces[i].toString() << std::endl;
     }
-
-
-
 
     while (!glfwWindowShouldClose(window))
     {
@@ -95,8 +92,17 @@ void draw()
             glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
     tigl::shader->setModelMatrix(glm::mat4(1.0f));
     tigl::begin(GL_TRIANGLES);
-    tigl::addVertex(Vertex::P(glm::vec3(-1, 0, 0)));
-    tigl::addVertex(Vertex::P(glm::vec3(1, 0, 0)));
-    tigl::addVertex(Vertex::P(glm::vec3(0, 1, 0)));
+
+    for(auto face : objModel.faces) {
+        tigl::addVertex(Vertex::P(glm::vec3(objModel.positions[face.pos[0]].x,objModel
+        .positions[face.pos[0]].y, objModel.positions[face.pos[0]].z)));
+
+        tigl::addVertex(Vertex::P(glm::vec3(objModel.positions[face.pos[1]].x,objModel
+                .positions[face.pos[1]].y, objModel.positions[face.pos[1]].z)));
+
+        tigl::addVertex(Vertex::P(glm::vec3(objModel.positions[face.pos[2]].x,objModel
+                .positions[face.pos[2]].y, objModel.positions[face.pos[2]].z)));
+    }
+
     tigl::end();
 }
