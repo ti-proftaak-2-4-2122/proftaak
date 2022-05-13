@@ -3,15 +3,12 @@
 #include "tigl.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
+#include "ImageFilter.h"
 
 #include "ObjModel.h"
 #include "Mesh.h"
 
 using tigl::Vertex;
-
-// #pragma comment(lib, "glfw3.lib")
-// #pragma comment(lib, "glew32s.lib")
-// #pragma comment(lib, "opengl32.lib")
 
 GLFWwindow *window;
 
@@ -28,9 +25,12 @@ Mesh* mesh = new Mesh(&objModel);
 
 int main()
 {
+    ImageFilter* filter = new ImageFilter();
+    filter->filter_image(); //blocking call
+
     if (!glfwInit())
         throw "Could not initialize glwf";
-    window = glfwCreateWindow(1400, 800, "Hello World", nullptr, nullptr);
+    //window = glfwCreateWindow(1400, 800, "Hello World", nullptr, nullptr);
     if (!window)
     {
         glfwTerminate();
