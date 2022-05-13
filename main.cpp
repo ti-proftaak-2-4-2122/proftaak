@@ -81,8 +81,6 @@ void init()
             glfwSetWindowShouldClose(window, true);
     });
 
-    tigl::shader->enableTexture(true);
-
     // Init OpenCV
     capture = new cv::VideoCapture(2);
     captureImage = new cv::Mat();
@@ -109,8 +107,6 @@ void draw()
     tigl::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
-    mesh->DrawMesh();
-
     tigl::shader->setModelMatrix(glm::mat4(1.0f));
 
     float rectangleSize = 3;
@@ -132,10 +128,14 @@ void draw()
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+    tigl::shader->enableTexture(true);
     tigl::begin(GL_QUADS);
     tigl::addVertex(Vertex::PT(glm::vec3(-rectangleSize, -rectangleSize, 0), glm::vec2(1, 1)));
     tigl::addVertex(Vertex::PT(glm::vec3(rectangleSize, -rectangleSize, 0), glm::vec2(0, 1)));
     tigl::addVertex(Vertex::PT(glm::vec3(rectangleSize, rectangleSize, 0), glm::vec2(0, 0)));
     tigl::addVertex(Vertex::PT(glm::vec3(-rectangleSize, rectangleSize, 0), glm::vec2(1, 0)));
     tigl::end();
+
+    tigl::shader->enableTexture(false);
+    mesh->DrawMesh();
 }

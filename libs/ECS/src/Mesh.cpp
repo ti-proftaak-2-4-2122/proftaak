@@ -18,5 +18,7 @@ void Mesh::DrawMesh() {
                 tigl::addVertex(tigl::Vertex::PN(vertexPosition, normalPosition));
             }
         }
+
+        tigl::end();
     }
 }
