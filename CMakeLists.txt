@@ -16,12 +16,10 @@ include_directories("libs/objLoader/include")
 include_directories("libs/glm")
 include_directories("libs/ECS/include")
 include_directories(${OpenCV_INCLUDE_DIRS})
-include_directories("libs/ECS/include")
 
 add_subdirectory(libs/ECS)
 add_subdirectory(libs/glm)
 add_subdirectory(libs/objLoader)
-add_subdirectory(libs/ECS)
 
 add_executable(${CMAKE_PROJECT_NAME} main.cpp libs/glad/glad.c libs/tigl/tigl.cpp opencv-main.cpp)
 
