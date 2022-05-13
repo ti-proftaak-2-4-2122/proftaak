@@ -107,7 +107,8 @@ void draw()
     tigl::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
-    tigl::shader->setModelMatrix(glm::mat4(1.0f));
+    glm::mat4 camModelMatrix = glm::mat4(1.0f);
+    tigl::shader->setModelMatrix(camModelMatrix);
 
     float rectangleSize = 3;
 
@@ -130,10 +131,12 @@ void draw()
 
     tigl::shader->enableTexture(true);
     tigl::begin(GL_QUADS);
+
     tigl::addVertex(Vertex::PT(glm::vec3(-rectangleSize, -rectangleSize, 0), glm::vec2(1, 1)));
     tigl::addVertex(Vertex::PT(glm::vec3(rectangleSize, -rectangleSize, 0), glm::vec2(0, 1)));
     tigl::addVertex(Vertex::PT(glm::vec3(rectangleSize, rectangleSize, 0), glm::vec2(0, 0)));
     tigl::addVertex(Vertex::PT(glm::vec3(-rectangleSize, rectangleSize, 0), glm::vec2(1, 0)));
+
     tigl::end();
 
     tigl::shader->enableTexture(false);
