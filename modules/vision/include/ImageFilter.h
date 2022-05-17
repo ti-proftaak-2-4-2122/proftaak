@@ -17,9 +17,10 @@ class ImageFilter
 private:
     cv::Mat loaded_img;
 
-    cv::Mat add_filter(cv::Mat* img, cv::Scalar hsv_lowerbound, cv::Scalar hsv_upperbound);
-
-    void filter_the_blob(cv::Mat* img);
+    cv::Mat add_gaussianblur(const cv::Mat input_img);
+    cv::Mat add_filter(const cv::Mat* img, const cv::Scalar& hsv_lowerbound, const cv::Scalar&
+    hsv_upperbound);
+    cv::Mat filter_the_blob(const cv::Mat* img);
 
 public:
     void filter_image();
