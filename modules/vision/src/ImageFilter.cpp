@@ -20,10 +20,10 @@ cv::Mat ImageFilter::add_filter(cv::Mat* img, cv::Scalar hsv_lowerbound, cv::Sca
 
 void ImageFilter::filter_the_blob(cv::Mat *img)
 {
-//    cv::Mat colour_img = *img;
-//    cv::cvtColor(*img, colour_img, cv::COLOR_BGR2RGB);
+    cv::Mat colour_img = *img;
+    cv::cvtColor(*img, colour_img, cv::COLOR_BGR2RGB);
 
-    cv::bitwise_not(*img, *img);
+    cv::bitwise_not(colour_img, colour_img);
 
     //Setting up blob filter params
     cv::SimpleBlobDetector::Params blob_detector_params;
@@ -33,11 +33,11 @@ void ImageFilter::filter_the_blob(cv::Mat *img)
 
     //Setup which colours need to be filtered to
     blob_detector_params.filterByColor = true;
-    blob_detector_params.blobColor = 200;
+    blob_detector_params.blobColor = 0;
 
     //Setup which areas are to be filtered
-//    blob_detector_params.filterByArea = true;
-//    blob_detector_params.minArea = 50;
+    blob_detector_params.filterByArea = true;
+    blob_detector_params.minArea = 50;
 
     //Setup which shapes need to be filtered
 //    blob_detector_params.filterByCircularity = true;
@@ -47,15 +47,14 @@ void ImageFilter::filter_the_blob(cv::Mat *img)
 
 
     //Setting up blob detector
-    cv::Ptr<cv::SimpleBlobDetector> blob_detector = cv::SimpleBlobDetector::create(
-            blob_detector_params);
+    cv::Ptr<cv::SimpleBlobDetector> blob_detector = cv::SimpleBlobDetector::create(blob_detector_params);
 
     //Detect blobs and store their key-points
     std::vector<cv::KeyPoint> key_points;
-    blob_detector->detect(*img, key_points);
+    blob_detector->detect(colour_img,key_points);
 
     cv::Mat img_with_keypoints;
-    cv::drawKeypoints(*img, key_points, img_with_keypoints, cv::Scalar(0, 255, 255),
+    cv::drawKeypoints(*img, key_points, img_with_keypoints, cv::Scalar(0, 0, 0),
                       cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 
     //Met een for-loop de info uit de vector halen.
@@ -76,17 +75,20 @@ void ImageFilter::filter_the_blob(cv::Mat *img)
 
 void ImageFilter::filter_image()
 {
-    cv::VideoCapture cap(2);
-    std::string path = "../resources/hsv.jpg";
-    //loaded_img = cv::imread(path);
+    cv::VideoCapture cap(0);
+//    std::string path = "../resources/vormen.jpg";
+//    loaded_img = cv::imread(path);
+//
+//    filter_the_blob(&loaded_img);
 
-    while (true)
+
+    while (1)
     {
         cap.read(loaded_img);
         cv::Mat green_mask = add_filter(&loaded_img,
                                         cv::Scalar(80, 100, 100),
                                         cv::Scalar (120, 200,200)); //green
-        cv::imshow("green", green_mask);
+//        cv::imshow("green", green_mask);
 
         cv::Mat red_mask1 = add_filter(&loaded_img,
                                        cv::Scalar(240, 150, 100),
@@ -96,22 +98,15 @@ void ImageFilter::filter_image()
                                        cv::Scalar (12, 220,200)); //red
         cv::Mat red_output;
         cv::bitwise_or(red_mask1, red_mask2, red_output);
-        cv::imshow("red", red_output);
+//        cv::imshow("red", red_output);
 
         cv::Mat blue_mask = add_filter(&loaded_img,
                                        cv::Scalar(25, 100, 100),
                                        cv::Scalar (55, 200, 200)); //blue
-        cv::imshow("blue", blue_mask);
+//        cv::imshow("blue", blue_mask);
 
-//        filter_the_blob(&output_img);
+        filter_the_blob(&red_mask1);
         cv::imshow("original", loaded_img);
         cv::waitKey(10);
     }
-
-
-
-    //cv::imshow("Image", loaded_img);
-
-
-    cv::waitKey(0);
 }
