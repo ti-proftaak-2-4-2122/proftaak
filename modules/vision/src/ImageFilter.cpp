@@ -6,18 +6,16 @@
 #include <vector>
 #include <iostream> //Dit is ffe voor debug waardes bekijken
 
-void ImageFilter::add_filters(cv::Mat *img)
+cv::Mat ImageFilter::add_filter(cv::Mat* img, cv::Scalar hsv_lowerbound, cv::Scalar hsv_upperbound)
 {
-    cvtColor(*img, hsv_img, cv::COLOR_BGR2HSV_FULL);
-    cv::Scalar hsv_l(100, 80, 80);
-    cv::Scalar hsv_h(200, 240, 200);
+    cv::Mat loaded_img, hsv_img, mask_img, output_img;
 
-    inRange(hsv_img, hsv_l, hsv_h, mask_img);
+    cvtColor(*img, hsv_img, cv::COLOR_BGR2HSV_FULL);
+
+    inRange(hsv_img, hsv_lowerbound , hsv_upperbound, mask_img);
     bitwise_and(hsv_img, hsv_img, output_img, mask_img);
-    //cv::resize(hsv_img, hsv_img, cv::Size(), 1000, 1000);
     cvtColor(output_img, output_img, cv::COLOR_HSV2BGR_FULL);
-    cv::imshow("output", output_img);
-    cv::waitKey(1);
+    return output_img;
 }
 
 void ImageFilter::filter_the_blob(cv::Mat *img)
@@ -78,20 +76,42 @@ void ImageFilter::filter_the_blob(cv::Mat *img)
 
 void ImageFilter::filter_image()
 {
-//    std::string path = "../resources/hsv.jpg";
-//    loaded_img = cv::imread(path);
-
-    cv::VideoCapture cap(0);
+    cv::VideoCapture cap(2);
+    std::string path = "../resources/hsv.jpg";
+    //loaded_img = cv::imread(path);
 
     while (true)
     {
         cap.read(loaded_img);
-        add_filters(&loaded_img);
+        cv::Mat green_mask = add_filter(&loaded_img,
+                                        cv::Scalar(80, 100, 100),
+                                        cv::Scalar (120, 200,200)); //green
+        cv::imshow("green", green_mask);
+
+        cv::Mat red_mask1 = add_filter(&loaded_img,
+                                       cv::Scalar(240, 150, 100),
+                                       cv::Scalar (255, 220,200)); //red
+        cv::Mat red_mask2 = add_filter(&loaded_img,
+                                       cv::Scalar(0, 150, 100),
+                                       cv::Scalar (12, 220,200)); //red
+        cv::Mat red_output;
+        cv::bitwise_or(red_mask1, red_mask2, red_output);
+        cv::imshow("red", red_output);
+
+        cv::Mat blue_mask = add_filter(&loaded_img,
+                                       cv::Scalar(25, 100, 100),
+                                       cv::Scalar (55, 200, 200)); //blue
+        cv::imshow("blue", blue_mask);
+
         filter_the_blob(&output_img);
         cv::imshow("original", loaded_img);
         cv::waitKey(10);
     }
 
-    cv::imshow("Image", loaded_img);
+
+
+    //cv::imshow("Image", loaded_img);
+
+
     cv::waitKey(0);
 }
