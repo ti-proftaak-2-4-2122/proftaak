@@ -4,7 +4,7 @@
 
 #include "Transform.h"
 
-Transform::Transform(GameObject *parentGameObject) : Component(parentGameObject) {
+Transform::Transform() {
     position = glm::vec3(0,0,0);
     rotation = glm::vec3(0,0,0);
     scale = glm::vec3(0,0,0);

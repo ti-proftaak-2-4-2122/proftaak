@@ -7,6 +7,7 @@
 
 #include "ObjModel.h"
 #include "Mesh.h"
+#include "ModelManager.h"
 
 using tigl::Vertex;
 
@@ -18,10 +19,9 @@ void update();
 
 void draw();
 
-std::string str = "../resource/models/suzanne.obj";
 
-ObjModel objModel = ObjModel(str);
 Mesh *mesh;
+ObjModel *objModel;
 
 int main()
 {
@@ -49,7 +49,13 @@ int main()
     tigl::init();
     init();
 
-    std::cout << objModel.toString();
+//    std::string str = ;
+//
+//    ObjModel objModel =  ModelManager::getModelVertices(str);
+    std::string str = "../resource/models/suzanne.obj";
+    //objModel = (ModelManager::getModelVertices(str));
+    mesh = new Mesh(objModel);
+    // std::cout << objModel.toString();
 
     while (!glfwWindowShouldClose(window))
     {
@@ -94,6 +100,6 @@ void draw()
     tigl::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
-//    mesh->DrawMesh();
+    mesh->DrawMesh();
 
 }

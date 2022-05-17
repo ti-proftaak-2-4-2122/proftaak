@@ -7,9 +7,10 @@
 #include "Component.h"
 
 void GameObject::AddComponent(Component *component) {
+    component->SetParent(this);
     components.push_back(component);
 }
 
 GameObject::GameObject() {
-    this->AddComponent(new Transform(this));
+    this->AddComponent(new Transform());
 }

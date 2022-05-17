@@ -15,7 +15,8 @@ public:
     virtual void Awake(){};
     virtual void Update(){};
     virtual void Draw(){};
-    Component(GameObject* gameObject);
+    Component();
+    void SetParent(GameObject* parentGameObject);
 };
 
 

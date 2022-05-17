@@ -3,7 +3,12 @@
 //
 #include "Component.h"
 
-Component::Component(GameObject *gameObject) : gameObject(gameObject)
+void Component::SetParent(GameObject *parentGameObject)
+{
+    gameObject = parentGameObject;
+}
+
+Component::Component()
 {
 
 }

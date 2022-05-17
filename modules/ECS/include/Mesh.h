@@ -19,7 +19,7 @@ private:
     ObjModel* objModel;
 public:
 
-    Mesh(ObjModel* _objmodel, GameObject* gameObject);
+    Mesh(ObjModel* _objmodel);
 
     void DrawMesh();
 };

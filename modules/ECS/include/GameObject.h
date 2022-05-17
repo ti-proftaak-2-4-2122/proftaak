@@ -8,12 +8,16 @@
 
 class Component;
 
-class GameObject {
+class GameObject
+{
 
 public:
-    std::vector<Component*> components;
-    void AddComponent(Component* component);
+    std::vector<Component *> components;
+
+    void AddComponent(Component *component);
+
     GameObject();
+
 
 };
 
