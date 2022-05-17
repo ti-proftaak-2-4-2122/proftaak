@@ -3,7 +3,13 @@
 //
 
 #include "GameObject.h"
+#include "Transform.h"
+#include "Component.h"
 
 void GameObject::AddComponent(Component *component) {
     components.push_back(component);
+}
+
+GameObject::GameObject() {
+    this->AddComponent(new Transform(this));
 }

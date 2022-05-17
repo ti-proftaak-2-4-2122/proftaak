@@ -18,14 +18,14 @@ void update();
 
 void draw();
 
-std::string str =  "../resource/models/suzanne.obj";
+std::string str = "../resource/models/suzanne.obj";
 
 ObjModel objModel = ObjModel(str);
-Mesh* mesh = new Mesh(&objModel);
+Mesh *mesh;
 
 int main()
 {
-    ImageFilter* filter = new ImageFilter();
+    ImageFilter *filter = new ImageFilter();
 //    filter->filter_image(); //blocking call
 
     if (!glfwInit())
@@ -73,6 +73,8 @@ void init()
         if (key == GLFW_KEY_ESCAPE)
             glfwSetWindowShouldClose(window, true);
     });
+//    GameObject gameObject = GameObject();
+//    mesh = new Mesh(&objModel, &gameObject);
 }
 
 
@@ -92,7 +94,6 @@ void draw()
     tigl::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
-    mesh->DrawMesh();
+//    mesh->DrawMesh();
 
-    tigl::end();
 }
