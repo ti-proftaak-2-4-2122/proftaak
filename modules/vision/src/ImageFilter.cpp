@@ -103,7 +103,7 @@ void ImageFilter::filter_image()
                                        cv::Scalar (55, 200, 200)); //blue
         cv::imshow("blue", blue_mask);
 
-        filter_the_blob(&output_img);
+//        filter_the_blob(&output_img);
         cv::imshow("original", loaded_img);
         cv::waitKey(10);
     }
