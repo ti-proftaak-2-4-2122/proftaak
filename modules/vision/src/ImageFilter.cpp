@@ -21,19 +21,19 @@ cv::Mat ImageFilter::add_filter(cv::Mat* img, cv::Scalar hsv_lowerbound, cv::Sca
 void ImageFilter::filter_the_blob(cv::Mat *img)
 {
     cv::Mat colour_img = *img;
-    cv::cvtColor(*img, colour_img, cv::COLOR_BGR2RGB);
+    cv::cvtColor(*img, colour_img, cv::COLOR_HSV2RGB_FULL);
 
     cv::bitwise_not(colour_img, colour_img);
 
     //Setting up blob filter params
     cv::SimpleBlobDetector::Params blob_detector_params;
 
-    blob_detector_params.minThreshold = 50;
+    blob_detector_params.minThreshold = 100;
     blob_detector_params.maxThreshold = 200;
 
     //Setup which colours need to be filtered to
-    blob_detector_params.filterByColor = true;
-    blob_detector_params.blobColor = 0;
+//    blob_detector_params.filterByColor = true;
+//    blob_detector_params.blobColor = 0;
 
     //Setup which areas are to be filtered
     blob_detector_params.filterByArea = true;
