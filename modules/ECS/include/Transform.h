@@ -6,14 +6,17 @@
 #define PROFTAAK24_TRANSFORM_H
 
 #include "Component.h"
-#include "glm/gtc/matrix_transform.hpp"
+#include "glm/glm.hpp"
+class GameObject;
 
 class Transform : public Component
 {
+
 public:
     glm::vec3 position;
     glm::vec3 rotation;
     glm::vec3 scale;
+    Transform();
 };
 #endif //PROFTAAK24_TRANSFORM_H
 
