@@ -13,6 +13,7 @@
 
 #include "ObjModel.h"
 #include "Mesh.h"
+#include "ModelManager.h"
 #include "OpenCVVideoCapture.h"
 
 #include "user-config.h"
@@ -30,14 +31,11 @@ void update();
 
 void draw();
 
-std::string str =  "../resource/models/suzanne.obj";
-
-ObjModel objModel = ObjModel(str);
-Mesh* mesh = new Mesh(&objModel);
+Mesh* mesh;
 
 int main()
 {
-    ImageFilter* filter = new ImageFilter();
+    ImageFilter *filter = new ImageFilter();
 //    filter->filter_image(); //blocking call
 
     if (!glfwInit())
@@ -62,7 +60,11 @@ int main()
     tigl::init();
     init();
 
-    std::cout << objModel.toString();
+    std::string str = "../resource/models/suzanne.obj";
+
+
+    auto objModel = ModelManager::getModelVertices(str);
+    mesh = new Mesh(objModel);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -87,7 +89,6 @@ void init()
             glfwSetWindowShouldClose(window, true);
 
     });
-
 
     // Init OpenCV
     capture = std::make_shared<cv::VideoCapture>(CONFIG_OPENCV_CAMERA_INDEX);
@@ -127,8 +128,7 @@ void draw()
     tigl::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
-
-
     tigl::shader->enableTexture(false);
     mesh->DrawMesh();
+
 }

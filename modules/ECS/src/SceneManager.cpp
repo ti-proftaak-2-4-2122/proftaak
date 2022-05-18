@@ -8,7 +8,7 @@
 
 void UpdatePoll(Scene scene);
 
-void SceneManager::LoadScene(Scene scene)
+void SceneManager::LoadScene(Scene& scene)
 {
     for (auto gameObject: scene.gameobjects)
     {
