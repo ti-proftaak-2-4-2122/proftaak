@@ -14,3 +14,8 @@ void GameObject::AddComponent(Component *component) {
 GameObject::GameObject() {
     this->AddComponent<Transform>();
 }
+
+Component *GameObject::getTransform()
+{
+    return components[0];
+}
