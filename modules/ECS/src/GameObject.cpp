@@ -12,5 +12,12 @@ void GameObject::AddComponent(Component *component) {
 }
 
 GameObject::GameObject() {
-    this->AddComponent(new Transform());
+    this->AddComponent<Transform>();
+}
+
+template<class T> T& GameObject::AddComponent()
+{
+    auto component = new T();
+    AddComponent(component);
+    return *component;
 }
