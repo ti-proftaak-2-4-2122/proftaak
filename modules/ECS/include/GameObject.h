@@ -17,6 +17,7 @@ public:
     void AddComponent(Component *component);
 
     GameObject();
+    Component* getTransform();
 
     template<class T>
     T& AddComponent();
