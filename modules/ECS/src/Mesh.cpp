@@ -9,14 +9,8 @@
 void Mesh::Draw()
 {
     tigl::shader->setModelMatrix(glm::mat4(1.0f));
-    tigl::begin(GL_TRIANGLES);
 
-    for (const auto &item: objModel->GetVertices())
-    {
-        tigl::addVertex(item);
-    }
-
-    tigl::end();
+    tigl::drawVertices(GL_TRIANGLES, objModel->GetVertices());
 
 }
 
