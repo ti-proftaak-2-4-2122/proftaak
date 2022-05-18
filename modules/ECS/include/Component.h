@@ -10,7 +10,7 @@ class GameObject;
 class Component
 {
 protected:
-    GameObject* gameObject;
+    GameObject* gameObject = nullptr;
 public:
     virtual void Awake(){};
     virtual void Update(){};

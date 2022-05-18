@@ -19,7 +19,7 @@ class VirtualCamera : public Component
 {
 public:
     VCamRenderSettings vCamRenderSettings;
-    VirtualCamera(VCamRenderSettings _vCamRenderSettings, glm::vec3 lookAtVec3);
+    VirtualCamera(VCamRenderSettings _vCamRenderSettings);
     void LookAt(glm::vec3 lookAt);
 };
 

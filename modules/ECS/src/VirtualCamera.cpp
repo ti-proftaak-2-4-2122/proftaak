@@ -8,20 +8,18 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
-VirtualCamera::VirtualCamera(VCamRenderSettings _vCamRenderSettings, glm::vec3 lookAtVec3)
+VirtualCamera::VirtualCamera(VCamRenderSettings _vCamRenderSettings)
 {
-//    vCamRenderSettings = _vCamRenderSettings;
-//    tigl::shader->setProjectionMatrix(glm::perspective(glm::radians(vCamRenderSettings.fov),
-//                                                       vCamRenderSettings.aspectRatio,
-//                                                       vCamRenderSettings.nearClipping,
-//                                                       vCamRenderSettings.farClipping));
-//    tigl::shader->setViewMatrix(glm::lookAt(lookAtVec3, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
-    std::cout << "Position X: " << gameObject->transform.position.x << std::endl;
+    vCamRenderSettings = _vCamRenderSettings;
+    tigl::shader->setProjectionMatrix(glm::perspective(glm::radians(vCamRenderSettings.fov),
+                                                       vCamRenderSettings.aspectRatio,
+                                                       vCamRenderSettings.nearClipping,
+                                                       vCamRenderSettings.farClipping));
+
 
 
 }
 
-void VirtualCamera::LookAt(glm::vec3 lookAt) {
-    tigl::shader->setViewMatrix(glm::lookAt(gameObject->transform.position, lookAt, glm::vec3(0,
-                                                                                             1, 0)));
+void VirtualCamera::LookAt(glm::vec3 lookAtVec3) {
+    tigl::shader->setViewMatrix(glm::lookAt(lookAtVec3, gameObject->transform.position, glm::vec3(0, 1,0)));
 }
