@@ -6,6 +6,18 @@ set(OpenCV_DIR "libs/opencv")
 
 find_package(OpenCV REQUIRED)
 
+# Get All Modules
+set(MODULES_DIR_PATH "${CMAKE_CURRENT_SOURCE_DIR}/modules")
+set(MODULE_LIST "")
+
+FILE(GLOB MODULE_DIR_FILE_LIST RELATIVE ${MODULES_DIR_PATH} ${MODULES_DIR_PATH}/*)
+
+FOREACH(MODULE_DIR_FILE ${MODULE_DIR_FILE_LIST})
+    IF(IS_DIRECTORY "${MODULES_DIR_PATH}/${MODULE_DIR_FILE}")
+        LIST(APPEND MODULE_LIST ${MODULE_DIR_FILE})
+    ENDIF()
+ENDFOREACH()
+
 link_directories("libs/glfw/lib-mingw-w64")
 link_directories("libs/glm/glm")
 
@@ -17,24 +29,27 @@ include_directories("libs/opencv/include")
 include_directories("libs/glm")
 include_directories(${OpenCV_INCLUDE_DIRS})
 
-#internal libaries .h files directory
-include_directories("modules/ECS/include")
-include_directories("modules/objLoader/include")
-include_directories("modules/vision/include")
+#include modules
+FOREACH(MODULE ${MODULE_LIST})
+    include_directories(${MODULES_DIR_PATH}/${MODULE}/include)
+ENDFOREACH()
 
-add_subdirectory(modules/ECS)
-add_subdirectory(modules/vision)
-add_subdirectory(modules/objLoader)
+#internal libaries .h files directory
 add_subdirectory(libs/glm)
+
+#add modules
+message("-- Adding all modules in modules folder")
+FOREACH(MODULE ${MODULE_LIST})
+    message("       Added ${MODULE}")
+    add_subdirectory(${MODULES_DIR_PATH}/${MODULE})
+ENDFOREACH()
 
 add_executable(${CMAKE_PROJECT_NAME} main.cpp libs/glad/glad.c libs/tigl/tigl.cpp)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} libglfw3.a )
 target_link_libraries(${CMAKE_PROJECT_NAME} glm )
-target_link_libraries(${CMAKE_PROJECT_NAME} vision)
+target_link_libraries(${CMAKE_PROJECT_NAME} ${MODULE_LIST} )
 target_link_libraries(${CMAKE_PROJECT_NAME} opencv_core opencv_imgproc opencv_highgui opencv_imgcodecs )
-target_link_libraries(${CMAKE_PROJECT_NAME} objLoader)
-target_link_libraries(${CMAKE_PROJECT_NAME} ECS)
 
 # Copy opencv dlls to build dir if not exists
 message("-- Copy OpenCV Dll's to output directory")

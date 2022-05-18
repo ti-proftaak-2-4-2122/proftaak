@@ -1,17 +1,27 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "tigl.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
+#include "tigl.h"
 #include "ImageFilter.h"
+
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
+
+#include <memory>
 
 #include "ObjModel.h"
 #include "Mesh.h"
 #include "ModelManager.h"
+#include "OpenCVVideoCapture.h"
 
 using tigl::Vertex;
 
 GLFWwindow *window;
+
+std::shared_ptr<cv::VideoCapture> capture;
+OpenCVVideoCapture* openCvComponent;
 
 void init();
 
@@ -30,6 +40,7 @@ int main()
 
     if (!glfwInit())
         throw "Could not initialize glwf";
+
     window = glfwCreateWindow(1400, 800, "Hello World", nullptr, nullptr);
     if (!window)
     {
@@ -78,28 +89,53 @@ void init()
     {
         if (key == GLFW_KEY_ESCAPE)
             glfwSetWindowShouldClose(window, true);
+
     });
 //    GameObject gameObject = GameObject();
 //    mesh = new Mesh(&objModel, &gameObject);
-}
 
+
+    // Init OpenCV
+    capture = std::make_shared<cv::VideoCapture>(2);
+
+    openCvComponent = new OpenCVVideoCapture(capture);
+    openCvComponent->Awake();
+}
 
 void update()
 {
+    openCvComponent->Update();
 }
+
+int width;
+int height;
 
 void draw()
 {
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    float width = 1400;
-    float height = 800;
+
+
+    // Draw Background
+    openCvComponent->Draw();
+
+    int testWidth = width;
+    int testHeight = height;
+
+    glfwGetFramebufferSize(window, &width, &height);
+
+    if(testWidth != width || testHeight != height) {
+        glViewport(0, 0, width, height);
+    }
 
     tigl::shader->setProjectionMatrix(
-            glm::perspective(glm::radians(70.0f), width / height, 0.1f, 200.0f));
+            glm::perspective(glm::radians(70.0f), (float)width / (float)height, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
+
+
+    tigl::shader->enableTexture(false);
     mesh->DrawMesh();
 
 }
