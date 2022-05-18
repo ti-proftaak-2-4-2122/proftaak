@@ -44,7 +44,7 @@ FOREACH(MODULE ${MODULE_LIST})
     add_subdirectory(${MODULES_DIR_PATH}/${MODULE})
 ENDFOREACH()
 
-add_executable(${CMAKE_PROJECT_NAME} main.cpp libs/glad/glad.c libs/tigl/tigl.cpp)
+add_executable(${CMAKE_PROJECT_NAME} main.cpp user-config.h libs/glad/glad.c libs/tigl/tigl.cpp)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} libglfw3.a )
 target_link_libraries(${CMAKE_PROJECT_NAME} glm )

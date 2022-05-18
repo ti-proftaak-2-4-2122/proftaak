@@ -15,6 +15,8 @@
 #include "Mesh.h"
 #include "OpenCVVideoCapture.h"
 
+#include "user-config.h"
+
 using tigl::Vertex;
 
 GLFWwindow *window;
@@ -88,7 +90,7 @@ void init()
 
 
     // Init OpenCV
-    capture = std::make_shared<cv::VideoCapture>(2);
+    capture = std::make_shared<cv::VideoCapture>(CONFIG_OPENCV_CAMERA_INDEX);
 
     openCvComponent = new OpenCVVideoCapture(capture);
     openCvComponent->Awake();
