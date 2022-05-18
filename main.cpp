@@ -58,15 +58,11 @@ int main()
     tigl::init();
     init();
 
-//    std::string str = ;
-//
-//    ObjModel objModel =  ModelManager::getModelVertices(str);
     std::string str = "../resource/models/suzanne.obj";
 
 
     auto objModel = ModelManager::getModelVertices(str);
     mesh = new Mesh(objModel);
-    // std::cout << objModel.toString();
 
     while (!glfwWindowShouldClose(window))
     {
@@ -91,9 +87,6 @@ void init()
             glfwSetWindowShouldClose(window, true);
 
     });
-//    GameObject gameObject = GameObject();
-//    mesh = new Mesh(&objModel, &gameObject);
-
 
     // Init OpenCV
     capture = std::make_shared<cv::VideoCapture>(2);
@@ -132,8 +125,6 @@ void draw()
             glm::perspective(glm::radians(70.0f), (float)width / (float)height, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
-
-
 
     tigl::shader->enableTexture(false);
     mesh->DrawMesh();
