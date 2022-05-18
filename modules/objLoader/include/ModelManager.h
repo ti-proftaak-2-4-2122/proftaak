@@ -14,7 +14,7 @@ private:
     static std::map<std::string, ObjModel*>  modelCache;
 
 public:
-    static ObjModel* getModelVertices(const std::string &fileName);
+    static ObjModel* getModel(const std::string &fileName);
 
 };
 

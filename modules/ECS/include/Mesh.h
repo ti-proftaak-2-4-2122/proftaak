@@ -21,7 +21,7 @@ public:
 
     Mesh(ObjModel* _objmodel);
 
-    void DrawMesh();
+     void Draw();
 };
 
 
