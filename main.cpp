@@ -19,9 +19,7 @@ void update();
 
 void draw();
 
-
-Mesh *mesh;
-ObjModel *objModel;
+Mesh* mesh;
 
 int main()
 {
@@ -53,7 +51,9 @@ int main()
 //
 //    ObjModel objModel =  ModelManager::getModelVertices(str);
     std::string str = "../resource/models/suzanne.obj";
-    //objModel = (ModelManager::getModelVertices(str));
+
+
+    auto objModel = ModelManager::getModelVertices(str);
     mesh = new Mesh(objModel);
     // std::cout << objModel.toString();
 

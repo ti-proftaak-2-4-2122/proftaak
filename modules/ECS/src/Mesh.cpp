@@ -11,13 +11,13 @@ void Mesh::DrawMesh()
     tigl::shader->setModelMatrix(glm::mat4(1.0f));
     tigl::begin(GL_TRIANGLES);
 
-
+    for (const auto &item: objModel->GetVertices())
+    {
+        tigl::addVertex(item);
+    }
 
     tigl::end();
 
 }
 
-Mesh::Mesh(ObjModel *_objmodel) : objModel(_objmodel)
-{
-
-}
+Mesh::Mesh(ObjModel *_objmodel) : objModel(_objmodel) {}
