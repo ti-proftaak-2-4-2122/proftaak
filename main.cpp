@@ -20,6 +20,7 @@
 #include "PlaneMesh.h"
 
 #include "user-config.h"
+#include "Transform.h"
 
 using tigl::Vertex;
 
@@ -117,6 +118,11 @@ void worldInit()
 
     auto* playfield = new GameObject();
     playfield->AddComponent<PlaneMesh>();
+
+    auto* playfieldTransform = (Transform*) playfield->getTransform();
+    playfieldTransform->position.y = -.75f;
+    playfieldTransform->rotation.x = glm::radians(-50.0f);
+    playfieldTransform->scale = glm::vec3(4, 2, 1);
 
     scene->AddGameObject(playfield);
 }
