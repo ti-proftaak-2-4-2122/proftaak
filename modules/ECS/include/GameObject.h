@@ -12,7 +12,7 @@ class GameObject
 {
 public:
     std::vector<Component *> components;
-    Transform* transform;
+    Transform& transform;
     GameObject();
     void AddComponent(Component *component);
     template<class T>

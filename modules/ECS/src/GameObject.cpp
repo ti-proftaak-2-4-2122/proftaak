@@ -11,7 +11,7 @@ void GameObject::AddComponent(Component *component) {
     components.push_back(component);
 }
 
-GameObject::GameObject() : transform(&(this->AddComponent<Transform>()))
+GameObject::GameObject() : transform((this->AddComponent<Transform>()))
 {
 
 }

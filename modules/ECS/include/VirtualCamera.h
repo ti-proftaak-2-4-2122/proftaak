@@ -8,19 +8,19 @@
 
 #include "Component.h"
 #include "glm/glm.hpp"
-//struct VCamRenderSettings {
-//    float fov;
-//    float aspectRatio;
-//    float nearClipping;
-//    float farClipping;
-//};
+struct VCamRenderSettings {
+    float fov;
+    float aspectRatio;
+    float nearClipping;
+    float farClipping;
+};
 
-class VirtualCamera : Component
+class VirtualCamera : public Component
 {
-//public:
-//    VCamRenderSettings vCamRenderSettings;
-//    VirtualCamera(VCamRenderSettings _vCamRenderSettings, glm::vec3 lookAt);
-//    void LookAt(glm::vec3 lookAt);
+public:
+    VCamRenderSettings vCamRenderSettings;
+    VirtualCamera(VCamRenderSettings _vCamRenderSettings, glm::vec3 lookAtVec3);
+    void LookAt(glm::vec3 lookAt);
 };
 
 

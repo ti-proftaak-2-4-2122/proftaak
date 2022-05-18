@@ -17,6 +17,7 @@
 #include "OpenCVVideoCapture.h"
 #include "Scene.h"
 #include "SceneManager.h"
+#include "VirtualCamera.h"
 
 using tigl::Vertex;
 
@@ -35,48 +36,53 @@ void worldInit();
 
 Scene *scene;
 
+const float windowWidth = 1400;
+const float windowHeight = 1400;
 
+GameObject* camera;
+VirtualCamera* virtualCamera;
 int main()
 {
-    ImageFilter *filter = new ImageFilter();
-//    filter->filter_image(); //blocking call
-
-    if (!glfwInit())
-        throw "Could not initialize glwf";
-
-    window = glfwCreateWindow(1400, 800, "Hello World", nullptr, nullptr);
-    if (!window)
-    {
-        glfwTerminate();
-        throw "Could not initialize glwf";
-    }
-    glfwMakeContextCurrent(window);
-
-    //test
-
-    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
-    {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
-    }
-
-    tigl::init();
-    init();
     worldInit();
-
-
-
-
-    while (!glfwWindowShouldClose(window))
-    {
-        update();
-        draw();
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
-
-    glfwTerminate();
-
+//    ImageFilter *filter = new ImageFilter();
+////    filter->filter_image(); //blocking call
+//
+//    if (!glfwInit())
+//        throw "Could not initialize glwf";
+//
+//    window = glfwCreateWindow(windowWidth, windowHeight, "Hello World", nullptr, nullptr);
+//    if (!window)
+//    {
+//        glfwTerminate();
+//        throw "Could not initialize glwf";
+//    }
+//    glfwMakeContextCurrent(window);
+//
+//    //test
+//
+//    if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
+//    {
+//        std::cout << "Failed to initialize GLAD" << std::endl;
+//        return -1;
+//    }
+//
+//    tigl::init();
+//    init();
+//    worldInit();
+//
+//
+//
+//
+//    while (!glfwWindowShouldClose(window))
+//    {
+//        update();
+//        draw();
+//        glfwSwapBuffers(window);
+//        glfwPollEvents();
+//    }
+//
+//    glfwTerminate();
+//
 
     return 0;
 }
@@ -106,6 +112,9 @@ void worldInit()
     ObjModel* _objmodel = ModelManager::getModel(str);
     Mesh* meshComponent = new Mesh(_objmodel);
     suzanne->AddComponent(meshComponent);
+    virtualCamera = new VirtualCamera({70.0f, (windowWidth/windowHeight) , 0.1f,200.0f},
+                                      glm::vec3(0, 0,5));
+    camera->AddComponent(virtualCamera);
 
     scene->AddGameObject(suzanne);
 }
@@ -137,10 +146,10 @@ void draw()
         glViewport(0, 0, width, height);
     }
 
-    tigl::shader->setProjectionMatrix(
-            glm::perspective(glm::radians(70.0f), (float) width / (float) height, 0.1f, 200.0f));
-    tigl::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+//    tigl::shader->setProjectionMatrix(
+//            glm::perspective(glm::radians(70.0f), (float) width / (float) height, 0.1f, 200.0f));
+//    tigl::shader->setViewMatrix(
+//            glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     tigl::shader->enableTexture(false);
 
