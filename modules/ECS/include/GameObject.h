@@ -19,6 +19,11 @@ public:
     GameObject();
 
     template<class T>
-    T& AddComponent();
+    T& AddComponent()
+    {
+        auto component = new T();
+        AddComponent(component);
+        return *component;
+    }
 };
 
