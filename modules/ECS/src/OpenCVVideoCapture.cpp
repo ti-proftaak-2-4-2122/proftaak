@@ -65,10 +65,10 @@ void OpenCVVideoCapture::Draw() {
     glBindTexture(GL_TEXTURE_2D, this->captureTextureId);
     tigl::begin(GL_QUADS);
 
-    tigl::addVertex(Vertex::PT(glm::vec3(-rectangleSize, -rectangleSize, 0), glm::vec2(1, 1)));
-    tigl::addVertex(Vertex::PT(glm::vec3(rectangleSize, -rectangleSize, 0), glm::vec2(0, 1)));
-    tigl::addVertex(Vertex::PT(glm::vec3(rectangleSize, rectangleSize, 0), glm::vec2(0, 0)));
-    tigl::addVertex(Vertex::PT(glm::vec3(-rectangleSize, rectangleSize, 0), glm::vec2(1, 0)));
+    tigl::addVertex(Vertex::PT(glm::vec3(-rectangleSize, -rectangleSize, 0), glm::vec2(0, 1)));
+    tigl::addVertex(Vertex::PT(glm::vec3(rectangleSize, -rectangleSize, 0), glm::vec2(1, 1)));
+    tigl::addVertex(Vertex::PT(glm::vec3(rectangleSize, rectangleSize, 0), glm::vec2(1, 0)));
+    tigl::addVertex(Vertex::PT(glm::vec3(-rectangleSize, rectangleSize, 0), glm::vec2(0, 0)));
 
     tigl::end();
 }
