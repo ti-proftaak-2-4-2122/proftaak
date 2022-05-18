@@ -11,6 +11,7 @@
 #include <tigl.h>
 
 #include "OpenCVVideoCapture.h"
+#include "CardDetector.h"
 
 using tigl::Vertex;
 
@@ -29,9 +30,13 @@ void OpenCVVideoCapture::Awake() {
 
 void OpenCVVideoCapture::Update() {
     cv::Mat captureImage;
+    auto *detector = new CardDetector();
 
     // Todo: Replace with image provider
     this->capture->read(captureImage);
+    detector->UpdateCards(captureImage);
+    detector->GetDetectedCards();
+
 
     glBindTexture(GL_TEXTURE_2D, this->captureTextureId);
 

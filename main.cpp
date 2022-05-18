@@ -3,7 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include "tigl.h"
-#include "ImageFilter.h"
+#include "CardDetector.h"
 
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
@@ -33,9 +33,6 @@ Mesh* mesh;
 
 int main()
 {
-    ImageFilter *filter = new ImageFilter();
-//    filter->filter_image(); //blocking call
-
     if (!glfwInit())
         throw "Could not initialize glwf";
 
@@ -89,7 +86,7 @@ void init()
     });
 
     // Init OpenCV
-    capture = std::make_shared<cv::VideoCapture>(2);
+    capture = std::make_shared<cv::VideoCapture>(0);
 
     openCvComponent = new OpenCVVideoCapture(capture);
     openCvComponent->Awake();
