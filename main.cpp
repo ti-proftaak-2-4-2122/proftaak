@@ -17,6 +17,7 @@
 #include "OpenCVVideoCapture.h"
 #include "Scene.h"
 #include "SceneManager.h"
+#include "PlaneMesh.h"
 
 #include "user-config.h"
 
@@ -103,13 +104,21 @@ void init()
 void worldInit()
 {
     std::string str = "../resource/models/suzanne.obj";
+
     scene = new Scene();
+
     GameObject* suzanne = new GameObject();
+
     ObjModel* _objmodel = ModelManager::getModel(str);
     Mesh* meshComponent = new Mesh(_objmodel);
     suzanne->AddComponent(meshComponent);
 
     scene->AddGameObject(suzanne);
+
+    auto* playfield = new GameObject();
+    playfield->AddComponent<PlaneMesh>();
+
+    scene->AddGameObject(playfield);
 }
 
 void update()
