@@ -18,6 +18,7 @@ public:
 
     GameObject();
 
-
+    template<class T>
+    T& AddComponent();
 };
 

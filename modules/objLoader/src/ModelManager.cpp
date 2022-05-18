@@ -4,10 +4,10 @@
 
 #include "ModelManager.h"
 
-ObjModel *ModelManager::getModelVertices(const std::string &fileName)
+ObjModel *ModelManager::getModel(const std::string &fileName)
 {
-
     auto foundModel = modelCache.find(fileName);
+
     if (foundModel != modelCache.end()) return foundModel->second;
 
     auto model = new ObjModel(fileName);

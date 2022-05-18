@@ -6,7 +6,7 @@
 #include "tigl.h"
 #include "ObjModel.h"
 
-void Mesh::DrawMesh()
+void Mesh::Draw()
 {
     tigl::shader->setModelMatrix(glm::mat4(1.0f));
     tigl::begin(GL_TRIANGLES);
