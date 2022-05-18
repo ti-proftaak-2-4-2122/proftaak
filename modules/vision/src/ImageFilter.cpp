@@ -9,7 +9,7 @@
 cv::Mat ImageFilter::add_gaussianblur(const cv::Mat input_img){
     cv::Mat output_img;
 
-    cv::GaussianBlur(input_img, output_img, cv::Size(17, 17), 17);
+    cv::GaussianBlur(input_img, output_img, cv::Size(21, 21), 21);
 
     return output_img;
 }
@@ -33,27 +33,29 @@ cv::Mat ImageFilter::filter_the_blob(const cv::Mat *img)
     cv::cvtColor(*img, grey_img, cv::COLOR_HSV2RGB_FULL);
     cv::cvtColor(grey_img, grey_img, cv::COLOR_RGB2GRAY);
 
-    cv::bitwise_not(grey_img, grey_img);
+    cv::threshold(grey_img, grey_img, 1, 255, cv::THRESH_BINARY);
 
     //Setting up blob filter params
     cv::SimpleBlobDetector::Params blob_detector_params;
 
-    blob_detector_params.minThreshold = 10;
+    blob_detector_params.minThreshold = 0;
     blob_detector_params.maxThreshold = 255;
+    blob_detector_params.minDistBetweenBlobs = 0;
 
     //Setup which colours need to be filtered to
-//    blob_detector_params.filterByColor = true;
-//    blob_detector_params.blobColor = 0;
+    blob_detector_params.filterByColor = false;
+    blob_detector_params.blobColor = 0;
 
     //Setup which areas are to be filtered
     blob_detector_params.filterByArea = true;
-    blob_detector_params.minArea = 200;
+    blob_detector_params.minArea = 400;
+    blob_detector_params.maxArea = 500000;
+
 
     //Setup which shapes need to be filtered
-//    blob_detector_params.filterByCircularity = true;
-//    blob_detector_params.minCircularity = 0;
-//    blob_detector_params.maxCircularity = 0.785;
-
+    blob_detector_params.filterByCircularity = true;
+    blob_detector_params.minCircularity = 0;
+    blob_detector_params.maxCircularity = 0.785;
 
     //Setting up blob detector
     cv::Ptr<cv::SimpleBlobDetector> blob_detector = cv::SimpleBlobDetector::create(blob_detector_params);
@@ -63,21 +65,20 @@ cv::Mat ImageFilter::filter_the_blob(const cv::Mat *img)
     blob_detector->detect(grey_img, key_points);
 
     cv::Mat img_with_keypoints;
-    cv::drawKeypoints(*img, key_points, img_with_keypoints, cv::Scalar(255, 255, 255),
+    cv::drawKeypoints(grey_img, key_points, img_with_keypoints, cv::Scalar(0, 0, 255),
                       cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 
     //Met een for-loop de info uit de vector halen.
-
     for (auto blob_iterator = key_points.begin(); blob_iterator != key_points.end();
          blob_iterator++)
     {
         std::cout << " Size of blob: " << blob_iterator->size << std::endl;
         std::cout << " Point x of blob: " << blob_iterator->pt.x << "\t" << "Point y of blob: " <<
                   blob_iterator->pt.y << std::endl;
+        cv::circle(img_with_keypoints, cv::Point(blob_iterator->pt.x, blob_iterator->pt.y),
+                   blob_iterator->size, cv::Scalar(255, 255, 255), 5);
     }
     return img_with_keypoints;
-//    cv::imshow("grey scaled img", colour_img);
-//    cv::waitKey(0);
 }
 
 
@@ -88,7 +89,6 @@ void ImageFilter::filter_image()
 //    loaded_img = cv::imread(path);
 //
 //    filter_the_blob(&loaded_img);
-
 
     while (1)
     {
@@ -110,13 +110,17 @@ void ImageFilter::filter_image()
                                        cv::Scalar(25, 100, 100),
                                        cv::Scalar (55, 200, 200)); //yellow
 
-        red_output = add_gaussianblur(red_output);
+        yellow_mask = add_gaussianblur(yellow_mask);
+        cv::imshow("yellowblob", filter_the_blob(&yellow_mask));
 
-        cv::imshow("blob", filter_the_blob(&red_output));
-        //cv::imshow("red", red_output);
+        green_mask = add_gaussianblur(green_mask);
+        cv::imshow("greenblob", filter_the_blob(&green_mask));
+
+        red_output = add_gaussianblur(red_output);
+        cv::imshow("redblob", filter_the_blob(&red_output));
         loaded_img = add_gaussianblur(loaded_img);
 
         cv::imshow("original", loaded_img);
-        cv::waitKey(10);
+        cv::waitKey(1);
     }
 }
