@@ -13,7 +13,7 @@
 #include "OpenCVVideoCapture.h"
 #include "Scene.h"
 #include "SceneManager.h"
-#include "VirtualCamera.h"
+//#include "VirtualCamera.h"
 #include "Transform.h"
 
 using tigl::Vertex;
@@ -34,9 +34,9 @@ void worldInit();
 Scene *scene;
 
 const float windowWidth = 1400;
-const float windowHeight = 1400;
+const float windowHeight = 800;
 
-VirtualCamera* virtualCamera;
+//VirtualCamera* virtualCamera;
 int main()
 {
     ImageFilter *filter = new ImageFilter();
@@ -105,11 +105,16 @@ void worldInit()
     suzanne->AddComponent(meshComponent);
     scene->AddGameObject(suzanne);
 
-    GameObject* cameraGameobject = new GameObject();
-    virtualCamera = new VirtualCamera({70.0f, float (windowWidth/windowHeight) , 0.1f,200.0f});
-    cameraGameobject->AddComponent(virtualCamera);
+    //GameObject* cameraGameobject = new GameObject();
+    //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
+    //                                       200.0f});
+    //cameraGameobject->AddComponent(virtualCamera);
+    //scene->AddGameObject(cameraGameobject);
 
-    scene->AddGameObject(cameraGameobject);
+    int viewport[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
+
+
 }
 
 void update()
@@ -125,7 +130,6 @@ void draw()
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
     // Draw Background
     openCvComponent->Draw();
 
@@ -139,7 +143,10 @@ void draw()
         glViewport(0, 0, width, height);
     }
 
-    virtualCamera->LookAt(glm::vec3(0, 0,5));
+    tigl::shader->setProjectionMatrix(
+            glm::perspective(glm::radians(70.0f), (float) width / (float) height, 0.1f, 200.0f));
+    tigl::shader->setViewMatrix(
+            glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     tigl::shader->enableTexture(false);
 

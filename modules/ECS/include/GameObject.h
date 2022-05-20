@@ -14,7 +14,7 @@ public:
     std::vector<Component *> components;
     Transform& transform;
     GameObject();
-    void AddComponent(Component *component);
+    Component& AddComponent(Component *component);
     template<class T>
     T& AddComponent();
 };
