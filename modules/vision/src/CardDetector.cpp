@@ -6,14 +6,15 @@
 #include <vector>
 #include <iostream> //Dit is ffe voor debug waardes bekijken
 
-cv::Mat CardDetector::GetBlurredImage(const cv::Mat input_img){
+cv::Mat CardDetector::GetBlurredImage(const cv::Mat input_img)
+{
     cv::Mat output_img;
 
     cv::GaussianBlur(input_img, output_img, cv::Size(21, 21), 21);
     return output_img;
 }
 
-cv::Mat CardDetector::GetFilteredImage(const cv::Mat* img, const ColorFilter& color)
+cv::Mat CardDetector::GetFilteredImage(const cv::Mat *img, const ColorFilter &color)
 {
     cv::Mat hsv_img, mask_img, output_img;
 
@@ -55,7 +56,8 @@ cv::Mat CardDetector::FilterTheBlob(const cv::Mat *img, const ColorFilter color)
     blob_detector_params.maxCircularity = 0.785;
 
     //Setting up blob detector
-    cv::Ptr<cv::SimpleBlobDetector> blob_detector = cv::SimpleBlobDetector::create(blob_detector_params);
+    cv::Ptr<cv::SimpleBlobDetector> blob_detector = cv::SimpleBlobDetector::create(
+            blob_detector_params);
 
     //Detect blobs and store their key-points
     std::vector<cv::KeyPoint> key_points;
@@ -75,7 +77,7 @@ cv::Mat CardDetector::FilterTheBlob(const cv::Mat *img, const ColorFilter color)
         cv::circle(img_with_keypoints, cv::Point(blob_iterator->pt.x, blob_iterator->pt.y),
                    blob_iterator->size, cv::Scalar(255, 255, 255), 5);
 
-        Card* card = new Card{color.color, blob_iterator->pt.x, blob_iterator->pt.y};
+        Card *card = new Card{color.color, blob_iterator->pt.x, blob_iterator->pt.y};
         cards.push_back(*card);
     }
     return img_with_keypoints;
@@ -83,7 +85,7 @@ cv::Mat CardDetector::FilterTheBlob(const cv::Mat *img, const ColorFilter color)
 
 cv::Mat CardDetector::UpdateCards(const cv::Mat &input_image)
 {
-    if(!initialized) Initialize();
+    if (!initialized) Initialize();
 
     //empty list with old cards
     cards.clear();
@@ -91,13 +93,13 @@ cv::Mat CardDetector::UpdateCards(const cv::Mat &input_image)
     //fill list with new cards
     cv::Mat temp, temp2;
     temp = GetBlurredImage(input_image);
-    for(const auto& color : colours)
+    for (const auto &color: colours)
     {
         temp2 = GetFilteredImage(&temp, color);
         FilterTheBlob(&temp2, color);
     }
 
-    for(const auto& card : cards)
+    for (const auto &card: cards)
     {
         cv::circle(input_image, cv::Point(card.x, card.y),
                    40, GetColor(card.color), 4);
@@ -117,12 +119,12 @@ void CardDetector::PrintCard(Card card)
 
 void CardDetector::PrintCards()
 {
-    if(cards.empty())
+    if (cards.empty())
     {
         //std::cout << "empty\n";
         return;
     }
-    for(auto& card : cards)
+    for (auto &card: cards)
     {
         PrintCard(card);
     }
@@ -135,10 +137,10 @@ void CardDetector::Initialize()
 
 cv::Scalar CardDetector::GetColor(unsigned int colorCode)
 {
-    if(colorCode == 0) return {100, 150, 150};
-    if(colorCode == 1) return {0, 150, 150};
-    if(colorCode == 2) return {35, 150, 150};
-    else return NULL;
+    if (colorCode == 0) return {100, 150, 150};
+    if (colorCode == 1) return {0, 150, 150};
+    if (colorCode == 2) return {35, 150, 150};
+    return {0, 0, 0};
 }
 
 ////        cv::Mat red_mask1 = add_filter(&loaded_img,

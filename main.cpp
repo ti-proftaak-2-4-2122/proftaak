@@ -18,6 +18,9 @@
 //#include "VirtualCamera.h"
 #include "Transform.h"
 
+// set camera id of camera you want to use
+#define CAMERA_ID 0
+
 using tigl::Vertex;
 
 GLFWwindow *window;
@@ -88,7 +91,7 @@ void init()
     });
 
     // Init OpenCV
-    capture = std::make_shared<cv::VideoCapture>(0);
+    capture = std::make_shared<cv::VideoCapture>(CAMERA_ID);
 
     openCvComponent = new OpenCVVideoCapture(capture);
     openCvComponent->Awake();
