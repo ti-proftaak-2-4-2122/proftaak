@@ -163,7 +163,7 @@ void draw()
             glm::lookAt(glm::vec3(0, 15, 15), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     tigl::shader->enableTexture(false);
-    tigl::shader->enableLighting(true);
+    tigl::shader->enableLighting(false);
     tigl::shader->setLightCount(1);
 
     tigl::shader->setLightDirectional(0, false);

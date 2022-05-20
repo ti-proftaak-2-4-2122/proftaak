@@ -6,6 +6,7 @@
 
 #include "vector"
 #include <typeinfo>
+
 class Component;
 
 class Transform;
@@ -21,10 +22,11 @@ public:
     Component &AddComponent(Component *component);
 
     template<class T>
-    bool TryFindComponent(T *outComponent) {
+    bool TryFindComponent(T *outComponent)
+    {
         for (auto component: components)
         {
-            auto derived = dynamic_cast<T*>(component);
+            auto derived = dynamic_cast<T *>(component);
             if (derived)
             {
                 outComponent = derived;
@@ -34,7 +36,8 @@ public:
         outComponent = nullptr;
         return false;
     }
+
     template<class T>
-    T& AddComponent();
+    T &AddComponent();
 };
 
