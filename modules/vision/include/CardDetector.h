@@ -40,14 +40,15 @@ private:
     std::vector<Card> cards;
 
     void Initialize();
-    cv::Mat GetBlurredImage(const cv::Mat input_img);
-    cv::Mat GetFilteredImage(const cv::Mat* img, const ColorFilter color);
+    static cv::Mat GetBlurredImage(const cv::Mat input_img);
+    static cv::Mat GetFilteredImage(const cv::Mat* img, const ColorFilter& color);
     cv::Mat FilterTheBlob(const cv::Mat* img, const ColorFilter color);
+    static void PrintCard(Card card);
 
 public:
     void UpdateCards(const cv::Mat& input_image);
     std::vector<Card> GetDetectedCards();
-
+    void PrintCards();
 };
 
 

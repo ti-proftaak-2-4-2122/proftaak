@@ -35,7 +35,7 @@ void OpenCVVideoCapture::Update() {
     // Todo: Replace with image provider
     this->capture->read(captureImage);
     detector->UpdateCards(captureImage);
-    detector->GetDetectedCards();
+    detector->PrintCards();
 
 
     glBindTexture(GL_TEXTURE_2D, this->captureTextureId);

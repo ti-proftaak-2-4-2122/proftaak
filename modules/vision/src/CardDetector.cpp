@@ -10,17 +10,17 @@ cv::Mat CardDetector::GetBlurredImage(const cv::Mat input_img){
     cv::Mat output_img;
 
     cv::GaussianBlur(input_img, output_img, cv::Size(21, 21), 21);
-
     return output_img;
 }
 
-cv::Mat CardDetector::GetFilteredImage(const cv::Mat* img, const ColorFilter color)
+cv::Mat CardDetector::GetFilteredImage(const cv::Mat* img, const ColorFilter& color)
 {
     cv::Mat hsv_img, mask_img, output_img;
 
     cvtColor(*img, hsv_img, cv::COLOR_BGR2HSV_FULL);
-
+    cv::imshow("before", hsv_img);
     inRange(hsv_img, color.low , color.high, mask_img);
+    cv::imshow("after", mask_img);
     bitwise_and(hsv_img, hsv_img, output_img, mask_img);
     cvtColor(output_img, output_img, cv::COLOR_HSV2BGR_FULL);
     return output_img;
@@ -67,6 +67,8 @@ cv::Mat CardDetector::FilterTheBlob(const cv::Mat *img, const ColorFilter color)
     cv::drawKeypoints(grey_img, key_points, img_with_keypoints, cv::Scalar(0, 0, 255),
                       cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 
+    cv::imshow("blobs", img_with_keypoints);
+
     //Met een for-loop de info uit de vector halen.
     for (auto blob_iterator = key_points.begin(); blob_iterator != key_points.end();
          blob_iterator++)
@@ -76,8 +78,9 @@ cv::Mat CardDetector::FilterTheBlob(const cv::Mat *img, const ColorFilter color)
                   blob_iterator->pt.y << std::endl;
         cv::circle(img_with_keypoints, cv::Point(blob_iterator->pt.x, blob_iterator->pt.y),
                    blob_iterator->size, cv::Scalar(255, 255, 255), 5);
-
-        cards.push_back(Card{color.color, blob_iterator->pt.x, blob_iterator->pt.y});
+        Card* card = new Card{color.color, blob_iterator->pt.x, blob_iterator->pt.y};
+        //PrintCard(*card);
+        cards.push_back(*card);
     }
     return img_with_keypoints;
 }
@@ -95,6 +98,7 @@ void CardDetector::UpdateCards(const cv::Mat &input_image)
     for(const auto& color : colours)
     {
         temp = GetFilteredImage(&input_image, color);
+        cv::imshow("cv", temp);
         FilterTheBlob(&temp, color);
     }
 }
@@ -103,6 +107,26 @@ std::vector<CardDetector::Card> CardDetector::GetDetectedCards()
 {
     return cards;
 }
+
+void CardDetector::PrintCard(Card card)
+{
+    std::cout << "Color: " << card.color << "Position: " << card.x << "," << card.y << "\n";
+}
+
+void CardDetector::PrintCards()
+{
+    if(cards.empty())
+    {
+        //std::cout << "empty\n";
+        return;
+    }
+    for(auto& card : cards)
+    {
+    PrintCard(card);
+    }
+}
+
+
 
 void CardDetector::Initialize()
 {
