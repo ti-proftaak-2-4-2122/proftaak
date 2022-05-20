@@ -2,7 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
-#include "tigl.h"
+#include <tigl.h>
 #include "ImageFilter.h"
 #include <opencv2/highgui.hpp>
 #include <memory>
