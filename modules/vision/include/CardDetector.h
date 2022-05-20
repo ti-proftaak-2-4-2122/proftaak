@@ -28,15 +28,14 @@ private:
     //colours
     struct ColorFilter {
         unsigned int color;
-        cv::Scalar high;
         cv::Scalar low;
+        cv::Scalar high;
     };
-
     const ColorFilter green = ColorFilter{0, cv::Scalar(80, 100, 100), cv::Scalar(120, 200,200)};
-//    const ColorFilter red = ColorFilter{0, cv::Scalar(80, 100, 100), cv::Scalar(120, 200,200)};
+    const ColorFilter red = ColorFilter{0, cv::Scalar(80, 100, 100), cv::Scalar(120, 200,200)};
     const ColorFilter yellow = ColorFilter{0, cv::Scalar(25, 100, 100), cv::Scalar(55, 200, 200)};
+    const std::vector<ColorFilter> colours = {yellow, green};
 
-    const std::vector<ColorFilter> colours = {green, yellow};
     std::vector<Card> cards;
 
     void Initialize();

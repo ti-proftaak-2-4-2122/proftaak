@@ -19,7 +19,7 @@ cv::Mat CardDetector::GetFilteredImage(const cv::Mat* img, const ColorFilter& co
 
     cvtColor(*img, hsv_img, cv::COLOR_BGR2HSV_FULL);
     cv::imshow("before", hsv_img);
-    inRange(hsv_img, color.low , color.high, mask_img);
+    inRange(hsv_img, color.low, color.high, mask_img);
     cv::imshow("after", mask_img);
     bitwise_and(hsv_img, hsv_img, output_img, mask_img);
     cvtColor(output_img, output_img, cv::COLOR_HSV2BGR_FULL);
@@ -67,8 +67,6 @@ cv::Mat CardDetector::FilterTheBlob(const cv::Mat *img, const ColorFilter color)
     cv::drawKeypoints(grey_img, key_points, img_with_keypoints, cv::Scalar(0, 0, 255),
                       cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 
-    cv::imshow("blobs", img_with_keypoints);
-
     //Met een for-loop de info uit de vector halen.
     for (auto blob_iterator = key_points.begin(); blob_iterator != key_points.end();
          blob_iterator++)
@@ -78,8 +76,8 @@ cv::Mat CardDetector::FilterTheBlob(const cv::Mat *img, const ColorFilter color)
                   blob_iterator->pt.y << std::endl;
         cv::circle(img_with_keypoints, cv::Point(blob_iterator->pt.x, blob_iterator->pt.y),
                    blob_iterator->size, cv::Scalar(255, 255, 255), 5);
+
         Card* card = new Card{color.color, blob_iterator->pt.x, blob_iterator->pt.y};
-        //PrintCard(*card);
         cards.push_back(*card);
     }
     return img_with_keypoints;
@@ -93,13 +91,12 @@ void CardDetector::UpdateCards(const cv::Mat &input_image)
     cards.clear();
 
     //fill list with new cards
-    cv::Mat temp;
+    cv::Mat temp, temp2;
     temp = GetBlurredImage(input_image);
     for(const auto& color : colours)
     {
-        temp = GetFilteredImage(&input_image, color);
-        cv::imshow("cv", temp);
-        FilterTheBlob(&temp, color);
+        temp2 = GetFilteredImage(&temp, color);
+        FilterTheBlob(&temp2, color);
     }
 }
 
@@ -110,7 +107,7 @@ std::vector<CardDetector::Card> CardDetector::GetDetectedCards()
 
 void CardDetector::PrintCard(Card card)
 {
-    std::cout << "Color: " << card.color << "Position: " << card.x << "," << card.y << "\n";
+    std::cout << "Color: " << card.color << " Position: " << card.x << "," << card.y << "\n";
 }
 
 void CardDetector::PrintCards()
@@ -122,14 +119,17 @@ void CardDetector::PrintCards()
     }
     for(auto& card : cards)
     {
-    PrintCard(card);
+        PrintCard(card);
     }
 }
 
-
-
 void CardDetector::Initialize()
 {
+//    this->green  = ColorFilter{0, cv::Scalar(80, 100, 100), cv::Scalar(120, 200,200)};
+//    this->red    = ColorFilter{0, cv::Scalar(80, 100, 100), cv::Scalar(120, 200,200)};
+//    this->yellow = ColorFilter{0, cv::Scalar(25, 100, 100), cv::Scalar(55, 200, 200)};
+
+//    this->colours = {green, yellow};
 
     initialized = true;
 }
