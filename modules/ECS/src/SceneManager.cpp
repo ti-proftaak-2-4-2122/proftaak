@@ -8,27 +8,30 @@
 
 void UpdatePoll(Scene scene);
 
-void SceneManager::LoadScene(Scene &scene)
+void SceneManager::LoadScene(Scene scene)
 {
     for (auto gameObject: scene.gameobjects)
     {
-        for (auto *component: gameObject->components)
+        for (auto* component: gameObject.components)
         {
             component->Awake();
         }
     }
+  
     //auto f = std::async(std::launch::async, UpdatePoll, scene);
-    //UpdatePoll(scene);
+    UpdatePoll(scene);
+
 }
 
-void SceneManager::UpdatePoll(Scene &scene)
-{
-    for (const auto& gameObject: scene.gameobjects)
-    {
-        for (auto *component: gameObject->components)
+void UpdatePoll(Scene scene) {
+    while(1) {
+        for (auto gameObject: scene.gameobjects)
         {
-            component->Update();
-            component->Draw();
+            for (auto* component: gameObject.components)
+            {
+                component->Update();
+                component->Draw();
+            }
         }
     }
 }
