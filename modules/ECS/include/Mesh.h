@@ -6,24 +6,23 @@
 #define PROFTAAK24_MESH_H
 
 #include <vector>
-#include "glm/vec3.hpp"
-#include "glad/glad.h"
+#include "glm/glm.hpp"
 #include "Component.h"
-#include "ObjModel.h"
-#include "glm/gtc/matrix_transform.hpp"
 
+
+class ObjModel;
+
+class GameObject;
 
 class Mesh : public Component
 {
 private:
-    ObjModel* objModel;
+    ObjModel *objModel;
 public:
 
-    Mesh(ObjModel* _objmodel) {
-        objModel = _objmodel;
-    }
+    Mesh(ObjModel *_objmodel);
 
-    void DrawMesh();
+    void Draw();
 };
 
 
