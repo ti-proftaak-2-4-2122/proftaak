@@ -103,7 +103,8 @@ void worldInit()
     auto levelMesh = new Mesh(ModelManager::getModel(str));
     levelGO->AddComponent(levelMesh);
     scene->AddGameObject(levelGO);
-    levelGO->FindComponent<Mesh>();
+    auto test = levelGO->FindComponent<Mesh>();
+    auto test1 = new GameObject();
     //auto testFind = levelGO->FindComponent<Mesh>();
 //    GameObject *suzanne = new GameObject();
 //    ObjModel *_objmodel = ModelManager::getModel(str);
@@ -118,7 +119,7 @@ void worldInit()
     //                                       200.0f});
     //cameraGameobject->AddComponent(virtualCamera);
     //scene->AddGameObject(cameraGameobject);
-    
+
     int viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
 

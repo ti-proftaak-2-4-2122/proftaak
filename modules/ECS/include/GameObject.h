@@ -5,7 +5,7 @@
 #pragma once
 
 #include "vector"
-
+#include <typeinfo>
 class Component;
 
 class Transform;
@@ -21,7 +21,17 @@ public:
     Component &AddComponent(Component *component);
 
     template<class T>
-    T& FindComponent();
+    T& FindComponent() {
+        for (auto component: components)
+        {
+            if (typeid(T) == typeid(component))
+            {
+                return *((T*) component);
+            }
+        }
+
+        //return nullptr;
+    }
     template<class T>
     T& AddComponent();
 };

@@ -26,17 +26,3 @@ T &GameObject::AddComponent()
     AddComponent(component);
     return *component;
 }
-
-template<class T>
-T &GameObject::FindComponent()
-{
-    for (auto component: components)
-    {
-        if (typeid(T) == typeid(*component))
-        {
-            return *((T*) component);
-        }
-    }
-
-    return nullptr;
-}
