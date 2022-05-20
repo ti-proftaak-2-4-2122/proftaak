@@ -7,6 +7,7 @@
 #include "vector"
 
 class Component;
+class Transform;
 
 class GameObject
 {
@@ -17,7 +18,9 @@ public:
     void AddComponent(Component *component);
 
     GameObject();
+    Transform& getTransform();
 
-
+    template<class T>
+    T& AddComponent();
 };
 

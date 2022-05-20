@@ -11,17 +11,18 @@
 
 
 class ObjModel;
+
 class GameObject;
 
 class Mesh : public Component
 {
 private:
-    ObjModel* objModel;
+    ObjModel *objModel;
 public:
 
-    Mesh(ObjModel* _objmodel);
+    Mesh(ObjModel *_objmodel);
 
-    void DrawMesh();
+    void Draw();
 };
 
 

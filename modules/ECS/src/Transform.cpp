@@ -4,9 +4,42 @@
 
 #include "Transform.h"
 
-Transform::Transform() {
-    position = glm::vec3(0,0,0);
-    rotation = glm::vec3(0,0,0);
-    scale = glm::vec3(0,0,0);
+Transform::Transform()
+{
+    position = glm::vec3(0, 0, 0);
+    rotation = glm::vec3(0, 0, 0);
+    scale = glm::vec3(1, 1, 1);
+}
+
+const glm::vec3 &Transform::getPosition() const
+{
+    return position;
+}
+
+void Transform::setPosition(const glm::vec3 &newPosition)
+{
+    position = newPosition;
 
 }
+
+const glm::vec3 &Transform::getRotation() const
+{
+    return rotation;
+}
+
+void Transform::setRotation(const glm::vec3 &newRotation)
+{
+    rotation = glm::radians(newRotation);
+}
+
+const glm::vec3 &Transform::getScale() const
+{
+    return scale;
+}
+
+void Transform::setScale(const glm::vec3 &newScale)
+{
+    Transform::scale = newScale;
+}
+
+
