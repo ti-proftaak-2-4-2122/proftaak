@@ -15,6 +15,7 @@
 #include "SceneManager.h"
 //#include "VirtualCamera.h"
 #include "Transform.h"
+#include "CharacterStats.h"
 
 using tigl::Vertex;
 
@@ -104,6 +105,8 @@ void worldInit()
     Mesh *meshComponent = new Mesh(_objmodel);
     suzanne->AddComponent(meshComponent);
     scene->AddGameObject(suzanne);
+    CharacterStats* cs = new CharacterStats();
+    suzanne->AddComponent(cs);
 
     //GameObject* cameraGameobject = new GameObject();
     //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
