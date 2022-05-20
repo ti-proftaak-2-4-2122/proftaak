@@ -13,6 +13,7 @@
 #include "OpenCVVideoCapture.h"
 #include "Scene.h"
 #include "SceneManager.h"
+#include "VirtualCamera.h"
 #include "Transform.h"
 
 using tigl::Vertex;
@@ -32,7 +33,10 @@ void worldInit();
 
 Scene *scene;
 
+const float windowWidth = 1400;
+const float windowHeight = 1400;
 
+VirtualCamera* virtualCamera;
 int main()
 {
     ImageFilter *filter = new ImageFilter();
@@ -41,7 +45,7 @@ int main()
     if (!glfwInit())
         throw "Could not initialize glwf";
 
-    window = glfwCreateWindow(1400, 800, "Hello World", nullptr, nullptr);
+    window = glfwCreateWindow(windowWidth, windowHeight, "Hello World", nullptr, nullptr);
     if (!window)
     {
         glfwTerminate();
@@ -60,6 +64,7 @@ int main()
     tigl::init();
     init();
     worldInit();
+
 
     while (!glfwWindowShouldClose(window))
     {
@@ -99,6 +104,12 @@ void worldInit()
     Mesh *meshComponent = new Mesh(_objmodel);
     suzanne->AddComponent(meshComponent);
     scene->AddGameObject(suzanne);
+
+    GameObject* cameraGameobject = new GameObject();
+    virtualCamera = new VirtualCamera({70.0f, float (windowWidth/windowHeight) , 0.1f,200.0f});
+    cameraGameobject->AddComponent(virtualCamera);
+
+    scene->AddGameObject(cameraGameobject);
 }
 
 void update()
@@ -128,10 +139,7 @@ void draw()
         glViewport(0, 0, width, height);
     }
 
-    tigl::shader->setProjectionMatrix(
-            glm::perspective(glm::radians(70.0f), (float) width / (float) height, 0.1f, 200.0f));
-    tigl::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+    virtualCamera->LookAt(glm::vec3(0, 0,5));
 
     tigl::shader->enableTexture(false);
 

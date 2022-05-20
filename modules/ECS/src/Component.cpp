@@ -10,5 +10,4 @@ void Component::SetParent(GameObject *parentGameObject)
 
 Component::Component()
 {
-
 }

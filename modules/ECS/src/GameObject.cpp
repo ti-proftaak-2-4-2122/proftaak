@@ -11,18 +11,13 @@ void GameObject::AddComponent(Component *component) {
     components.push_back(component);
 }
 
-GameObject::GameObject() {
-    this->AddComponent<Transform>();
-}
+GameObject::GameObject() : transform((this->AddComponent<Transform>()))
+{
 
+}
 template<class T> T& GameObject::AddComponent()
 {
     auto component = new T();
     AddComponent(component);
     return *component;
-}
-
-Transform &GameObject::getTransform()
-{
-    return *((Transform*) components[0]);
 }

@@ -8,18 +8,13 @@
 
 class Component;
 class Transform;
-
 class GameObject
 {
-
 public:
     std::vector<Component *> components;
-
-    void AddComponent(Component *component);
-
+    Transform& transform;
     GameObject();
-    Transform& getTransform();
-
+    void AddComponent(Component *component);
     template<class T>
     T& AddComponent();
 };
