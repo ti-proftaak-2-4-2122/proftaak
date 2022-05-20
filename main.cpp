@@ -2,8 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
-#include "tigl.h"
-#include "ImageFilter.h"
+#include <tigl.h>
 #include <opencv2/highgui.hpp>
 #include <memory>
 
@@ -13,8 +12,9 @@
 #include "OpenCVVideoCapture.h"
 #include "Scene.h"
 #include "SceneManager.h"
-#include "VirtualCamera.h"
+//#include "VirtualCamera.h"
 #include "Transform.h"
+#include "LerpController.h"
 
 #include "user-config.h"
 
@@ -35,15 +35,12 @@ void worldInit();
 
 Scene *scene;
 
-const float windowWidth = 1400;
-const float windowHeight = 1400;
+const int windowWidth = 1400;
+const int windowHeight = 800;
 
-VirtualCamera* virtualCamera;
+//VirtualCamera* virtualCamera;
 int main()
 {
-    ImageFilter *filter = new ImageFilter();
-//    filter->filter_image(); //blocking call
-
     if (!glfwInit())
         throw "Could not initialize glwf";
 
@@ -107,12 +104,22 @@ void worldInit()
 
     ObjModel* _objmodel = ModelManager::getModel(str);
     Mesh* meshComponent = new Mesh(_objmodel);
+    auto lerpController = new LerpController();
     suzanne->AddComponent(meshComponent);
+    suzanne->AddComponent(lerpController);
     scene->AddGameObject(suzanne);
 
-    GameObject* cameraGameobject = new GameObject();
-    virtualCamera = new VirtualCamera({70.0f, float (windowWidth/windowHeight) , 0.1f,200.0f});
-    cameraGameobject->AddComponent(virtualCamera);
+    //GameObject* cameraGameobject = new GameObject();
+    //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
+    //                                       200.0f});
+    //cameraGameobject->AddComponent(virtualCamera);
+    //scene->AddGameObject(cameraGameobject);
+
+
+    lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.01f);
+    int viewport[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
+
 
     scene->AddGameObject(cameraGameobject);
 
@@ -155,7 +162,10 @@ void draw()
 
     glEnable(GL_DEPTH_TEST);
 
-    virtualCamera->LookAt(glm::vec3(0, 0,5));
+    tigl::shader->setProjectionMatrix(
+            glm::perspective(glm::radians(70.0f), (float) width / (float) height, 0.1f, 200.0f));
+    tigl::shader->setViewMatrix(
+            glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     tigl::shader->enableTexture(false);
 

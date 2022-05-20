@@ -6,7 +6,8 @@
 #include "Transform.h"
 #include "Component.h"
 
-Component& GameObject::AddComponent(Component *component) {
+Component &GameObject::AddComponent(Component *component)
+{
     component->SetParent(this);
     components.push_back(component);
     return *component;

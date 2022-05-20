@@ -38,7 +38,7 @@ ObjModel::ObjModel(const std::string &fileName)
         }
         if (firstPart == "f")
         {
-            Face face;
+            Face face{};
             for (int i = 0; i < 3; i++)
             {
                 char junk;
