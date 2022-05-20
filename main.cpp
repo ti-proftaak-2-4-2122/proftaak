@@ -17,7 +17,7 @@
 #include "LerpController.h"
 
 // set camera id of camera you want to use
-#define CAMERA_ID 0
+#define CAMERA_ID 1
 
 using tigl::Vertex;
 
@@ -103,8 +103,13 @@ void worldInit()
     auto levelMesh = new Mesh(ModelManager::getModel(str));
     levelGO->AddComponent(levelMesh);
     scene->AddGameObject(levelGO);
-    auto test = levelGO->FindComponent<Mesh>();
-    auto test1 = new GameObject();
+    LerpController* test1;
+
+    if(levelGO->TryFindComponent<LerpController>(test1) )
+    {
+        auto test2 = *test1;
+    }
+
     //auto testFind = levelGO->FindComponent<Mesh>();
 //    GameObject *suzanne = new GameObject();
 //    ObjModel *_objmodel = ModelManager::getModel(str);

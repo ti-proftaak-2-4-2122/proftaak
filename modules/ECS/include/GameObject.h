@@ -21,16 +21,17 @@ public:
     Component &AddComponent(Component *component);
 
     template<class T>
-    T& FindComponent() {
+    bool TryFindComponent(T *outComponent) {
         for (auto component: components)
         {
-            if (typeid(T) == typeid(component))
+            auto derived = dynamic_cast<T*>(component);
+            if (derived)
             {
-                return *((T*) component);
+                outComponent = derived;
+                return true;
             }
         }
-
-        //return nullptr;
+        return false;
     }
     template<class T>
     T& AddComponent();
