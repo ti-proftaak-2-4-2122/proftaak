@@ -10,8 +10,7 @@
 class SceneManager
 {
 public:
-    static void LoadScene(Scene& scene);
-    static void UpdatePoll(Scene &scene);
+    static void LoadScene(Scene scene);
 };
 
 
