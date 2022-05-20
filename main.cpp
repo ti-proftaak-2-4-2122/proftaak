@@ -103,9 +103,9 @@ void worldInit()
     auto levelMesh = new Mesh(ModelManager::getModel(str));
     levelGO->AddComponent(levelMesh);
     scene->AddGameObject(levelGO);
-    LerpController* test1;
+    LerpController *test1;
 
-    if(levelGO->TryFindComponent<LerpController>(test1) )
+    if (levelGO->TryFindComponent<LerpController>(test1))
     {
         auto test2 = *test1;
     }

@@ -31,6 +31,7 @@ public:
                 return true;
             }
         }
+        outComponent = nullptr;
         return false;
     }
     template<class T>
