@@ -1,3 +1,4 @@
+//
 // This file contains all user/computer specific config values
 // All defines/variables defined in this files are for the current user only
 // This file should be ignored by git
