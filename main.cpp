@@ -3,7 +3,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include <tigl.h>
-#include "ImageFilter.h"
 #include <opencv2/highgui.hpp>
 #include <memory>
 
@@ -16,6 +15,9 @@
 //#include "VirtualCamera.h"
 #include "Transform.h"
 #include "LerpController.h"
+
+// set camera id of camera you want to use
+#define CAMERA_ID 0
 
 using tigl::Vertex;
 
@@ -34,15 +36,12 @@ void worldInit();
 
 Scene *scene;
 
-const float windowWidth = 1400;
-const float windowHeight = 800;
+const int windowWidth = 1400;
+const int windowHeight = 800;
 
 //VirtualCamera* virtualCamera;
 int main()
 {
-    ImageFilter *filter = new ImageFilter();
-//    filter->filter_image(); //blocking call
-
     if (!glfwInit())
         throw "Could not initialize glwf";
 
@@ -90,7 +89,7 @@ void init()
     });
 
     // Init OpenCV
-    capture = std::make_shared<cv::VideoCapture>(2);
+    capture = std::make_shared<cv::VideoCapture>(CAMERA_ID);
 
     openCvComponent = new OpenCVVideoCapture(capture);
     openCvComponent->Awake();
@@ -100,10 +99,10 @@ void worldInit()
 {
     std::string str = "../resource/models/suzanne.obj";
     scene = new Scene();
-    GameObject *suzanne = new GameObject();
+    auto suzanne = new GameObject();
     ObjModel *_objmodel = ModelManager::getModel(str);
     Mesh *meshComponent = new Mesh(_objmodel);
-    LerpController* lerpController = new LerpController();
+    auto lerpController = new LerpController();
     suzanne->AddComponent(meshComponent);
     suzanne->AddComponent(lerpController);
     scene->AddGameObject(suzanne);
@@ -115,7 +114,7 @@ void worldInit()
     //scene->AddGameObject(cameraGameobject);
 
 
-    lerpController->Move(glm::vec3(0,0,0), glm::vec3(5,0,0), 0.01f);
+    lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.01f);
     int viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
 

@@ -6,5 +6,8 @@
       <file path="$PROJECT_DIR$/modules/ECS" />
       <file path="$PROJECT_DIR$/modules/objLoader" />
     </sourceRoots>
+    <libraryRoots>
+      <file path="$PROJECT_DIR$/libs" />
+    </libraryRoots>
   </component>
 </project>

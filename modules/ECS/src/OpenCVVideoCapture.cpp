@@ -8,18 +8,22 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <utility>
 #include <tigl.h>
 
 #include "OpenCVVideoCapture.h"
+#include "CardDetector.h"
 
 using tigl::Vertex;
 
-OpenCVVideoCapture::OpenCVVideoCapture(std::shared_ptr<cv::VideoCapture> capture) {
-    this->capture = capture;
+OpenCVVideoCapture::OpenCVVideoCapture(std::shared_ptr<cv::VideoCapture> capture)
+{
+    this->capture = std::move(capture);
     this->captureTextureId = -1;
 }
 
-void OpenCVVideoCapture::Awake() {
+void OpenCVVideoCapture::Awake()
+{
     glGenTextures(1, &captureTextureId);
     glBindTexture(GL_TEXTURE_2D, captureTextureId);
 
@@ -27,11 +31,17 @@ void OpenCVVideoCapture::Awake() {
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
-void OpenCVVideoCapture::Update() {
-    cv::Mat captureImage;
+void OpenCVVideoCapture::Update()
+{
+    cv::Mat captureImage, cvImage;
+    auto *detector = new CardDetector();
 
     // Todo: Replace with image provider
     this->capture->read(captureImage);
+
+    cvImage = detector->UpdateCards(captureImage);
+    detector->PrintCards();
+
 
     glBindTexture(GL_TEXTURE_2D, this->captureTextureId);
 
@@ -39,22 +49,23 @@ void OpenCVVideoCapture::Update() {
             GL_TEXTURE_2D,
             0,
             GL_RGB,
-            captureImage.cols,
-            captureImage.rows,
+            cvImage.cols,
+            cvImage.rows,
             0,
             GL_BGR,
             GL_UNSIGNED_BYTE,
-            captureImage.data
+            cvImage.data
     );
 }
 
-void OpenCVVideoCapture::Draw() {
+void OpenCVVideoCapture::Draw()
+{
 
     tigl::shader->setProjectionMatrix(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(glm::lookAt(
             glm::vec3(0.0f, 0, 5),
             glm::vec3(0.0f, 0, 0),
-            glm::vec3(0.0f,1,0)
+            glm::vec3(0.0f, 1, 0)
     ));
 
     tigl::shader->setModelMatrix(glm::mat4(1.0f));

@@ -9,6 +9,7 @@ class ObjModel
 {
 private:
     void loadVertices();
+
     std::vector<tigl::Vertex> vertices;
 
 public:
@@ -23,9 +24,9 @@ public:
     std::vector<glm::vec3> normals;
     std::vector<Face> faces;
 
-    ObjModel(const std::string &fileName);
+    explicit ObjModel(const std::string &fileName);
 
-    std::vector<tigl::Vertex>  GetVertices();
+    std::vector<tigl::Vertex> GetVertices();
 
     std::string toString();
 };
