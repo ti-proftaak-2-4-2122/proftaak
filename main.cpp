@@ -120,9 +120,9 @@ void worldInit()
     playfield->AddComponent<PlaneMesh>();
 
     auto* playfieldTransform = (Transform*) playfield->getTransform();
-    playfieldTransform->position.y = -.75f;
-    playfieldTransform->rotation.x = glm::radians(-50.0f);
-    playfieldTransform->scale = glm::vec3(4, 2, 1);
+    playfieldTransform->position = CONFIG_PLAYFIELD_POSITION;
+    playfieldTransform->rotation = CONFIG_PLAYFIELD_ROTATION;
+    playfieldTransform->scale = CONFIG_PLAYFIELD_SCALE;
 
     scene->AddGameObject(playfield);
 }
