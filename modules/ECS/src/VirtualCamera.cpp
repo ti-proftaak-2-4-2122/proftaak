@@ -21,5 +21,6 @@ VirtualCamera::VirtualCamera(VCamRenderSettings _vCamRenderSettings)
 }
 
 void VirtualCamera::LookAt(glm::vec3 lookAtVec3) {
-    tigl::shader->setViewMatrix(glm::lookAt(lookAtVec3, gameObject->transform.position, glm::vec3(0, 1,0)));
+    tigl::shader->setViewMatrix(glm::lookAt(lookAtVec3, gameObject->transform.getPosition(), glm::vec3(0, 1,
+                                                                                           0)));
 }

@@ -13,7 +13,7 @@
 
 void Mesh::Draw()
 {
-    auto transform = gameObject->getTransform();
+    auto transform = gameObject->transform;
 
     auto modelMatrix = glm::mat4(1.0f);
 

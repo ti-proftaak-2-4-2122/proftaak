@@ -21,8 +21,3 @@ template<class T> T& GameObject::AddComponent()
     AddComponent(component);
     return *component;
 }
-
-Transform &GameObject::getTransform()
-{
-    return *((Transform*) components[0]);
-}
