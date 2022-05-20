@@ -118,9 +118,7 @@ void worldInit()
     //                                       200.0f});
     //cameraGameobject->AddComponent(virtualCamera);
     //scene->AddGameObject(cameraGameobject);
-
-
-    lerpController->Move(glm::vec3(0,0,0), glm::vec3(5,0,0), 0.01f);
+    
     int viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
 
