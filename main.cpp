@@ -15,10 +15,8 @@
 #include "SceneManager.h"
 #include "VirtualCamera.h"
 #include "Transform.h"
-#include "PlaneMesh.h"
 
 #include "user-config.h"
-#include "Transform.h"
 
 using tigl::Vertex;
 
@@ -119,12 +117,12 @@ void worldInit()
     scene->AddGameObject(cameraGameobject);
 
     auto* playfield = new GameObject();
-    playfield->AddComponent<PlaneMesh>();
+    playfield->AddComponent(new Mesh(ModelManager::getModel("../resource/models/plane.obj")));
 
-    auto* playfieldTransform = (Transform*) playfield->getTransform();
-    playfieldTransform->position = CONFIG_PLAYFIELD_POSITION;
-    playfieldTransform->rotation = CONFIG_PLAYFIELD_ROTATION;
-    playfieldTransform->scale = CONFIG_PLAYFIELD_SCALE;
+    auto playfieldTransform = playfield->transform;
+    playfieldTransform.setPosition(CONFIG_PLAYFIELD_POSITION);
+    playfieldTransform.setRotation(CONFIG_PLAYFIELD_ROTATION);
+    playfieldTransform.setScale(CONFIG_PLAYFIELD_SCALE);
 
     scene->AddGameObject(playfield);
 }
