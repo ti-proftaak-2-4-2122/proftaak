@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.21)
 project(Proftaak24)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(OpenCV_DIR "libs/opencv")
 
 find_package(OpenCV REQUIRED)
@@ -36,6 +36,8 @@ ENDFOREACH()
 
 #internal libaries .h files directory
 add_subdirectory(libs/glm)
+add_subdirectory(libs/tigl)
+add_subdirectory(libs/glad)
 
 #add modules
 message("-- Adding all modules in modules folder")
@@ -44,10 +46,12 @@ FOREACH(MODULE ${MODULE_LIST})
     add_subdirectory(${MODULES_DIR_PATH}/${MODULE})
 ENDFOREACH()
 
-add_executable(${CMAKE_PROJECT_NAME} main.cpp libs/glad/glad.c libs/tigl/tigl.cpp)
+add_executable(${CMAKE_PROJECT_NAME} main.cpp)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} libglfw3.a )
 target_link_libraries(${CMAKE_PROJECT_NAME} glm )
+target_link_libraries(${CMAKE_PROJECT_NAME} tigl )
+target_link_libraries(${CMAKE_PROJECT_NAME} glad )
 target_link_libraries(${CMAKE_PROJECT_NAME} ${MODULE_LIST} )
 target_link_libraries(${CMAKE_PROJECT_NAME} opencv_core opencv_imgproc opencv_highgui opencv_imgcodecs )
 
