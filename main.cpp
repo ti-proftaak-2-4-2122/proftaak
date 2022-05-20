@@ -17,6 +17,7 @@
 #include "LerpController.h"
 
 #include "user-config.h"
+#include "ParentTransform.h"
 
 using tigl::Vertex;
 
@@ -114,16 +115,22 @@ void worldInit()
     playfield->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
     playfield->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
     playfield->transform.setScale(CONFIG_PLAYFIELD_SCALE);
+
+    scene->AddGameObject(playfield);
+
     GameObject* suzanne = new GameObject();
 
     ObjModel* _objmodel = ModelManager::getModel(str);
     Mesh* meshComponent = new Mesh(_objmodel);
 
     auto lerpController = new LerpController();
-    lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.01f);
+    lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.1f);
+
+    auto parentTransform = new ParentTransform(playfield);
 
     suzanne->AddComponent(meshComponent);
     suzanne->AddComponent(lerpController);
+    suzanne->AddComponent(parentTransform);
 
     scene->AddGameObject(suzanne);
 
