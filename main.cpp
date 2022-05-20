@@ -92,6 +92,14 @@ void init()
 
     openCvComponent = new OpenCVVideoCapture(capture);
     openCvComponent->Awake();
+
+    tigl::shader->setLightCount(2);
+
+    tigl::shader->setLightAmbient(0, glm::vec3(0.5f, 0.5f, 0.5f));
+
+    tigl::shader->setLightDiffuse(1, glm::vec3(0.8f, 0.8f, 0.8f));
+    tigl::shader->setLightDirectional(1, false);
+    tigl::shader->setLightPosition(1, glm::vec3(0.0f));
 }
 
 void worldInit()
@@ -100,6 +108,12 @@ void worldInit()
 
     scene = new Scene();
 
+    auto* playfield = new GameObject();
+    playfield->AddComponent(new Mesh(ModelManager::getModel("../resource/models/plane.obj")));
+
+    playfield->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
+    playfield->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
+    playfield->transform.setScale(CONFIG_PLAYFIELD_SCALE);
     GameObject* suzanne = new GameObject();
 
     ObjModel* _objmodel = ModelManager::getModel(str);
@@ -118,16 +132,6 @@ void worldInit()
     //                                       200.0f});
     //cameraGameobject->AddComponent(virtualCamera);
     //scene->AddGameObject(cameraGameobject);
-
-    auto* playfield = new GameObject();
-    playfield->AddComponent(new Mesh(ModelManager::getModel("../resource/models/plane.obj")));
-
-    auto* playfieldTransform = &playfield->transform;
-    playfieldTransform->setPosition(CONFIG_PLAYFIELD_POSITION);
-    playfieldTransform->setRotation(CONFIG_PLAYFIELD_ROTATION);
-    playfieldTransform->setScale(CONFIG_PLAYFIELD_SCALE);
-
-    scene->AddGameObject(playfield);
 }
 
 void update()
@@ -142,6 +146,8 @@ void draw()
 {
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    tigl::shader->enableLighting(false);
 
     // Draw Background
     openCvComponent->Draw();
@@ -164,6 +170,8 @@ void draw()
             glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     tigl::shader->enableTexture(false);
+
+    tigl::shader->enableLighting(true);
 
     SceneManager::UpdatePoll(*scene);
 }
