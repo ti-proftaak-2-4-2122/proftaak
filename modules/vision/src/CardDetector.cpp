@@ -18,9 +18,7 @@ cv::Mat CardDetector::GetFilteredImage(const cv::Mat* img, const ColorFilter& co
     cv::Mat hsv_img, mask_img, output_img;
 
     cvtColor(*img, hsv_img, cv::COLOR_BGR2HSV_FULL);
-    cv::imshow("before", hsv_img);
     inRange(hsv_img, color.low, color.high, mask_img);
-    cv::imshow("after", mask_img);
     bitwise_and(hsv_img, hsv_img, output_img, mask_img);
     cvtColor(output_img, output_img, cv::COLOR_HSV2BGR_FULL);
     return output_img;
@@ -83,7 +81,7 @@ cv::Mat CardDetector::FilterTheBlob(const cv::Mat *img, const ColorFilter color)
     return img_with_keypoints;
 }
 
-void CardDetector::UpdateCards(const cv::Mat &input_image)
+cv::Mat CardDetector::UpdateCards(const cv::Mat &input_image)
 {
     if(!initialized) Initialize();
 
@@ -98,6 +96,13 @@ void CardDetector::UpdateCards(const cv::Mat &input_image)
         temp2 = GetFilteredImage(&temp, color);
         FilterTheBlob(&temp2, color);
     }
+
+    for(const auto& card : cards)
+    {
+        cv::circle(input_image, cv::Point(card.x, card.y),
+                   40, GetColor(card.color), 4);
+    }
+    return input_image;
 }
 
 std::vector<CardDetector::Card> CardDetector::GetDetectedCards()
@@ -125,54 +130,21 @@ void CardDetector::PrintCards()
 
 void CardDetector::Initialize()
 {
-//    this->green  = ColorFilter{0, cv::Scalar(80, 100, 100), cv::Scalar(120, 200,200)};
-//    this->red    = ColorFilter{0, cv::Scalar(80, 100, 100), cv::Scalar(120, 200,200)};
-//    this->yellow = ColorFilter{0, cv::Scalar(25, 100, 100), cv::Scalar(55, 200, 200)};
-
-//    this->colours = {green, yellow};
-
     initialized = true;
 }
 
-//
-//void CardDetector::filter_image()
-//{
-//    cv::VideoCapture cap(0);
-////    std::string path = "../resources/vormen.jpg";
-////    loaded_img = cv::imread(path);
-////
-////    filter_the_blob(&loaded_img);
-//
-//    while (1)
-//    {
-//        cap.read(loaded_img);
-//        cv::Mat green_mask = GetFilteredImage(&loaded_img,
-//                                              cv::Scalar(80, 100, 100),
-//                                              cv::Scalar(120, 200, 200)); //green
-//
+cv::Scalar CardDetector::GetColor(unsigned int colorCode)
+{
+    if(colorCode == 0) return {100, 150, 150};
+    if(colorCode == 1) return {0, 150, 150};
+    if(colorCode == 2) return {35, 150, 150};
+    else return NULL;
+}
+
 ////        cv::Mat red_mask1 = add_filter(&loaded_img,
-////                                       cv::Scalar(245, 190, 100),
-////                                       cv::Scalar (255, 230,200)); //red
+////                                       cv::Scalar(245, 190, 100), cv::Scalar (255, 230,200)); //red
 ////        cv::Mat red_mask2 = add_filter(&loaded_img,
 ////                                       cv::Scalar(0, 190, 100),
 ////                                       cv::Scalar (12, 230,200)); //red
 ////        cv::Mat red_output;
 ////        cv::bitwise_or(red_mask1, red_mask2, red_output);
-//
-//        cv::Mat yellow_mask = GetFilteredImage(&loaded_img,
-//                                               cv::Scalar(25, 100, 100),
-//                                               cv::Scalar(55, 200, 200)); //yellow
-//
-//        yellow_mask = GetBlurredImage(yellow_mask);
-//        cv::imshow("yellowblob", FilterTheBlob(&yellow_mask));
-//
-//        green_mask = GetBlurredImage(green_mask);
-//        cv::imshow("greenblob", FilterTheBlob(&green_mask));
-//
-//        red_output = GetBlurredImage(red_output);
-//        cv::imshow("redblob", FilterTheBlob(&red_output));
-//        loaded_img = GetBlurredImage(loaded_img);
-//
-//        cv::imshow("original", loaded_img);
-//        cv::waitKey(1);
-//    }

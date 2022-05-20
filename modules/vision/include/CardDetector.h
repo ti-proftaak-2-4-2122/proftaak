@@ -32,9 +32,11 @@ private:
         cv::Scalar high;
     };
     const ColorFilter green = ColorFilter{0, cv::Scalar(80, 100, 100), cv::Scalar(120, 200,200)};
-    const ColorFilter red = ColorFilter{0, cv::Scalar(80, 100, 100), cv::Scalar(120, 200,200)};
-    const ColorFilter yellow = ColorFilter{0, cv::Scalar(25, 100, 100), cv::Scalar(55, 200, 200)};
-    const std::vector<ColorFilter> colours = {yellow, green};
+    const ColorFilter red = ColorFilter{1, cv::Scalar(245, 190, 100), cv::Scalar (255, 230,200)};
+    const ColorFilter red2 = ColorFilter{1, cv::Scalar(0, 190, 100), cv::Scalar (12, 230,200)};
+    const ColorFilter yellow = ColorFilter{2, cv::Scalar(25, 100, 100), cv::Scalar(55, 200, 200)};
+
+    const std::vector<ColorFilter> colours = {yellow, red, green};
 
     std::vector<Card> cards;
 
@@ -43,9 +45,10 @@ private:
     static cv::Mat GetFilteredImage(const cv::Mat* img, const ColorFilter& color);
     cv::Mat FilterTheBlob(const cv::Mat* img, const ColorFilter color);
     static void PrintCard(Card card);
+    static cv::Scalar GetColor(unsigned int colorCode);
 
 public:
-    void UpdateCards(const cv::Mat& input_image);
+    cv::Mat UpdateCards(const cv::Mat& input_image);
     std::vector<Card> GetDetectedCards();
     void PrintCards();
 };

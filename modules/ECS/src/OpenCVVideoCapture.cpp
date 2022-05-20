@@ -29,12 +29,13 @@ void OpenCVVideoCapture::Awake() {
 }
 
 void OpenCVVideoCapture::Update() {
-    cv::Mat captureImage;
+    cv::Mat captureImage, cvImage;
     auto *detector = new CardDetector();
 
     // Todo: Replace with image provider
     this->capture->read(captureImage);
-    detector->UpdateCards(captureImage);
+
+    cvImage = detector->UpdateCards(captureImage);
     detector->PrintCards();
 
 
@@ -44,12 +45,12 @@ void OpenCVVideoCapture::Update() {
             GL_TEXTURE_2D,
             0,
             GL_RGB,
-            captureImage.cols,
-            captureImage.rows,
+            cvImage.cols,
+            cvImage.rows,
             0,
             GL_BGR,
             GL_UNSIGNED_BYTE,
-            captureImage.data
+            cvImage.data
     );
 }
 
