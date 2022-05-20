@@ -31,10 +31,10 @@ private:
         cv::Scalar low;
         cv::Scalar high;
     };
-    const ColorFilter green = ColorFilter{0, cv::Scalar(80, 100, 100), cv::Scalar(120, 200, 200)};
+    const ColorFilter green = ColorFilter{0, cv::Scalar(80, 50, 50), cv::Scalar(120, 220, 220)};
     const ColorFilter red = ColorFilter{1, cv::Scalar(245, 190, 100), cv::Scalar(255, 230, 200)};
-    const ColorFilter red2 = ColorFilter{1, cv::Scalar(0, 190, 100), cv::Scalar(12, 230, 200)};
-    const ColorFilter yellow = ColorFilter{2, cv::Scalar(25, 100, 100), cv::Scalar(55, 200, 200)};
+    const ColorFilter red2 = ColorFilter{1, cv::Scalar(0, 190, 100), cv::Scalar(15, 230, 200)};
+    const ColorFilter yellow = ColorFilter{2, cv::Scalar(30, 80, 80), cv::Scalar(60, 245, 245)};
 
     const std::vector<ColorFilter> colours = {yellow, red, green};
 

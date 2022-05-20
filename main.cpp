@@ -17,7 +17,7 @@
 #include "LerpController.h"
 
 // set camera id of camera you want to use
-#define CAMERA_ID 1
+#define CAMERA_ID 0
 
 using tigl::Vertex;
 
