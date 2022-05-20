@@ -21,6 +21,8 @@ public:
     Component &AddComponent(Component *component);
 
     template<class T>
-    T &AddComponent();
+    T& FindComponent();
+    template<class T>
+    T& AddComponent();
 };
 

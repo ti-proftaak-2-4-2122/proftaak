@@ -97,15 +97,21 @@ void init()
 
 void worldInit()
 {
-    std::string str = "../resource/models/suzanne.obj";
+    std::string str = "../resource/models/map.obj";
     scene = new Scene();
-    auto suzanne = new GameObject();
-    ObjModel *_objmodel = ModelManager::getModel(str);
-    Mesh *meshComponent = new Mesh(_objmodel);
-    auto lerpController = new LerpController();
-    suzanne->AddComponent(meshComponent);
-    suzanne->AddComponent(lerpController);
-    scene->AddGameObject(suzanne);
+    auto levelGO = new GameObject();
+    auto levelMesh = new Mesh(ModelManager::getModel(str));
+    levelGO->AddComponent(levelMesh);
+    scene->AddGameObject(levelGO);
+    levelGO->FindComponent<Mesh>();
+    //auto testFind = levelGO->FindComponent<Mesh>();
+//    GameObject *suzanne = new GameObject();
+//    ObjModel *_objmodel = ModelManager::getModel(str);
+//    Mesh *meshComponent = new Mesh(_objmodel);
+//    LerpController* lerpController = new LerpController();
+//    suzanne->AddComponent(meshComponent);
+//    suzanne->AddComponent(lerpController);
+//    scene->AddGameObject(suzanne);
 
     //GameObject* cameraGameobject = new GameObject();
     //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
@@ -114,7 +120,7 @@ void worldInit()
     //scene->AddGameObject(cameraGameobject);
 
 
-    lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.01f);
+    lerpController->Move(glm::vec3(0,0,0), glm::vec3(5,0,0), 0.01f);
     int viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
 
@@ -150,9 +156,17 @@ void draw()
     tigl::shader->setProjectionMatrix(
             glm::perspective(glm::radians(70.0f), (float) width / (float) height, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+            glm::lookAt(glm::vec3(0, 15, 15), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     tigl::shader->enableTexture(false);
+    tigl::shader->enableLighting(true);
+    tigl::shader->setLightCount(1);
+
+    tigl::shader->setLightDirectional(0, false);
+    tigl::shader->setLightAmbient(0, glm::vec3(0, 0, 10.0f));
+//    tigl::shader->setLightDiffuse(0, glm::vec3(0.8f, 0.8f, 0.8f));
+//    tigl::shader->setLightSpecular(0, glm::vec3(0, 0, 0));
+//    tigl::shader->setShinyness(32.0f);
 
     SceneManager::UpdatePoll(*scene);
 }

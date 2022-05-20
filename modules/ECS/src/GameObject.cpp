@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include "Component.h"
+#include <typeinfo>
 
 Component &GameObject::AddComponent(Component *component)
 {
@@ -24,4 +25,18 @@ T &GameObject::AddComponent()
     auto component = new T();
     AddComponent(component);
     return *component;
+}
+
+template<class T>
+T &GameObject::FindComponent()
+{
+    for (auto component: components)
+    {
+        if (typeid(T) == typeid(*component))
+        {
+            return *((T*) component);
+        }
+    }
+
+    return nullptr;
 }
