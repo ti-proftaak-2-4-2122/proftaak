@@ -3,10 +3,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include <tigl.h>
-#include "tigl.h"
-#include "CardDetector.h"
-
-#include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
 #include <memory>
 
@@ -21,7 +17,7 @@
 #include "LerpController.h"
 
 // set camera id of camera you want to use
-#define CAMERA_ID 0
+#define CAMERA_ID 1
 
 using tigl::Vertex;
 
@@ -40,8 +36,8 @@ void worldInit();
 
 Scene *scene;
 
-const float windowWidth = 1400;
-const float windowHeight = 800;
+const int windowWidth = 1400;
+const int windowHeight = 800;
 
 //VirtualCamera* virtualCamera;
 int main()
@@ -103,10 +99,10 @@ void worldInit()
 {
     std::string str = "../resource/models/suzanne.obj";
     scene = new Scene();
-    GameObject *suzanne = new GameObject();
+    auto suzanne = new GameObject();
     ObjModel *_objmodel = ModelManager::getModel(str);
     Mesh *meshComponent = new Mesh(_objmodel);
-    LerpController* lerpController = new LerpController();
+    auto lerpController = new LerpController();
     suzanne->AddComponent(meshComponent);
     suzanne->AddComponent(lerpController);
     scene->AddGameObject(suzanne);
@@ -118,7 +114,7 @@ void worldInit()
     //scene->AddGameObject(cameraGameobject);
 
 
-    lerpController->Move(glm::vec3(0,0,0), glm::vec3(5,0,0), 0.01f);
+    lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.01f);
     int viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
 

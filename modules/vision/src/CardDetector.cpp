@@ -6,7 +6,7 @@
 #include <vector>
 #include <iostream> //Dit is ffe voor debug waardes bekijken
 
-cv::Mat CardDetector::GetBlurredImage(const cv::Mat input_img)
+cv::Mat CardDetector::GetBlurredImage(const cv::Mat &input_img)
 {
     cv::Mat output_img;
 
@@ -25,7 +25,7 @@ cv::Mat CardDetector::GetFilteredImage(const cv::Mat *img, const ColorFilter &co
     return output_img;
 }
 
-cv::Mat CardDetector::FilterTheBlob(const cv::Mat *img, const ColorFilter color)
+cv::Mat CardDetector::FilterTheBlob(const cv::Mat *img, const ColorFilter &color)
 {
     cv::Mat grey_img;
     cv::cvtColor(*img, grey_img, cv::COLOR_HSV2RGB_FULL);
@@ -68,16 +68,15 @@ cv::Mat CardDetector::FilterTheBlob(const cv::Mat *img, const ColorFilter color)
                       cv::DrawMatchesFlags::DRAW_RICH_KEYPOINTS);
 
     //Met een for-loop de info uit de vector halen.
-    for (auto blob_iterator = key_points.begin(); blob_iterator != key_points.end();
-         blob_iterator++)
+    for (auto &key_point: key_points)
     {
-        std::cout << " Size of blob: " << blob_iterator->size << std::endl;
-        std::cout << " Point x of blob: " << blob_iterator->pt.x << "\t" << "Point y of blob: " <<
-                  blob_iterator->pt.y << std::endl;
-        cv::circle(img_with_keypoints, cv::Point(blob_iterator->pt.x, blob_iterator->pt.y),
-                   blob_iterator->size, cv::Scalar(255, 255, 255), 5);
+        std::cout << " Size of blob: " << key_point.size << std::endl;
+        std::cout << " Point x of blob: " << key_point.pt.x << "\t" << "Point y of blob: " <<
+                  key_point.pt.y << std::endl;
+        cv::circle(img_with_keypoints, cv::Point((int) key_point.pt.x, (int) key_point.pt.y),
+                   (int) key_point.size, cv::Scalar(255, 255, 255), 5);
 
-        Card *card = new Card{color.color, blob_iterator->pt.x, blob_iterator->pt.y};
+        Card *card = new Card{color.color, key_point.pt.x, key_point.pt.y};
         cards.push_back(*card);
     }
     return img_with_keypoints;
@@ -101,7 +100,7 @@ cv::Mat CardDetector::UpdateCards(const cv::Mat &input_image)
 
     for (const auto &card: cards)
     {
-        cv::circle(input_image, cv::Point(card.x, card.y),
+        cv::circle(input_image, cv::Point((int) card.x, (int) card.y),
                    40, GetColor(card.color), 4);
     }
     return input_image;
