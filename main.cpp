@@ -4,11 +4,7 @@
 #include <iostream>
 #include "tigl.h"
 #include "ImageFilter.h"
-
-#include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
-#include <opencv2/imgproc.hpp>
-
 #include <memory>
 
 #include "ObjModel.h"
@@ -17,6 +13,8 @@
 #include "OpenCVVideoCapture.h"
 #include "Scene.h"
 #include "SceneManager.h"
+#include "VirtualCamera.h"
+#include "Transform.h"
 #include "PlaneMesh.h"
 
 #include "user-config.h"
@@ -39,7 +37,10 @@ void worldInit();
 
 Scene *scene;
 
+const float windowWidth = 1400;
+const float windowHeight = 1400;
 
+VirtualCamera* virtualCamera;
 int main()
 {
     ImageFilter *filter = new ImageFilter();
@@ -48,7 +49,7 @@ int main()
     if (!glfwInit())
         throw "Could not initialize glwf";
 
-    window = glfwCreateWindow(1400, 800, "Hello World", nullptr, nullptr);
+    window = glfwCreateWindow(windowWidth, windowHeight, "Hello World", nullptr, nullptr);
     if (!window)
     {
         glfwTerminate();
@@ -69,8 +70,6 @@ int main()
     worldInit();
 
 
-
-
     while (!glfwWindowShouldClose(window))
     {
         update();
@@ -80,7 +79,6 @@ int main()
     }
 
     glfwTerminate();
-
 
     return 0;
 }
@@ -92,7 +90,6 @@ void init()
     {
         if (key == GLFW_KEY_ESCAPE)
             glfwSetWindowShouldClose(window, true);
-
     });
 
     // Init OpenCV
@@ -113,8 +110,13 @@ void worldInit()
     ObjModel* _objmodel = ModelManager::getModel(str);
     Mesh* meshComponent = new Mesh(_objmodel);
     suzanne->AddComponent(meshComponent);
-
     scene->AddGameObject(suzanne);
+
+    GameObject* cameraGameobject = new GameObject();
+    virtualCamera = new VirtualCamera({70.0f, float (windowWidth/windowHeight) , 0.1f,200.0f});
+    cameraGameobject->AddComponent(virtualCamera);
+
+    scene->AddGameObject(cameraGameobject);
 
     auto* playfield = new GameObject();
     playfield->AddComponent<PlaneMesh>();
@@ -155,14 +157,9 @@ void draw()
 
     glEnable(GL_DEPTH_TEST);
 
-    tigl::shader->setProjectionMatrix(
-            glm::perspective(glm::radians(70.0f), (float) width / (float) height, 0.1f, 200.0f));
-    tigl::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+    virtualCamera->LookAt(glm::vec3(0, 0,5));
 
     tigl::shader->enableTexture(false);
 
-
     SceneManager::UpdatePoll(*scene);
-
 }
