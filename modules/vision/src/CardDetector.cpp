@@ -10,7 +10,7 @@ cv::Mat CardDetector::GetBlurredImage(const cv::Mat &input_img)
 {
     cv::Mat output_img;
 
-    cv::GaussianBlur(input_img, output_img, cv::Size(21, 21), 21);
+    cv::GaussianBlur(input_img, output_img, cv::Size(29, 29), 29);
     return output_img;
 }
 
