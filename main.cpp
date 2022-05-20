@@ -104,9 +104,13 @@ void worldInit()
 
     ObjModel* _objmodel = ModelManager::getModel(str);
     Mesh* meshComponent = new Mesh(_objmodel);
+
     auto lerpController = new LerpController();
+    lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.01f);
+
     suzanne->AddComponent(meshComponent);
     suzanne->AddComponent(lerpController);
+
     scene->AddGameObject(suzanne);
 
     //GameObject* cameraGameobject = new GameObject();
@@ -115,21 +119,13 @@ void worldInit()
     //cameraGameobject->AddComponent(virtualCamera);
     //scene->AddGameObject(cameraGameobject);
 
-
-    lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.01f);
-    int viewport[4];
-    glGetIntegerv(GL_VIEWPORT, viewport);
-
-
-    scene->AddGameObject(cameraGameobject);
-
     auto* playfield = new GameObject();
     playfield->AddComponent(new Mesh(ModelManager::getModel("../resource/models/plane.obj")));
 
-    auto playfieldTransform = playfield->transform;
-    playfieldTransform.setPosition(CONFIG_PLAYFIELD_POSITION);
-    playfieldTransform.setRotation(CONFIG_PLAYFIELD_ROTATION);
-    playfieldTransform.setScale(CONFIG_PLAYFIELD_SCALE);
+    auto* playfieldTransform = &playfield->transform;
+    playfieldTransform->setPosition(CONFIG_PLAYFIELD_POSITION);
+    playfieldTransform->setRotation(CONFIG_PLAYFIELD_ROTATION);
+    playfieldTransform->setScale(CONFIG_PLAYFIELD_SCALE);
 
     scene->AddGameObject(playfield);
 }
