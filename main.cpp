@@ -4,11 +4,7 @@
 #include <iostream>
 #include "tigl.h"
 #include "ImageFilter.h"
-
-#include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
-#include <opencv2/imgproc.hpp>
-
 #include <memory>
 
 #include "ObjModel.h"
@@ -17,6 +13,7 @@
 #include "OpenCVVideoCapture.h"
 #include "Scene.h"
 #include "SceneManager.h"
+#include "Transform.h"
 
 using tigl::Vertex;
 
@@ -64,9 +61,6 @@ int main()
     init();
     worldInit();
 
-
-
-
     while (!glfwWindowShouldClose(window))
     {
         update();
@@ -76,7 +70,6 @@ int main()
     }
 
     glfwTerminate();
-
 
     return 0;
 }
@@ -88,7 +81,6 @@ void init()
     {
         if (key == GLFW_KEY_ESCAPE)
             glfwSetWindowShouldClose(window, true);
-
     });
 
     // Init OpenCV
@@ -102,11 +94,10 @@ void worldInit()
 {
     std::string str = "../resource/models/suzanne.obj";
     scene = new Scene();
-    GameObject* suzanne = new GameObject();
-    ObjModel* _objmodel = ModelManager::getModel(str);
-    Mesh* meshComponent = new Mesh(_objmodel);
+    GameObject *suzanne = new GameObject();
+    ObjModel *_objmodel = ModelManager::getModel(str);
+    Mesh *meshComponent = new Mesh(_objmodel);
     suzanne->AddComponent(meshComponent);
-
     scene->AddGameObject(suzanne);
 }
 
@@ -144,7 +135,5 @@ void draw()
 
     tigl::shader->enableTexture(false);
 
-
     SceneManager::UpdatePoll(*scene);
-
 }
