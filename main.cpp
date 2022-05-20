@@ -140,7 +140,6 @@ void draw()
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
     // Draw Background
     openCvComponent->Draw();
 
@@ -153,6 +152,8 @@ void draw()
     {
         glViewport(0, 0, width, height);
     }
+
+    glEnable(GL_DEPTH_TEST);
 
     tigl::shader->setProjectionMatrix(
             glm::perspective(glm::radians(70.0f), (float) width / (float) height, 0.1f, 200.0f));

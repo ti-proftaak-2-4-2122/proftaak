@@ -50,6 +50,8 @@ void OpenCVVideoCapture::Update() {
 
 void OpenCVVideoCapture::Draw() {
 
+    glDisable(GL_DEPTH_TEST);
+
     tigl::shader->setProjectionMatrix(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(glm::lookAt(
             glm::vec3(0.0f, 0, 5),

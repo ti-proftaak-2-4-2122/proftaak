@@ -14,10 +14,10 @@
 using tigl::Vertex;
 
 const std::vector<Vertex> PlaneMesh::vertices = std::vector<Vertex>({
-    Vertex::PT(glm::vec3(-1, -1, 0), glm::vec2(0, 1)),
-    Vertex::PT(glm::vec3(1, -1, 0), glm::vec2(1, 1)),
-    Vertex::PT(glm::vec3(1, 1, 0), glm::vec2(1, 0)),
-    Vertex::PT(glm::vec3(-1, 1, 0), glm::vec2(0, 0))
+    Vertex::PC(glm::vec3(-1, -1, 0), glm::vec4(1)),
+    Vertex::PC(glm::vec3(1, -1, 0), glm::vec4(1)),
+    Vertex::PC(glm::vec3(1, 1, 0), glm::vec4(1)),
+    Vertex::PC(glm::vec3(-1, 1, 0), glm::vec4(1))
 });
 
 PlaneMesh::PlaneMesh()
@@ -39,6 +39,14 @@ void PlaneMesh::Draw()
     modelMatrix = glm::scale(modelMatrix, transform->scale);
 
     tigl::shader->setModelMatrix(modelMatrix);
+    tigl::shader->setColorMult(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+
+    tigl::shader->enableColor(true);
+    tigl::shader->enableColorMult(true);
+
 
     tigl::drawVertices(GL_QUADS, PlaneMesh::vertices);
+
+    tigl::shader->enableColor(false);
+    tigl::shader->enableColorMult(false);
 }
