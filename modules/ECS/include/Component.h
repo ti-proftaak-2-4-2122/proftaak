@@ -5,18 +5,23 @@
 #pragma once
 
 #include "GameObject.h"
+
 class GameObject;
 
 class Component
 {
 protected:
-    GameObject* gameObject = nullptr;
+    GameObject *gameObject = nullptr;
 public:
-    virtual void Awake(){};
-    virtual void Update(){};
-    virtual void Draw(){};
+    virtual void Awake() {};
+
+    virtual void Update() {};
+
+    virtual void Draw() {};
+
     Component();
-    void SetParent(GameObject* parentGameObject);
+
+    void SetParent(GameObject *parentGameObject);
 };
 
 

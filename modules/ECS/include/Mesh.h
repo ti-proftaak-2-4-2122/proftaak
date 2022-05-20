@@ -2,8 +2,7 @@
 // Created by Daan van Donk on 12/05/2022.
 //
 
-#ifndef PROFTAAK24_MESH_H
-#define PROFTAAK24_MESH_H
+#pragma once
 
 #include <vector>
 #include "glm/glm.hpp"
@@ -20,10 +19,7 @@ private:
     ObjModel *objModel;
 public:
 
-    Mesh(ObjModel *_objmodel);
+    explicit Mesh(ObjModel *_objmodel);
 
-    void Draw();
+    void Draw() override;
 };
-
-
-#endif //PROFTAAK24_MESH_H
