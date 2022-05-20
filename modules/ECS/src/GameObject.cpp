@@ -6,11 +6,22 @@
 #include "Transform.h"
 #include "Component.h"
 
-void GameObject::AddComponent(Component *component) {
+Component &GameObject::AddComponent(Component *component)
+{
     component->SetParent(this);
     components.push_back(component);
+    return *component;
 }
 
-GameObject::GameObject() {
-    this->AddComponent(new Transform());
+GameObject::GameObject() : transform((this->AddComponent<Transform>()))
+{
+
+}
+
+template<class T>
+T &GameObject::AddComponent()
+{
+    auto component = new T();
+    AddComponent(component);
+    return *component;
 }

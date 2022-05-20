@@ -7,21 +7,23 @@
 
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
-#include <opencv2/imgproc.hpp>
-
 #include <memory>
 
 #include "ObjModel.h"
 #include "Mesh.h"
 #include "ModelManager.h"
 #include "OpenCVVideoCapture.h"
+#include "Scene.h"
+#include "SceneManager.h"
+//#include "VirtualCamera.h"
+#include "Transform.h"
 
 using tigl::Vertex;
 
 GLFWwindow *window;
 
 std::shared_ptr<cv::VideoCapture> capture;
-OpenCVVideoCapture* openCvComponent;
+OpenCVVideoCapture *openCvComponent;
 
 void init();
 
@@ -29,14 +31,20 @@ void update();
 
 void draw();
 
-Mesh* mesh;
+void worldInit();
 
+Scene *scene;
+
+const float windowWidth = 1400;
+const float windowHeight = 800;
+
+//VirtualCamera* virtualCamera;
 int main()
 {
     if (!glfwInit())
         throw "Could not initialize glwf";
 
-    window = glfwCreateWindow(1400, 800, "Hello World", nullptr, nullptr);
+    window = glfwCreateWindow(windowWidth, windowHeight, "Hello World", nullptr, nullptr);
     if (!window)
     {
         glfwTerminate();
@@ -54,12 +62,8 @@ int main()
 
     tigl::init();
     init();
+    worldInit();
 
-    std::string str = "../resource/models/suzanne.obj";
-
-
-    auto objModel = ModelManager::getModelVertices(str);
-    mesh = new Mesh(objModel);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -71,7 +75,6 @@ int main()
 
     glfwTerminate();
 
-
     return 0;
 }
 
@@ -82,7 +85,6 @@ void init()
     {
         if (key == GLFW_KEY_ESCAPE)
             glfwSetWindowShouldClose(window, true);
-
     });
 
     // Init OpenCV
@@ -90,6 +92,28 @@ void init()
 
     openCvComponent = new OpenCVVideoCapture(capture);
     openCvComponent->Awake();
+}
+
+void worldInit()
+{
+    std::string str = "../resource/models/suzanne.obj";
+    scene = new Scene();
+    GameObject *suzanne = new GameObject();
+    ObjModel *_objmodel = ModelManager::getModel(str);
+    Mesh *meshComponent = new Mesh(_objmodel);
+    suzanne->AddComponent(meshComponent);
+    scene->AddGameObject(suzanne);
+
+    //GameObject* cameraGameobject = new GameObject();
+    //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
+    //                                       200.0f});
+    //cameraGameobject->AddComponent(virtualCamera);
+    //scene->AddGameObject(cameraGameobject);
+
+    int viewport[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
+
+
 }
 
 void update()
@@ -105,7 +129,6 @@ void draw()
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
     // Draw Background
     openCvComponent->Draw();
 
@@ -114,16 +137,17 @@ void draw()
 
     glfwGetFramebufferSize(window, &width, &height);
 
-    if(testWidth != width || testHeight != height) {
+    if (testWidth != width || testHeight != height)
+    {
         glViewport(0, 0, width, height);
     }
 
     tigl::shader->setProjectionMatrix(
-            glm::perspective(glm::radians(70.0f), (float)width / (float)height, 0.1f, 200.0f));
+            glm::perspective(glm::radians(70.0f), (float) width / (float) height, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     tigl::shader->enableTexture(false);
-    mesh->DrawMesh();
 
+    SceneManager::UpdatePoll(*scene);
 }

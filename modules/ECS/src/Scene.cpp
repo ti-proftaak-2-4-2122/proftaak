@@ -4,6 +4,15 @@
 
 #include "Scene.h"
 
-void Scene::AddGameObject(GameObject gameObject) {
+void Scene::AddGameObject(GameObject* gameObject) {
     gameobjects.push_back(gameObject);
+}
+
+Scene::Scene() {
+    gameobjects = std::vector<GameObject*>();
+}
+
+void Scene::update()
+{
+
 }
