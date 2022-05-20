@@ -15,7 +15,6 @@
 #include "SceneManager.h"
 //#include "VirtualCamera.h"
 #include "Transform.h"
-#include "LerpController.h"
 
 using tigl::Vertex;
 
@@ -103,9 +102,7 @@ void worldInit()
     GameObject *suzanne = new GameObject();
     ObjModel *_objmodel = ModelManager::getModel(str);
     Mesh *meshComponent = new Mesh(_objmodel);
-    LerpController* lerpController = new LerpController();
     suzanne->AddComponent(meshComponent);
-    suzanne->AddComponent(lerpController);
     scene->AddGameObject(suzanne);
 
     //GameObject* cameraGameobject = new GameObject();
@@ -114,8 +111,6 @@ void worldInit()
     //cameraGameobject->AddComponent(virtualCamera);
     //scene->AddGameObject(cameraGameobject);
 
-
-    lerpController->Move(glm::vec3(0,0,0), glm::vec3(5,0,0), 0.01f);
     int viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
 
