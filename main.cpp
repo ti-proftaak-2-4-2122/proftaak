@@ -18,7 +18,7 @@
 #include "AIPrefab.h"
 
 // set camera id of camera you want to use
-#define CAMERA_ID 0
+#define CAMERA_ID 1
 
 using tigl::Vertex;
 
@@ -153,9 +153,17 @@ void draw()
     tigl::shader->setProjectionMatrix(
             glm::perspective(glm::radians(70.0f), (float) width / (float) height, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+            glm::lookAt(glm::vec3(0, 15, 15), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     tigl::shader->enableTexture(false);
+    tigl::shader->enableLighting(false);
+    tigl::shader->setLightCount(1);
+
+    tigl::shader->setLightDirectional(0, false);
+    tigl::shader->setLightAmbient(0, glm::vec3(0, 0, 10.0f));
+//    tigl::shader->setLightDiffuse(0, glm::vec3(0.8f, 0.8f, 0.8f));
+//    tigl::shader->setLightSpecular(0, glm::vec3(0, 0, 0));
+//    tigl::shader->setShinyness(32.0f);
 
     SceneManager::UpdatePoll(*scene);
 }

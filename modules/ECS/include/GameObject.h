@@ -5,6 +5,7 @@
 #pragma once
 
 #include "vector"
+#include <typeinfo>
 
 class Component;
 
@@ -19,6 +20,21 @@ public:
     GameObject();
 
     Component &AddComponent(Component *component);
+
+    template<class T>
+    T *FindComponent()
+    {
+        for (auto component: components)
+        {
+            auto derived = dynamic_cast<T *>(component);
+            if (derived)
+            {
+                //outComponent = derived;
+                return derived;
+            }
+        }
+        return nullptr;
+    }
 
     template<class T>
     T &AddComponent();
