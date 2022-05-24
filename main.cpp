@@ -134,11 +134,6 @@ void worldInit()
 
     scene->AddGameObject(suzanne);
 
-    if (levelGO->TryFindComponent<LerpController>(test1))
-    {
-        auto test2 = *test1;
-    }
-
     //auto testFind = levelGO->FindComponent<Mesh>();
 //    GameObject *suzanne = new GameObject();
 //    ObjModel *_objmodel = ModelManager::getModel(str);
