@@ -6,10 +6,10 @@
 #include "tigl.h"
 #include "ObjModel.h"
 #include "Transform.h"
-
 #include <glm/vec3.hpp> // glm::vec3
 #include <glm/mat4x4.hpp> // glm::mat4
 #include <glm/ext/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale
+#include <iostream>
 
 void Mesh::Draw()
 {

@@ -23,7 +23,7 @@ void SceneManager::LoadScene(Scene &scene)
 
 void SceneManager::UpdatePoll(Scene &scene)
 {
-    for (const auto& gameObject: scene.gameobjects)
+    for (const auto &gameObject: scene.gameobjects)
     {
         for (auto *component: gameObject->components)
         {
