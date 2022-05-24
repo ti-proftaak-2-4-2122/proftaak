@@ -16,7 +16,6 @@ class GameObject
 public:
     std::vector<Component *> components;
     Transform &transform;
-
     GameObject();
 
     Component &AddComponent(Component *component);
