@@ -18,7 +18,7 @@
 #include "AIPrefab.h"
 
 // set camera id of camera you want to use
-#define CAMERA_ID 1
+#define CAMERA_ID 0
 
 using tigl::Vertex;
 
@@ -99,7 +99,7 @@ void init()
 void worldInit()
 {
 //    std::string str = "../resource/models/suzanne.obj";
-//    scene = new Scene();
+    scene = new Scene();
 //    auto suzanne = new GameObject();
 //    ObjModel *_objmodel = ModelManager::getModel(str);
 //    Mesh *meshComponent = new Mesh(_objmodel);

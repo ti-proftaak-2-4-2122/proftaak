@@ -2,13 +2,15 @@
 // Created by doguk on 5/24/2022.
 //
 #include "../include/AIPrefab.h"
+#include "statemachine/CombatState.h"
 
 AIPrefab::AIPrefab()
 {
-    context = new AIContext();
+    aiContext = new AIContext();
 }
 
 void AIPrefab::onTriggerEnter()
 {
-    context->switchState(new CombatState(context));
+    CombatState* combatState = new CombatState(aiContext);
+    aiContext->switchState(combatState);
 }

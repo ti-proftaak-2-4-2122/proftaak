@@ -11,7 +11,7 @@ class CombatState;
 class AIPrefab : public GameObject
 {
 private:
-    AIContext *context;
+    AIContext *aiContext;
 public:
     AIPrefab();
 
