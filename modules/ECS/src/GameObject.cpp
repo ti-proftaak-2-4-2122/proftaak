@@ -5,6 +5,7 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include "Component.h"
+#include <typeinfo>
 
 Component &GameObject::AddComponent(Component *component)
 {

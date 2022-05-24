@@ -134,6 +134,20 @@ void worldInit()
 
     scene->AddGameObject(suzanne);
 
+    if (levelGO->TryFindComponent<LerpController>(test1))
+    {
+        auto test2 = *test1;
+    }
+
+    //auto testFind = levelGO->FindComponent<Mesh>();
+//    GameObject *suzanne = new GameObject();
+//    ObjModel *_objmodel = ModelManager::getModel(str);
+//    Mesh *meshComponent = new Mesh(_objmodel);
+//    LerpController* lerpController = new LerpController();
+//    suzanne->AddComponent(meshComponent);
+//    suzanne->AddComponent(lerpController);
+//    scene->AddGameObject(suzanne);
+
     //GameObject* cameraGameobject = new GameObject();
     //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
     //                                       200.0f});
@@ -174,9 +188,11 @@ void draw()
     tigl::shader->setProjectionMatrix(
             glm::perspective(glm::radians(70.0f), (float) width / (float) height, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+            glm::lookAt(glm::vec3(0, 15, 15), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     tigl::shader->enableTexture(false);
+    tigl::shader->enableLighting(false);
+    tigl::shader->setLightCount(1);
 
     tigl::shader->enableLighting(true);
 
