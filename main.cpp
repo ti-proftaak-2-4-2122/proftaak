@@ -40,6 +40,9 @@ void worldInit();
 
 Scene *scene;
 
+int currentWidth;
+int currentHeight;
+
 //VirtualCamera* virtualCamera;
 int main()
 {
@@ -101,7 +104,7 @@ void init()
 
     tigl::shader->setLightDiffuse(1, glm::vec3(0.8f, 0.8f, 0.8f));
     tigl::shader->setLightDirectional(1, false);
-    tigl::shader->setLightPosition(1, glm::vec3(0.0f));
+    tigl::shader->setLightPosition(1, glm::vec3(2.0f, 0.0f, 2.0f));
 }
 
 void worldInit()
@@ -175,29 +178,30 @@ void update()
     GameTimer::update(glfwGetTime());
 }
 
-int width;
-int height;
-
 void draw()
 {
+    // Resize viewport, when needed
+    int newWidth = currentWidth;
+    int newHeight = currentHeight;
+
+    glfwGetFramebufferSize(window, &newWidth, &newHeight);
+    if (newWidth != currentWidth || newHeight != currentHeight)
+        glViewport(0, 0, currentWidth = newWidth, currentHeight = newHeight);
+
+
+    // Clear view
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Prepare for background
+    glDisable(GL_DEPTH_TEST);
 
     tigl::shader->enableLighting(false);
 
     // Draw Background
     openCvComponent->Draw();
 
-    int testWidth = width;
-    int testHeight = height;
-
-    glfwGetFramebufferSize(window, &width, &height);
-
-    if (testWidth != width || testHeight != height)
-    {
-        glViewport(0, 0, width, height);
-    }
-
+    // Prepare for 3D Scene
     glEnable(GL_DEPTH_TEST);
 
     tigl::shader->enableTexture(false);
@@ -208,11 +212,6 @@ void draw()
     tigl::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 0.5f, 2.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
-    tigl::shader->enableTexture(false);
-    tigl::shader->enableLighting(false);
-    tigl::shader->setLightCount(1);
-
-    tigl::shader->enableLighting(true);
-
+    // Draw 3D Scene
     SceneManager::UpdatePoll(*scene);
 }
