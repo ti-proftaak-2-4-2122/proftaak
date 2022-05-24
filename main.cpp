@@ -23,8 +23,8 @@
 #include "ParentTransform.h"
 
 //aspect ratio should always be 4:3 when using realsense camera
-#define WINDOW_WIDTH 640
-#define WINDOW_HEIGTH 480
+#define WINDOW_WIDTH 1440
+#define WINDOW_HEIGTH 1080
 
 #include "CharacterStats.h"
 
@@ -148,10 +148,16 @@ void worldInit()
 //    ObjModel *_objmodel = ModelManager::getModel(str);
 //    Mesh *meshComponent = new Mesh(_objmodel);
 //    auto lerpController = new LerpController();
-//    suzanne->AddComponent(meshComponent);
-//    suzanne->AddComponent(lerpController);
-//    scene->AddGameObject(suzanne);
+    suzanne->AddComponent(meshComponent);
+    scene->AddGameObject(suzanne);
 
+    suzanne->transform.setScale({5, 5, 5});
+    auto mesh = suzanne->FindComponent<Mesh>();
+    if(mesh)
+    {
+        //mesh->SetColor({200,200,200,255});
+        mesh->SetDiffuseColor({0.8f, 0, 0});
+    }
 //
 //    //GameObject* cameraGameobject = new GameObject();
 //    //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
@@ -214,6 +220,19 @@ void draw()
             glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 0.5f, 2.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+
+    glad_glEnable(GL_DEPTH_TEST);
+    tigl::shader->enableColor(false);
+    tigl::shader->enableTexture(false);
+    tigl::shader->enableLighting(true);
+    tigl::shader->setLightCount(2);
+
+    tigl::shader->setLightDirectional(0, true);
+    tigl::shader->setLightPosition(0, glm::vec3(10,10,10));
+    tigl::shader->setLightAmbient(1, glm::vec3(0.1f, 0.1f, 0.15f));
+    tigl::shader->setLightDiffuse(0, glm::vec3(0.8f, 0.8f, 0.8f));
+    tigl::shader->setLightSpecular(0, glm::vec3(0, 0, 0));
+    tigl::shader->setShinyness(32.0f);
 
     // Draw 3D Scene
     SceneManager::UpdatePoll(*scene);

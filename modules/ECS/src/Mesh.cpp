@@ -33,9 +33,20 @@ void Mesh::Draw()
     modelMatrix = glm::rotate(modelMatrix, rotation.z, glm::vec3(0, 0, 1));
 
     tigl::shader->setModelMatrix(modelMatrix);
-
+    tigl::shader->setLightDiffuse(0, diffuseColor);
     tigl::drawVertices(GL_TRIANGLES, objModel->GetVertices());
-
 }
 
 Mesh::Mesh(ObjModel *_objmodel) : objModel(_objmodel) {}
+
+void Mesh::SetColor(const glm::vec4& color)
+{
+    for(auto &vertex : objModel->GetVertices())
+        vertex.color = color;
+
+}
+
+void Mesh::SetDiffuseColor(const glm::vec3& color)
+{
+    this->diffuseColor = color;
+}
