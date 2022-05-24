@@ -12,16 +12,6 @@ set(MODULE_LIST "")
 
 FILE(GLOB MODULE_DIR_FILE_LIST RELATIVE ${MODULES_DIR_PATH} ${MODULES_DIR_PATH}/*)
 
-# Add check file lists function that can be triggered on build.
-# Will reload CMake if one of the modules has changed file listings
-add_custom_target(CHECK_MODULES_FILE_CHANGES
-        COMMAND
-        ${PROJECT_SOURCE_DIR}/reload_on_file_list_change.bat
-            ${PROJECT_SOURCE_DIR}
-            ${PROJECT_SOURCE_DIR}/modules
-            ${CMAKE_CURRENT_BINARY_DIR}/modules
-)
-
 FOREACH(MODULE_DIR_FILE ${MODULE_DIR_FILE_LIST})
     IF(IS_DIRECTORY "${MODULES_DIR_PATH}/${MODULE_DIR_FILE}")
         LIST(APPEND MODULE_LIST ${MODULE_DIR_FILE})
@@ -54,7 +44,6 @@ message("-- Adding all modules in modules folder")
 FOREACH(MODULE ${MODULE_LIST})
     message("       Added ${MODULE}")
     add_subdirectory(${MODULES_DIR_PATH}/${MODULE})
-    add_dependencies(${MODULE} CHECK_MODULES_FILE_CHANGES)
 ENDFOREACH()
 
 add_executable(${CMAKE_PROJECT_NAME} main.cpp user-config.h)
