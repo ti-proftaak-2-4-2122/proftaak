@@ -3,26 +3,27 @@
 //
 #include "AIPrefab.h"
 #include "statemachine/CombatState.h"
+#include "statemachine/WalkState.h"
 
 AIPrefab::AIPrefab(CharacterStats* characterStats)
 {
     aiContext = new AIContext();
-    this->characterStats = characterStats;
-    this->collider = new Collider(this->characterStats->range);
-
-    combatController = new CombatController();
+    aiContext->characterStats = characterStats;
+    this->collider = new Collider(aiContext->characterStats->range);
 }
 
 void AIPrefab::onTriggerEnter(Collider* other)
 {
     TagEnum result = other->getGameObject()->tagEnum;
     if(result == ENEMY) {
+        auto* combatState = new CombatState(aiContext);
         auto* otherStats = other->getGameObject()->FindComponent<CharacterStats>();
         if(otherStats) {
-            combatController->Damage(*(this->characterStats), *otherStats);
+            combatState->otherStats = otherStats;
+            aiContext->switchState(combatState);
         }
     } else if(result == STATE) {
-        auto* combatState = new CombatState(aiContext);
-        aiContext->switchState(combatState);
+        auto* moveState = new WalkState(aiContext);
+        aiContext->switchState(moveState);
     }
 }

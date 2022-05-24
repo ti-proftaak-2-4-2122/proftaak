@@ -14,8 +14,6 @@ class AIPrefab : public GameObject
 {
 private:
     AIContext *aiContext;
-    CharacterStats* characterStats;
-    CombatController* combatController;
     Collider* collider;
 public:
     AIPrefab(CharacterStats* characterStats);

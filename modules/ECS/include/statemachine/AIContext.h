@@ -16,6 +16,7 @@ class AIContext : public Component
 public:
     LerpController *lerpController;
     CombatController *combatController;
+    CharacterStats* characterStats;
 
     AIContext();
 

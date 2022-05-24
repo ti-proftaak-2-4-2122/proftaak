@@ -11,4 +11,5 @@ class CombatState : public State
 public:
     CombatState(AIContext *context);
     void actionSwitched() override;
+    CharacterStats* otherStats;
 };
