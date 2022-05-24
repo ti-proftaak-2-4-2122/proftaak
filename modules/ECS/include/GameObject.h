@@ -45,6 +45,8 @@ public:
         return *component;
     }
 
+    void AddChild(GameObject* child);
+
     void Awake();
 
     void Update();

@@ -136,9 +136,10 @@ void worldInit()
 
     suzanne->AddComponent(meshComponent);
     suzanne->AddComponent(lerpController);
-    suzanne->AddComponent(parentTransform);
 
-    scene->AddGameObject(suzanne);
+    //scene->AddGameObject(suzanne);
+
+    playfield->AddChild(suzanne);
 
     //auto testFind = levelGO->FindComponent<Mesh>();
 //    GameObject *suzanne = new GameObject();
