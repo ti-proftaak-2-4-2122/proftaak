@@ -128,6 +128,8 @@ void worldInit()
     lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.1f);
 
     auto parentTransform = new ParentTransform(playfield);
+    suzanne->transform.setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
+    suzanne->transform.setScale(glm::vec3(0.2f, 0.2f, 0.2f));
 
     suzanne->AddComponent(meshComponent);
     suzanne->AddComponent(lerpController);
@@ -198,10 +200,13 @@ void draw()
 
     glEnable(GL_DEPTH_TEST);
 
+    tigl::shader->enableTexture(false);
+    tigl::shader->enableLighting(true);
+
     tigl::shader->setProjectionMatrix(
             glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0, 15, 15), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+            glm::lookAt(glm::vec3(0, 0.5f, 2.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     tigl::shader->enableTexture(false);
     tigl::shader->enableLighting(false);
