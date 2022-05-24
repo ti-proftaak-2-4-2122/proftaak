@@ -92,12 +92,13 @@ void ObjModel::loadVertices()
         {
             auto vertexPosition = this->positions[face.pos[i]];
             auto normalPosition = this->normals[face.normal[i]];
-            vertices.push_back(tigl::Vertex::PN(vertexPosition, normalPosition));
+            vertices.push_back(tigl::Vertex::PCN(vertexPosition, {100,100,100,100},
+                                                 normalPosition));
         }
     }
 }
 
-std::vector<tigl::Vertex> ObjModel::GetVertices()
+std::vector<tigl::Vertex>& ObjModel::GetVertices()
 {
     return vertices;
 }
