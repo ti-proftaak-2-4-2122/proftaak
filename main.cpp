@@ -26,6 +26,8 @@
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGTH 480
 
+#include "CharacterStats.h"
+
 using tigl::Vertex;
 
 GLFWwindow *window;
