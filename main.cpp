@@ -125,6 +125,8 @@ void worldInit()
     //cameraGameobject->AddComponent(virtualCamera);
     //scene->AddGameObject(cameraGameobject);
 
+
+    lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.01f);
     int viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
 
@@ -158,7 +160,7 @@ void draw()
     }
 
     tigl::shader->setProjectionMatrix(
-            glm::perspective(glm::radians(70.0f), (float) width / (float) height, 0.1f, 200.0f));
+            glm::perspective(glm::radians(85.2f), (float) width / (float) height, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 15, 15), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
