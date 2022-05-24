@@ -21,11 +21,11 @@
 
 
 // set camera id of camera you want to use
-#define CAMERA_ID 1
+#define CAMERA_ID 0
 
 //aspect ratio should always be 4:3 when using realsense camera
-#define WINDOW_WIDTH 640
-#define WINDOW_HEIGTH 480
+#define WINDOW_WIDTH 1440
+#define WINDOW_HEIGTH 1080
 
 #include "CharacterStats.h"
 
@@ -101,15 +101,16 @@ void init()
 
 void worldInit()
 {
-//    std::string str = "../resource/models/suzanne.obj";
+    std::string str = "../resource/models/suzanne.obj";
     scene = new Scene();
-//    ObjModel *_objmodel = ModelManager::getModel(str);
-//    Mesh *meshComponent = new Mesh(_objmodel);
+    auto* suzanne = new GameObject();
+    ObjModel *_objmodel = ModelManager::getModel(str);
+    Mesh *meshComponent = new Mesh(_objmodel);
 //    auto lerpController = new LerpController();
-//    suzanne->AddComponent(meshComponent);
-//    suzanne->AddComponent(lerpController);
-//    scene->AddGameObject(suzanne);
+    suzanne->AddComponent(meshComponent);
+    scene->AddGameObject(suzanne);
 
+    suzanne->transform.setScale({5, 5, 5});
 //
 //    //GameObject* cameraGameobject = new GameObject();
 //    //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
@@ -149,6 +150,7 @@ void draw()
 {
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glad_glDisable(GL_DEPTH_TEST);
     // Draw Background
     openCvComponent->Draw();
 
@@ -167,15 +169,19 @@ void draw()
     tigl::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 15, 15), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
+    glad_glEnable(GL_DEPTH_TEST);
+
+    tigl::shader->enableColor(false);
     tigl::shader->enableTexture(false);
-    tigl::shader->enableLighting(false);
+    tigl::shader->enableLighting(true);
     tigl::shader->setLightCount(1);
 
-    tigl::shader->setLightDirectional(0, false);
-    tigl::shader->setLightAmbient(0, glm::vec3(0, 0, 10.0f));
-//    tigl::shader->setLightDiffuse(0, glm::vec3(0.8f, 0.8f, 0.8f));
-//    tigl::shader->setLightSpecular(0, glm::vec3(0, 0, 0));
-//    tigl::shader->setShinyness(32.0f);
+    tigl::shader->setLightDirectional(0, true);
+    tigl::shader->setLightPosition(0, glm::vec3(10,10,10));
+    tigl::shader->setLightAmbient(0, glm::vec3(0.1f, 0.1f, 0.15f));
+    tigl::shader->setLightDiffuse(0, glm::vec3(0.8f, 0.8f, 0.8f));
+    tigl::shader->setLightSpecular(0, glm::vec3(0, 0, 0));
+    tigl::shader->setShinyness(32.0f);
 
     SceneManager::UpdatePoll(*scene);
 }
