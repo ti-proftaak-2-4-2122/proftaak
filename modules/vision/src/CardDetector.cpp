@@ -21,7 +21,6 @@ cv::Mat CardDetector::GetFilteredImage(const cv::Mat *img, const ColorFilter &co
     cvtColor(*img, hsv_img, cv::COLOR_BGR2HSV_FULL);
     inRange(hsv_img, color.low, color.high, mask_img);
     bitwise_and(hsv_img, hsv_img, output_img, mask_img);
-    cv::imshow("daan", mask_img);
     cvtColor(output_img, output_img, cv::COLOR_HSV2BGR_FULL);
     return output_img;
 }

@@ -6,6 +6,7 @@
 #include <opencv2/highgui.hpp>
 #include <memory>
 
+
 #include "ObjModel.h"
 #include "Mesh.h"
 #include "ModelManager.h"
@@ -16,9 +17,15 @@
 #include "Transform.h"
 #include "LerpController.h"
 #include "AIPrefab.h"
+#include "GameTimer.h"
+
 
 // set camera id of camera you want to use
 #define CAMERA_ID 1
+
+//aspect ratio should always be 4:3 when using realsense camera
+#define WINDOW_WIDTH 640
+#define WINDOW_HEIGTH 480
 
 using tigl::Vertex;
 
@@ -28,17 +35,11 @@ std::shared_ptr<cv::VideoCapture> capture;
 OpenCVVideoCapture *openCvComponent;
 
 void init();
-
 void update();
-
 void draw();
-
 void worldInit();
 
 Scene *scene;
-
-const int windowWidth = 1400;
-const int windowHeight = 800;
 
 //VirtualCamera* virtualCamera;
 int main()
@@ -46,15 +47,13 @@ int main()
     if (!glfwInit())
         throw "Could not initialize glwf";
 
-    window = glfwCreateWindow(windowWidth, windowHeight, "Hello World", nullptr, nullptr);
+    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGTH, "Hello World", nullptr, nullptr);
     if (!window)
     {
         glfwTerminate();
         throw "Could not initialize glwf";
     }
     glfwMakeContextCurrent(window);
-
-    //test
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
     {
@@ -94,19 +93,21 @@ void init()
 
     openCvComponent = new OpenCVVideoCapture(capture);
     openCvComponent->Awake();
+
+    glfwSetTime(0);
 }
 
 void worldInit()
 {
 //    std::string str = "../resource/models/suzanne.obj";
     scene = new Scene();
-//    auto suzanne = new GameObject();
 //    ObjModel *_objmodel = ModelManager::getModel(str);
 //    Mesh *meshComponent = new Mesh(_objmodel);
 //    auto lerpController = new LerpController();
 //    suzanne->AddComponent(meshComponent);
 //    suzanne->AddComponent(lerpController);
 //    scene->AddGameObject(suzanne);
+
 //
 //    //GameObject* cameraGameobject = new GameObject();
 //    //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
@@ -122,11 +123,21 @@ void worldInit()
     auto aiPrefab = new AIPrefab();
     aiPrefab->onTriggerEnter();
 
+    //GameObject* cameraGameobject = new GameObject();
+    //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
+    //                                       200.0f});
+    //cameraGameobject->AddComponent(virtualCamera);
+    //scene->AddGameObject(cameraGameobject);
+
+    int viewport[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
 }
 
 void update()
 {
     openCvComponent->Update();
+    scene->update();
+    GameTimer::update(glfwGetTime());
 }
 
 int width;
@@ -136,7 +147,6 @@ void draw()
 {
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     // Draw Background
     openCvComponent->Draw();
 
@@ -151,7 +161,7 @@ void draw()
     }
 
     tigl::shader->setProjectionMatrix(
-            glm::perspective(glm::radians(70.0f), (float) width / (float) height, 0.1f, 200.0f));
+            glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 15, 15), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
