@@ -103,12 +103,14 @@ void worldInit()
     auto levelMesh = new Mesh(ModelManager::getModel(str));
     levelGO->AddComponent(levelMesh);
     scene->AddGameObject(levelGO);
-    LerpController *test1;
 
-    if (levelGO->TryFindComponent<LerpController>(test1))
+    auto *transform = levelGO->FindComponent<Transform>();
+    if (transform)
     {
-        auto test2 = *test1;
+        //do stuff with transform
     }
+
+
 
     //auto testFind = levelGO->FindComponent<Mesh>();
 //    GameObject *suzanne = new GameObject();
