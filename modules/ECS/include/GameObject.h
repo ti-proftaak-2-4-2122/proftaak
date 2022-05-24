@@ -16,25 +16,23 @@ class GameObject
 public:
     std::vector<Component *> components;
     Transform &transform;
-
     GameObject();
 
     Component &AddComponent(Component *component);
 
     template<class T>
-    bool TryFindComponent(T *outComponent)
+    T *FindComponent()
     {
         for (auto component: components)
         {
             auto derived = dynamic_cast<T *>(component);
             if (derived)
             {
-                outComponent = derived;
-                return true;
+                //outComponent = derived;
+                return derived;
             }
         }
-        outComponent = nullptr;
-        return false;
+        return nullptr;
     }
 
     template<class T>
@@ -44,5 +42,7 @@ public:
         AddComponent(component);
         return *component;
     }
+
+    virtual void onTriggerEnter() {};
 };
 

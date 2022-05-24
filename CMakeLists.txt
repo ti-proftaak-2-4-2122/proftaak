@@ -65,7 +65,6 @@ target_link_libraries(${CMAKE_PROJECT_NAME} tigl )
 target_link_libraries(${CMAKE_PROJECT_NAME} glad )
 target_link_libraries(${CMAKE_PROJECT_NAME} ${MODULE_LIST} )
 target_link_libraries(${CMAKE_PROJECT_NAME} opencv_core opencv_imgproc opencv_highgui opencv_imgcodecs opencv_features2d)
-
 # Copy opencv dlls to build dir if not exists
 message("-- Copy OpenCV Dll's to output directory")
 file(
