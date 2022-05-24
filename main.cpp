@@ -18,7 +18,7 @@
 #include "AIPrefab.h"
 
 // set camera id of camera you want to use
-#define CAMERA_ID 0
+#define CAMERA_ID 1
 
 using tigl::Vertex;
 

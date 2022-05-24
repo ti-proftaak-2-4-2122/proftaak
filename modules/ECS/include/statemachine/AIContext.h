@@ -9,7 +9,6 @@
 #include "CombatController.h"
 
 class Component;
-
 class State;
 
 class AIContext : public Component

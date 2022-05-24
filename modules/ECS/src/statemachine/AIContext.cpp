@@ -8,6 +8,7 @@
 void AIContext::switchState(State* newState)
 {
     this->currentState = newState;
+    this->currentState->actionSwitched();
 }
 
 AIContext::AIContext()
