@@ -12,9 +12,10 @@
 #include "OpenCVVideoCapture.h"
 #include "Scene.h"
 #include "SceneManager.h"
-//#include "VirtualCamera.h"
+#include "VirtualCamera.h"
 #include "Transform.h"
 #include "LerpController.h"
+#include "AIPrefab.h"
 
 // set camera id of camera you want to use
 #define CAMERA_ID 0
@@ -97,27 +98,29 @@ void init()
 
 void worldInit()
 {
-    std::string str = "../resource/models/suzanne.obj";
-    scene = new Scene();
-    auto suzanne = new GameObject();
-    ObjModel *_objmodel = ModelManager::getModel(str);
-    Mesh *meshComponent = new Mesh(_objmodel);
-    auto lerpController = new LerpController();
-    suzanne->AddComponent(meshComponent);
-    suzanne->AddComponent(lerpController);
-    scene->AddGameObject(suzanne);
+//    std::string str = "../resource/models/suzanne.obj";
+//    scene = new Scene();
+//    auto suzanne = new GameObject();
+//    ObjModel *_objmodel = ModelManager::getModel(str);
+//    Mesh *meshComponent = new Mesh(_objmodel);
+//    auto lerpController = new LerpController();
+//    suzanne->AddComponent(meshComponent);
+//    suzanne->AddComponent(lerpController);
+//    scene->AddGameObject(suzanne);
+//
+//    //GameObject* cameraGameobject = new GameObject();
+//    //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
+//    //                                       200.0f});
+//    //cameraGameobject->AddComponent(virtualCamera);
+//    //scene->AddGameObject(cameraGameobject);
+//
+//
+//    lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.01f);
+//    int viewport[4];
+//    glGetIntegerv(GL_VIEWPORT, viewport);
 
-    //GameObject* cameraGameobject = new GameObject();
-    //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
-    //                                       200.0f});
-    //cameraGameobject->AddComponent(virtualCamera);
-    //scene->AddGameObject(cameraGameobject);
-
-
-    lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.01f);
-    int viewport[4];
-    glGetIntegerv(GL_VIEWPORT, viewport);
-
+    auto aiPrefab = new AIPrefab();
+    aiPrefab->onTriggerEnter();
 
 }
 

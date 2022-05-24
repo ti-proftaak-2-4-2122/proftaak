@@ -22,5 +22,7 @@ public:
 
     template<class T>
     T &AddComponent();
+
+    virtual void onTriggerEnter() {};
 };
 
