@@ -21,7 +21,7 @@
 
 
 // set camera id of camera you want to use
-#define CAMERA_ID 1
+#define CAMERA_ID 0
 
 //aspect ratio should always be 4:3 when using realsense camera
 #define WINDOW_WIDTH 640
