@@ -34,15 +34,13 @@ void OpenCVVideoCapture::Awake()
 void OpenCVVideoCapture::Update()
 {
     cv::Mat captureImage, cvImage;
-    auto *detector = new CardDetector();
 
     // Todo: Replace with image provider
     this->capture->read(captureImage);
 
     cvImage = detector->UpdateCards(captureImage);
     detector->PrintCards();
-
-
+    
     glBindTexture(GL_TEXTURE_2D, this->captureTextureId);
 
     glTexImage2D(

@@ -10,12 +10,13 @@
 #include <opencv2/imgproc.hpp>
 
 #include "Component.h"
+#include "CardDetector.h"
 
 class OpenCVVideoCapture : public Component
 {
 private:
     std::shared_ptr<cv::VideoCapture> capture;
-
+    CardDetector *detector = new CardDetector();
     uint captureTextureId;
 
 public:
