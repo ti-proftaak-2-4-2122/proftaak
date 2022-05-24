@@ -26,6 +26,8 @@
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGTH 480
 
+#include "CharacterStats.h"
+
 using tigl::Vertex;
 
 GLFWwindow *window;
@@ -39,6 +41,9 @@ void draw();
 void worldInit();
 
 Scene *scene;
+
+int currentWidth;
+int currentHeight;
 
 //VirtualCamera* virtualCamera;
 int main()
@@ -101,7 +106,7 @@ void init()
 
     tigl::shader->setLightDiffuse(1, glm::vec3(0.8f, 0.8f, 0.8f));
     tigl::shader->setLightDirectional(1, false);
-    tigl::shader->setLightPosition(1, glm::vec3(0.0f));
+    tigl::shader->setLightPosition(1, glm::vec3(2.0f, 0.0f, 2.0f));
 }
 
 void worldInit()
@@ -128,12 +133,15 @@ void worldInit()
     lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.1f);
 
     auto parentTransform = new ParentTransform(playfield);
+    suzanne->transform.setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
+    suzanne->transform.setScale(glm::vec3(0.2f, 0.2f, 0.2f));
 
     suzanne->AddComponent(meshComponent);
     suzanne->AddComponent(lerpController);
-    suzanne->AddComponent(parentTransform);
 
-    scene->AddGameObject(suzanne);
+    //scene->AddGameObject(suzanne);
+
+    playfield->AddChild(suzanne);
 
     //auto testFind = levelGO->FindComponent<Mesh>();
 //    GameObject *suzanne = new GameObject();
@@ -173,41 +181,40 @@ void update()
     GameTimer::update(glfwGetTime());
 }
 
-int width;
-int height;
-
 void draw()
 {
+    // Resize viewport, when needed
+    int newWidth = currentWidth;
+    int newHeight = currentHeight;
+
+    glfwGetFramebufferSize(window, &newWidth, &newHeight);
+    if (newWidth != currentWidth || newHeight != currentHeight)
+        glViewport(0, 0, currentWidth = newWidth, currentHeight = newHeight);
+
+
+    // Clear view
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Prepare for background
+    glDisable(GL_DEPTH_TEST);
 
     tigl::shader->enableLighting(false);
 
     // Draw Background
     openCvComponent->Draw();
 
-    int testWidth = width;
-    int testHeight = height;
-
-    glfwGetFramebufferSize(window, &width, &height);
-
-    if (testWidth != width || testHeight != height)
-    {
-        glViewport(0, 0, width, height);
-    }
-
+    // Prepare for 3D Scene
     glEnable(GL_DEPTH_TEST);
+
+    tigl::shader->enableTexture(false);
+    tigl::shader->enableLighting(true);
 
     tigl::shader->setProjectionMatrix(
             glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0, 15, 15), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+            glm::lookAt(glm::vec3(0, 0.5f, 2.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
-    tigl::shader->enableTexture(false);
-    tigl::shader->enableLighting(false);
-    tigl::shader->setLightCount(1);
-
-    tigl::shader->enableLighting(true);
-
+    // Draw 3D Scene
     SceneManager::UpdatePoll(*scene);
 }
