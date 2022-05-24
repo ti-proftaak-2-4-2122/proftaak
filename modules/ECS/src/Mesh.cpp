@@ -3,13 +3,6 @@
 //
 
 #include "Mesh.h"
-#include "tigl.h"
-#include "ObjModel.h"
-#include "Transform.h"
-#include <glm/vec3.hpp> // glm::vec3
-#include <glm/mat4x4.hpp> // glm::mat4
-#include <glm/ext/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale
-#include <iostream>
 
 void Mesh::Draw()
 {
@@ -27,17 +20,20 @@ void Mesh::Draw()
     modelMatrix = glm::rotate(modelMatrix, rotation.z, glm::vec3(0, 0, 1));
 
     tigl::shader->setModelMatrix(modelMatrix);
-
-
-    tigl::begin(GL_TRIANGLES);
-
-    for (const auto &item: objModel->GetVertices())
-    {
-        tigl::addVertex(item);
-    }
-
-    tigl::end();
-
+    tigl::shader->setLightDiffuse(0, diffuseColor);
+    tigl::drawVertices(GL_TRIANGLES, objModel->GetVertices());
 }
 
 Mesh::Mesh(ObjModel *_objmodel) : objModel(_objmodel) {}
+
+void Mesh::SetColor(const glm::vec4& color)
+{
+    for(auto &vertex : objModel->GetVertices())
+        vertex.color = color;
+
+}
+
+void Mesh::SetDiffuseColor(const glm::vec3& color)
+{
+    this->diffuseColor = color;
+}

@@ -111,6 +111,12 @@ void worldInit()
     scene->AddGameObject(suzanne);
 
     suzanne->transform.setScale({5, 5, 5});
+    auto mesh = suzanne->FindComponent<Mesh>();
+    if(mesh)
+    {
+        //mesh->SetColor({200,200,200,255});
+        mesh->SetDiffuseColor({0.8f, 0, 0});
+    }
 //
 //    //GameObject* cameraGameobject = new GameObject();
 //    //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
@@ -150,7 +156,8 @@ void draw()
 {
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glad_glDisable(GL_DEPTH_TEST);
+
+    glad_glDisable(GL_DEPTH_TEST); //makes sure background is behind everything
     // Draw Background
     openCvComponent->Draw();
 
@@ -170,18 +177,19 @@ void draw()
             glm::lookAt(glm::vec3(0, 15, 15), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     glad_glEnable(GL_DEPTH_TEST);
-
     tigl::shader->enableColor(false);
     tigl::shader->enableTexture(false);
     tigl::shader->enableLighting(true);
-    tigl::shader->setLightCount(1);
+    tigl::shader->setLightCount(2);
 
     tigl::shader->setLightDirectional(0, true);
     tigl::shader->setLightPosition(0, glm::vec3(10,10,10));
-    tigl::shader->setLightAmbient(0, glm::vec3(0.1f, 0.1f, 0.15f));
+    tigl::shader->setLightAmbient(1, glm::vec3(0.1f, 0.1f, 0.15f));
     tigl::shader->setLightDiffuse(0, glm::vec3(0.8f, 0.8f, 0.8f));
     tigl::shader->setLightSpecular(0, glm::vec3(0, 0, 0));
     tigl::shader->setShinyness(32.0f);
+
+
 
     SceneManager::UpdatePoll(*scene);
 }
