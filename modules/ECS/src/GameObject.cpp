@@ -7,6 +7,11 @@
 #include "Component.h"
 #include <typeinfo>
 
+GameObject::GameObject() : transform((this->AddComponent<Transform>()))
+{
+
+}
+
 Component &GameObject::AddComponent(Component *component)
 {
     component->SetParent(this);
@@ -14,7 +19,20 @@ Component &GameObject::AddComponent(Component *component)
     return *component;
 }
 
-GameObject::GameObject() : transform((this->AddComponent<Transform>()))
+void GameObject::Awake()
 {
+    for(auto component : this->components)
+        component->Awake();
+}
 
+void GameObject::Update()
+{
+    for(auto component : this->components)
+        component->Update();
+}
+
+void GameObject::Draw()
+{
+    for(auto component : this->components)
+        component->Draw();
 }
