@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.21)
 
-file(GLOB VISION_SRC
+file(GLOB_RECURSE VISION_SRC CONFIGURE_DEPENDS
         "src/*.cpp"
-        "include/*.h"
-        )
+        "include/*.h")
 
 add_library(vision ${VISION_SRC})
