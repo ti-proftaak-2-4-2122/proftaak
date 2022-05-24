@@ -36,8 +36,9 @@ void worldInit();
 
 Scene *scene;
 
-const int windowWidth = 1400;
-const int windowHeight = 800;
+//aspect ratio should always be 4:3 when using realsense camera
+const int windowWidth = 1440;
+const int windowHeight = 1080;
 
 //VirtualCamera* virtualCamera;
 int main()
@@ -97,7 +98,7 @@ void init()
 
 void worldInit()
 {
-    std::string str = "../resource/models/map.obj";
+    std::string str = "../resource/models/grids.obj";
     scene = new Scene();
     auto levelGO = new GameObject();
     auto levelMesh = new Mesh(ModelManager::getModel(str));
@@ -126,7 +127,7 @@ void worldInit()
     //scene->AddGameObject(cameraGameobject);
 
 
-    lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.01f);
+    //lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.01f);
     int viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
 
@@ -160,9 +161,9 @@ void draw()
     }
 
     tigl::shader->setProjectionMatrix(
-            glm::perspective(glm::radians(85.2f), (float) width / (float) height, 0.1f, 200.0f));
+            glm::perspective(glm::radians(95.0f), (float) width / (float) height, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0, 15, 15), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+            glm::lookAt(glm::vec3(0, 6.6f, 0.01f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     tigl::shader->enableTexture(false);
     tigl::shader->enableLighting(false);
