@@ -5,11 +5,12 @@
 #pragma once
 
 #include "vector"
+#include "TagEnum.h"
 #include <typeinfo>
 
 class Component;
-
 class Transform;
+class Collider;
 
 class GameObject
 {
@@ -17,6 +18,8 @@ public:
     std::vector<Component *> components;
     Transform &transform;
     GameObject();
+
+    TagEnum tagEnum;
 
     Component &AddComponent(Component *component);
 
@@ -38,6 +41,6 @@ public:
     template<class T>
     T &AddComponent();
 
-    virtual void onTriggerEnter() {};
+    virtual void onTriggerEnter(Collider* collider) {};
 };
 

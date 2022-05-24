@@ -5,6 +5,8 @@
 
 #include "statemachine/AIContext.h"
 #include "GameObject.h"
+#include "Collider.h"
+#include "CharacterStats.h"
 
 class CombatState;
 
@@ -12,8 +14,11 @@ class AIPrefab : public GameObject
 {
 private:
     AIContext *aiContext;
+    CharacterStats* characterStats;
+    CombatController* combatController;
+    Collider* collider;
 public:
-    AIPrefab();
+    AIPrefab(CharacterStats* characterStats);
 
-    void onTriggerEnter() override;
+    void onTriggerEnter(Collider* collider) override;
 };

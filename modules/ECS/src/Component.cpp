@@ -8,5 +8,10 @@ void Component::SetParent(GameObject *parentGameObject)
     gameObject = parentGameObject;
 }
 
+GameObject *Component::getGameObject()
+{
+    return gameObject;
+}
+
 Component::Component()
 = default;

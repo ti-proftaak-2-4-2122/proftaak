@@ -120,8 +120,8 @@ void worldInit()
 //    int viewport[4];
 //    glGetIntegerv(GL_VIEWPORT, viewport);
 
-    auto aiPrefab = new AIPrefab();
-    aiPrefab->onTriggerEnter();
+    //auto aiPrefab = new AIPrefab();
+    //aiPrefab->onTriggerEnter();
 
     //GameObject* cameraGameobject = new GameObject();
     //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
