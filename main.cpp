@@ -6,6 +6,7 @@
 #include <opencv2/highgui.hpp>
 #include <memory>
 
+
 #include "ObjModel.h"
 #include "Mesh.h"
 #include "ModelManager.h"
@@ -15,6 +16,8 @@
 //#include "VirtualCamera.h"
 #include "Transform.h"
 #include "LerpController.h"
+#include "GameTimer.h"
+
 
 // set camera id of camera you want to use
 #define CAMERA_ID 1
@@ -93,6 +96,8 @@ void init()
 
     openCvComponent = new OpenCVVideoCapture(capture);
     openCvComponent->Awake();
+
+    glfwSetTime(0);
 }
 
 void worldInit()
@@ -129,13 +134,13 @@ void worldInit()
 
     int viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
-
-
 }
 
 void update()
 {
     openCvComponent->Update();
+    scene->update();
+    GameTimer::update(glfwGetTime());
 }
 
 int width;
@@ -145,7 +150,6 @@ void draw()
 {
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     // Draw Background
     openCvComponent->Draw();
 
