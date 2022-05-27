@@ -48,6 +48,7 @@ int currentHeight;
 //VirtualCamera* virtualCamera;
 int main()
 {
+    //Init GLFW
     if (!glfwInit())
         throw "Could not initialize glwf";
 
