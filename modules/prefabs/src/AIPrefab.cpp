@@ -9,7 +9,7 @@ AIPrefab::AIPrefab()
     aiContext = new AIContext();
 }
 
-void AIPrefab::onTriggerEnter()
+void AIPrefab::onTriggerEnter(Collider* collider)
 {
     auto* combatState = new CombatState(aiContext);
     aiContext->switchState(combatState);

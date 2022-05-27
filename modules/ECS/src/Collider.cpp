@@ -1,46 +1,39 @@
 //
-// Created by robin on 20-May-22.
+// Created by Daan van Donk on 24/05/2022.
 //
 
 #include "Collider.h"
-#include "Transform.h"
-
-void Collider::CheckColliders(const std::vector<Collider *> &other){
-
-    for (const auto collider : other){
-        if (CheckCollision(*collider))
-        {
-            //        attack.onTriggerEnter(other);
-        }
-
-    }
+Collider::Collider(float radius, glm::vec3 position) : radius(radius), position(position) {
 
 }
 
-
-Collider::Collider(float radius) : radius(radius) {
-
-}
-
-bool Collider::CheckCollision(Collider &other)
+void Collider::CheckCollision(Collider* other)
 {
-    // get center point circle first
+    //Distance calculation between this collider and other collider
+    double distance = sqrt((((other->position.x+other->radius)-(this->position.x+this->radius))*(
+            (other->position.x+other->radius)-
+            (this->position.x+this->radius))) + (((other->position.y+other->radius)-(this->position
+                                                                                             .y+this->radius))*(
+                                                         (other->position.y+other->radius)-(this->position.y+this->radius))));
 
-    auto position = this->gameObject->transform.getPosition();
-    auto positionOther = this->gameObject->transform.getPosition();
-
-    // get center point circle first
-    glm::vec2 center(position + radius);
-    glm::vec2 center_other(positionOther + 1.0f);
-
-    // get difference vector between both centers
-    glm::vec2 difference = center - center_other;
-
-    return glm::length(difference) < this->radius;
-
-
-
-    //return glm::length(difference) < one.Radius;
+    if(distance <= this->radius + other->radius) {
+        if(!hasEntered) {
+            gameObject->onTriggerEnter(other);
+            hasEntered = true;
+        }
+    } else {
+        if(hasEntered) {
+            gameObject->onTriggerExit(other);
+            hasEntered = false;
+        }
+    }
 }
 
+void Collider::Update()
+{
+    Component::Update();
+    for(auto other : otherColliders) {
+        CheckCollision(other);
+    }
+}
 
