@@ -100,10 +100,19 @@ void init()
 
     glfwSetTime(0);
 
+    tigl::shader->enableColor(false);
+    tigl::shader->enableTexture(true);
+    tigl::shader->enableLighting(true);
     tigl::shader->setLightCount(2);
 
-    tigl::shader->setLightAmbient(0, glm::vec3(0.5f, 0.5f, 0.5f));
+    tigl::shader->setLightDirectional(0, false);
+    tigl::shader->setLightPosition(0, glm::vec3(10,10,10));
 
+    tigl::shader->setLightAmbient(1, glm::vec3(0.1f, 0.1f, 0.15f));
+    tigl::shader->setLightDiffuse(0, glm::vec3(0.8f, 0.8f, 0.8f));
+    tigl::shader->setLightSpecular(0, glm::vec3(0, 0, 0));
+    tigl::shader->setShinyness(32.0f);
+    tigl::shader->setLightAmbient(0, glm::vec3(0.5f, 0.5f, 0.5f));
     tigl::shader->setLightDiffuse(1, glm::vec3(0.8f, 0.8f, 0.8f));
     tigl::shader->setLightDirectional(1, false);
     tigl::shader->setLightPosition(1, glm::vec3(2.0f, 0.0f, 2.0f));
@@ -115,14 +124,58 @@ void worldInit()
 
     scene = new Scene();
 
-    auto* playfield = new GameObject();
-    playfield->AddComponent(new Mesh(ModelManager::getModel("../resource/models/plane.obj")));
+    auto* map_ground = new GameObject();
+    map_ground->AddComponent(new Mesh(ModelManager::getModel("../resource/models/map_ground.obj")));
+    map_ground->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
+    map_ground->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
+    map_ground->transform.setScale(CONFIG_PLAYFIELD_SCALE);
+    auto mesh_map_ground = map_ground->FindComponent<Mesh>();
+    if(mesh_map_ground)
+    {
+        //mesh_map_ground->SetColor({200,200,200,255});
+        mesh_map_ground->SetDiffuseColor({0.0f, 1, 0});
+    }
+    scene->AddGameObject(map_ground);
 
-    playfield->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
-    playfield->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
-    playfield->transform.setScale(CONFIG_PLAYFIELD_SCALE);
+    auto* map_river = new GameObject();
+    map_river->AddComponent(new Mesh(ModelManager::getModel("../resource/models/map_river.obj")));
+    map_river->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
+    map_river->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
+    map_river->transform.setScale(CONFIG_PLAYFIELD_SCALE);
+    auto mesh_map_river = map_river->FindComponent<Mesh>();
+    if(mesh_map_river)
+    {
+        //mesh_map_ground->SetColor({200,200,200,255});
+        mesh_map_river->SetDiffuseColor({0.0f, 0, 1});
+    }
+    scene->AddGameObject(map_river);
 
-    scene->AddGameObject(playfield);
+    auto* map_bridges = new GameObject();
+    map_bridges->AddComponent(new Mesh(ModelManager::getModel("../resource/models/map_bridges.obj")));
+    map_bridges->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
+    map_bridges->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
+    map_bridges->transform.setScale(CONFIG_PLAYFIELD_SCALE);
+    auto mesh_map_bridges = map_bridges->FindComponent<Mesh>();
+    if(mesh_map_bridges)
+    {
+        //mesh_map_bridges->SetColor({200,200,200,255});
+        mesh_map_bridges->SetDiffuseColor({1.0f, 0.392f, 0.3137f});
+    }
+    scene->AddGameObject(map_bridges);
+
+    auto* map_towers = new GameObject();
+    map_towers->AddComponent(new Mesh(ModelManager::getModel("../resource/models/map_towers.obj")));
+    map_towers->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
+    map_towers->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
+    map_towers->transform.setScale(CONFIG_PLAYFIELD_SCALE);
+    auto mesh_map_towers = map_towers->FindComponent<Mesh>();
+    if(mesh_map_towers)
+    {
+        //mesh_map_towers->SetColor({183,176,156,200});
+        //mesh_map_towers->SetDiffuseColor({0.319f, 0.292f, 0.2137f});
+        mesh_map_towers->SetDiffuseColor({1.0f, 0.392f, 0.3137f});
+    }
+    scene->AddGameObject(map_towers);
 
     GameObject* suzanne = new GameObject();
 
@@ -132,7 +185,7 @@ void worldInit()
     auto lerpController = new LerpController();
     lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.1f);
 
-    auto parentTransform = new ParentTransform(playfield);
+    auto parentTransform = new ParentTransform(map_ground);
     suzanne->transform.setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
     suzanne->transform.setScale(glm::vec3(0.2f, 0.2f, 0.2f));
 
@@ -141,7 +194,7 @@ void worldInit()
 
     //scene->AddGameObject(suzanne);
 
-    playfield->AddChild(suzanne);
+    map_ground->AddChild(suzanne);
 
     //auto testFind = levelGO->FindComponent<Mesh>();
 //    GameObject *suzanne = new GameObject();
@@ -156,7 +209,7 @@ void worldInit()
     if(mesh)
     {
         //mesh->SetColor({200,200,200,255});
-        mesh->SetDiffuseColor({0.8f, 0, 0});
+        //mesh->SetDiffuseColor({0.8f, 0, 0});
     }
 //
 //    //GameObject* cameraGameobject = new GameObject();
@@ -197,23 +250,17 @@ void draw()
     if (newWidth != currentWidth || newHeight != currentHeight)
         glViewport(0, 0, currentWidth = newWidth, currentHeight = newHeight);
 
-
     // Clear view
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Prepare for background
     glDisable(GL_DEPTH_TEST);
-
     tigl::shader->enableLighting(false);
-
     // Draw Background
     openCvComponent->Draw();
-
     // Prepare for 3D Scene
     glEnable(GL_DEPTH_TEST);
-
-    tigl::shader->enableTexture(false);
     tigl::shader->enableLighting(true);
 
     tigl::shader->setProjectionMatrix(
@@ -222,17 +269,7 @@ void draw()
             glm::lookAt(glm::vec3(0, 0.5f, 2.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     glad_glEnable(GL_DEPTH_TEST);
-    tigl::shader->enableColor(false);
-    tigl::shader->enableTexture(false);
-    tigl::shader->enableLighting(true);
-    tigl::shader->setLightCount(2);
 
-    tigl::shader->setLightDirectional(0, true);
-    tigl::shader->setLightPosition(0, glm::vec3(10,10,10));
-    tigl::shader->setLightAmbient(1, glm::vec3(0.1f, 0.1f, 0.15f));
-    tigl::shader->setLightDiffuse(0, glm::vec3(0.8f, 0.8f, 0.8f));
-    tigl::shader->setLightSpecular(0, glm::vec3(0, 0, 0));
-    tigl::shader->setShinyness(32.0f);
 
     // Draw 3D Scene
     SceneManager::UpdatePoll(*scene);
