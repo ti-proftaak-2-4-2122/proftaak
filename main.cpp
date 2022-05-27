@@ -89,46 +89,25 @@ void init()
     });
 
     // Init OpenCV
-    capture = std::make_shared<cv::VideoCapture>(CAMERA_ID);
-
-    openCvComponent = new OpenCVVideoCapture(capture);
-    openCvComponent->Awake();
+//    capture = std::make_shared<cv::VideoCapture>(CAMERA_ID);
+//
+//    openCvComponent = new OpenCVVideoCapture(capture);
+//    openCvComponent->Awake();
 
     glfwSetTime(0);
 }
 
 void worldInit()
 {
-//    std::string str = "../resource/models/suzanne.obj";
     scene = new Scene();
-//    ObjModel *_objmodel = ModelManager::getModel(str);
-//    Mesh *meshComponent = new Mesh(_objmodel);
-//    auto lerpController = new LerpController();
-//    suzanne->AddComponent(meshComponent);
-//    suzanne->AddComponent(lerpController);
-//    scene->AddGameObject(suzanne);
 
-//
-//    //GameObject* cameraGameobject = new GameObject();
-//    //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
-//    //                                       200.0f});
-//    //cameraGameobject->AddComponent(virtualCamera);
-//    //scene->AddGameObject(cameraGameobject);
-//
-//
-//    lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.01f);
-//    int viewport[4];
-//    glGetIntegerv(GL_VIEWPORT, viewport);
+    Collider* collider = new Collider(1.0f, glm::vec3(0,0,0));
+    Collider* collider1 = new Collider(1.0f, glm::vec3(2.1f,0,0));
 
-    //auto aiPrefab = new AIPrefab();
-    //aiPrefab->onTriggerEnter();
 
-    //GameObject* cameraGameobject = new GameObject();
-    //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
-    //                                       200.0f});
-    //cameraGameobject->AddComponent(virtualCamera);
-    //scene->AddGameObject(cameraGameobject);
-
+    if(collider->CheckCollision(collider1->position, collider1->radius)) {
+        std::cout << "Is colliding" << std::endl;
+    }
     int viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
 }

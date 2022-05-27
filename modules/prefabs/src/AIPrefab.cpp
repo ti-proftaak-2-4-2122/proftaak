@@ -9,7 +9,7 @@ AIPrefab::AIPrefab(CharacterStats* characterStats)
 {
     aiContext = new AIContext();
     aiContext->characterStats = characterStats;
-    this->collider = new Collider(aiContext->characterStats->range);
+    //this->collider = new Collider(aiContext->characterStats->range);
 }
 
 void AIPrefab::onTriggerEnter(Collider* other)

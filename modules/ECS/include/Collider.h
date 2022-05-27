@@ -5,10 +5,13 @@
 #pragma once
 
 #include "Component.h"
-
+#include "glm/glm.hpp"
 class Collider : public Component
 {
-    float radius;
+
 public:
-    Collider(float radius);
+    Collider(float radius, glm::vec3 position);
+    bool CheckCollision(glm::vec3 position2, float radius2);
+    float radius;
+    glm::vec3 position;
 };
