@@ -7,8 +7,9 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "test_exception.h"
-#include "test_case_exception.h"
+#include "utest/assertions.h"
+#include "utest/test_exception.h"
+#include "utest/test_case_exception.h"
 
 #define TEST_SUCCESS() return 0
 #define TEST_FAILED(message) throw utest::test_exception( \

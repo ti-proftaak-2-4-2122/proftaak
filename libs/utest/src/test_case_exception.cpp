@@ -2,7 +2,7 @@
 // Created by twanh on 27-5-2022.
 //
 
-#include "test_case_exception.h"
+#include "utest.h"
 
 namespace utest
 {
