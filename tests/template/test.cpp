@@ -3,13 +3,13 @@
 // Created by twanh on 27-5-2022.
 //
 
-#define TEST_SUCCESS 0
-#define TEST_FAILED 1
+#include "utest.h"
 
-int main() {
+TEST_MAIN({
 
-//    if(test == false)
-//        return TEST_FAILED;
+//    if(test_failed)
+//        TEST_FAILED("You suck at coding");
 
-    return TEST_SUCCESS;
-}
+    TEST_SUCCESS();
+})
+

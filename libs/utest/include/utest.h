@@ -5,10 +5,27 @@
 #pragma once
 
 #include <iostream>
+#include <stdexcept>
+
+#include "test_exception.h"
 
 #define TEST_SUCCESS() return 0
-#define TEST_FAILED(message) { \
-    std::cerr << "Test fail reason: " << message << std::endl \
-    << "Test fail location: " << __FILE__ << ":" << __LINE__ << std::endl; \
-    return 1; \
+#define TEST_FAILED(message) throw utest::test_exception( \
+    message,                                              \
+    std::string(__FILE__) + ":" + std::to_string(__LINE__)\
+)
+
+#define TEST_MAIN(code) int main() \
+{ \
+    try { \
+        code \
+        TEST_SUCCESS(); \
+    } \
+    catch(utest::test_exception& ex) { \
+        std::cerr << "Test fail reason: " << ex.message << std::endl \
+        << "Test fail location: " << ex.location << std::endl;       \
+        return 1; \
+    } \
 }
+
+// EOF
