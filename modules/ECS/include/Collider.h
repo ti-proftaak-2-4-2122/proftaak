@@ -24,6 +24,7 @@ public:
     void CheckColliders(const std::vector<Collider *> &other);
 
     Collider(float radius);
+
 };
 
 

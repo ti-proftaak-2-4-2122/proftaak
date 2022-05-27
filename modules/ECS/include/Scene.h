@@ -5,13 +5,22 @@
 
 #include <vector>
 #include "GameObject.h"
+#include "Collider.h"
 
 class Scene
 {
-public:
+
     std::vector<GameObject *> gameobjects;
+    std::vector<Collider *> colliders;
+public:
+
+    const std::vector<GameObject *> &getGameobjects() const;
+
+    const std::vector<Collider *> &getColliders() const;
 
     void AddGameObject(GameObject *gameObject);
+
+    void AddColliderObject(GameObject &gameObject);
 
     void update();
 

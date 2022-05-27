@@ -44,4 +44,6 @@ public:
                     float attackDamage = 5.0f,
                     float attackSpeed = 3.0f,
                     float attackRange = 50.0f        );
+
+    void Awake() override;
 };

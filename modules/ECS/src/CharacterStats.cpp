@@ -3,6 +3,7 @@
 //
 
 #include "CharacterStats.h"
+#include "Collider.h"
 
 
 CharacterStats::CharacterStats(CharacterType characterType, float health, float moveSpeed,
@@ -10,4 +11,15 @@ CharacterStats::CharacterStats(CharacterType characterType, float health, float 
                                float attackRange)
         : characterType(characterType), health(health), moveSpeed(moveSpeed),
           AttackTarget(attackTarget), AttackDamage(attackDamage), attackSpeed(attackSpeed),
-          attackRange(attackRange){}
+          attackRange(attackRange){
+
+
+}
+
+void CharacterStats::Awake()
+{
+    if (attackRange > 0.0f){
+        auto collider = new Collider(attackRange);
+        this->gameObject->AddComponent(collider);
+    }
+}

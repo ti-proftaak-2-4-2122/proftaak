@@ -21,7 +21,7 @@
 
 
 // set camera id of camera you want to use
-#define CAMERA_ID 1
+#define CAMERA_ID 2
 
 //aspect ratio should always be 4:3 when using realsense camera
 #define WINDOW_WIDTH 640
@@ -41,7 +41,7 @@ void update();
 void draw();
 void worldInit();
 
-Scene *scene;
+Scene * scene;
 
 //VirtualCamera* virtualCamera;
 int main()
@@ -101,38 +101,65 @@ void init()
 
 void worldInit()
 {
-//    std::string str = "../resource/models/suzanne.obj";
+    std::string str = "../resource/models/suzanne.obj";
     scene = new Scene();
-//    ObjModel *_objmodel = ModelManager::getModel(str);
-//    Mesh *meshComponent = new Mesh(_objmodel);
-//    auto lerpController = new LerpController();
-//    suzanne->AddComponent(meshComponent);
+    GameObject *suzanne = new GameObject();
+    ObjModel *_objmodel = ModelManager::getModel(str);
+    Mesh *meshComponent = new Mesh(_objmodel);
+    auto lerpController = new LerpController();
+    auto characterStats = new CharacterStats(CharacterType::VEHICLE,
+                                             60.0f,
+                                             4.0f,
+                                             CharacterType::AIR,
+                                             5.0f,
+                                             2.0f,
+                                             2.0f);
+    suzanne->AddComponent(meshComponent);
+    suzanne->AddComponent(characterStats).Awake();
 //    suzanne->AddComponent(lerpController);
-//    scene->AddGameObject(suzanne);
+    suzanne->transform.setPosition({4,0,0});
+    suzanne->transform.setScale({4,4,4});
+    scene->AddGameObject(suzanne);
 
-//
-//    //GameObject* cameraGameobject = new GameObject();
-//    //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
-//    //                                       200.0f});
-//    //cameraGameobject->AddComponent(virtualCamera);
-//    //scene->AddGameObject(cameraGameobject);
-//
-//
+
+//    GameObject* cameraGameobject = new GameObject();
+//        virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
+//                                           200.0f});
+//    cameraGameobject->AddComponent(virtualCamera);
+//    scene->AddGameObject(cameraGameobject);
+
+
+
+
+
 //    lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.01f);
-//    int viewport[4];
-//    glGetIntegerv(GL_VIEWPORT, viewport);
+    int viewport[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
+
+
+    GameObject *suzanne2 = new GameObject();
+    ObjModel *_objmodel2 = ModelManager::getModel(str);
+    Mesh *meshComponent2 = new Mesh(_objmodel2);
+    auto lerpController2 = new LerpController();
+    auto characterStats2 = new CharacterStats(CharacterType::VEHICLE,
+                                             60.0f,
+                                             4.0f,
+                                             CharacterType::AIR,
+                                             5.0f,
+                                             2.0f,
+                                             1.0f);
+    suzanne2->AddComponent(meshComponent2);
+    suzanne2->AddComponent(characterStats2).Awake();
+    suzanne2->AddComponent(lerpController2);
+    suzanne2->transform.setPosition({-4,0,0});
+    suzanne2->transform.setScale({4,4,4});
+    scene->AddGameObject(suzanne2);
+    lerpController2->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.01f);
+
 
     auto aiPrefab = new AIPrefab();
     aiPrefab->onTriggerEnter();
 
-    //GameObject* cameraGameobject = new GameObject();
-    //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
-    //                                       200.0f});
-    //cameraGameobject->AddComponent(virtualCamera);
-    //scene->AddGameObject(cameraGameobject);
-
-    int viewport[4];
-    glGetIntegerv(GL_VIEWPORT, viewport);
 }
 
 void update()
