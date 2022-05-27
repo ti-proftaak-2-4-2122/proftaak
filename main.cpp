@@ -19,13 +19,14 @@
 #include "AIPrefab.h"
 #include "GameTimer.h"
 
-
-// set camera id of camera you want to use
-#define CAMERA_ID 0
+#include "user-config.h"
+#include "ParentTransform.h"
 
 //aspect ratio should always be 4:3 when using realsense camera
-#define WINDOW_WIDTH 640
-#define WINDOW_HEIGTH 480
+#define WINDOW_WIDTH 1440
+#define WINDOW_HEIGTH 1080
+
+#include "CharacterStats.h"
 
 using tigl::Vertex;
 
@@ -40,6 +41,9 @@ void draw();
 void worldInit();
 
 Scene *scene;
+
+int currentWidth;
+int currentHeight;
 
 //VirtualCamera* virtualCamera;
 int main()
@@ -89,12 +93,22 @@ void init()
     });
 
     // Init OpenCV
-//    capture = std::make_shared<cv::VideoCapture>(CAMERA_ID);
-//
-//    openCvComponent = new OpenCVVideoCapture(capture);
-//    openCvComponent->Awake();
+    capture = std::make_shared<cv::VideoCapture>(CONFIG_OPENCV_CAMERA_INDEX);
+
+    if(capture->isOpened()) {
+        openCvComponent = new OpenCVVideoCapture(capture);
+        openCvComponent->Awake();
+    }
 
     glfwSetTime(0);
+
+    tigl::shader->setLightCount(2);
+
+    tigl::shader->setLightAmbient(0, glm::vec3(0.5f, 0.5f, 0.5f));
+
+    tigl::shader->setLightDiffuse(1, glm::vec3(0.8f, 0.8f, 0.8f));
+    tigl::shader->setLightDirectional(1, false);
+    tigl::shader->setLightPosition(1, glm::vec3(2.0f, 0.0f, 2.0f));
 }
 
 void worldInit()
@@ -111,45 +125,62 @@ void worldInit()
 
 void update()
 {
-    openCvComponent->Update();
+    if(capture->isOpened())
+        openCvComponent->Update();
+
     scene->update();
     GameTimer::update(glfwGetTime());
 }
 
-int width;
-int height;
-
 void draw()
 {
+    // Resize viewport, when needed
+    int newWidth = currentWidth;
+    int newHeight = currentHeight;
+
+    glfwGetFramebufferSize(window, &newWidth, &newHeight);
+    if (newWidth != currentWidth || newHeight != currentHeight)
+        glViewport(0, 0, currentWidth = newWidth, currentHeight = newHeight);
+
+
+    // Clear view
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    // Draw Background
-    openCvComponent->Draw();
 
-    int testWidth = width;
-    int testHeight = height;
+    if(capture->isOpened()) {
+        // Prepare for background
+        glDisable(GL_DEPTH_TEST);
 
-    glfwGetFramebufferSize(window, &width, &height);
+        tigl::shader->enableLighting(false);
 
-    if (testWidth != width || testHeight != height)
-    {
-        glViewport(0, 0, width, height);
+        // Draw Background
+        openCvComponent->Draw();
     }
+
+    // Prepare for 3D Scene
+    glEnable(GL_DEPTH_TEST);
+
+    tigl::shader->enableTexture(false);
+    tigl::shader->enableLighting(true);
 
     tigl::shader->setProjectionMatrix(
             glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0, 15, 15), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+            glm::lookAt(glm::vec3(0, 0.5f, 2.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
+    glad_glEnable(GL_DEPTH_TEST);
+    tigl::shader->enableColor(false);
     tigl::shader->enableTexture(false);
-    tigl::shader->enableLighting(false);
-    tigl::shader->setLightCount(1);
+    tigl::shader->enableLighting(true);
+    tigl::shader->setLightCount(2);
 
-    tigl::shader->setLightDirectional(0, false);
-    tigl::shader->setLightAmbient(0, glm::vec3(0, 0, 10.0f));
-//    tigl::shader->setLightDiffuse(0, glm::vec3(0.8f, 0.8f, 0.8f));
-//    tigl::shader->setLightSpecular(0, glm::vec3(0, 0, 0));
-//    tigl::shader->setShinyness(32.0f);
+    tigl::shader->setLightDirectional(0, true);
+    tigl::shader->setLightPosition(0, glm::vec3(10,10,10));
+    tigl::shader->setLightAmbient(1, glm::vec3(0.1f, 0.1f, 0.15f));
+    tigl::shader->setLightDiffuse(0, glm::vec3(0.8f, 0.8f, 0.8f));
+    tigl::shader->setLightSpecular(0, glm::vec3(0, 0, 0));
+    tigl::shader->setShinyness(32.0f);
 
+    // Draw 3D Scene
     SceneManager::UpdatePoll(*scene);
 }
