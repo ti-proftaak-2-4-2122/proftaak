@@ -38,7 +38,6 @@ void SceneManager::LoadScene(Scene &scene)
     for(Collider* collider : colliders) {
         for(Collider* collider1 : colliders) {
             if(collider == collider1) {
-                std::cout << "These Colliders are the same" << std::endl;
                 continue;
             }
             collider->otherColliders.push_back(collider1);

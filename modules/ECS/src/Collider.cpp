@@ -9,6 +9,7 @@ Collider::Collider(float radius, glm::vec3 position) : radius(radius), position(
 
 void Collider::CheckCollision(Collider* other)
 {
+    //Distance calculation between this collider and other collider
     double distance = sqrt((((other->position.x+other->radius)-(this->position.x+this->radius))*(
             (other->position.x+other->radius)-
     (this->position.x+this->radius))) + (((other->position.y+other->radius)-(this->position
@@ -16,7 +17,15 @@ void Collider::CheckCollision(Collider* other)
             (other->position.y+other->radius)-(this->position.y+this->radius))));
 
     if(distance <= this->radius + other->radius) {
-        gameObject->onTriggerEnter(other);
+        if(!hasEntered) {
+            gameObject->onTriggerEnter(other);
+            hasEntered = true;
+        }
+    } else {
+        if(hasEntered) {
+            gameObject->onTriggerExit(other);
+            hasEntered = false;
+        }
     }
 }
 

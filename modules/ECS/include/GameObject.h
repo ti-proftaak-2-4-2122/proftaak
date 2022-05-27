@@ -45,5 +45,9 @@ public:
     virtual void onTriggerEnter(Collider* collider) {
         std::cout << "On Trigger Enter called" << std::endl;
     };
+
+    virtual void onTriggerExit(Collider* collider) {
+        std::cout << "On Trigger Exit called" << std::endl;
+    };
 };
 

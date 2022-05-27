@@ -8,6 +8,8 @@
 #include "glm/glm.hpp"
 class Collider : public Component
 {
+private:
+    bool hasEntered;
 public:
     float radius;
     glm::vec3 position;
