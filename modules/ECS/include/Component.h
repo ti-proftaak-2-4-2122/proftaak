@@ -22,6 +22,8 @@ public:
     Component();
 
     void SetParent(GameObject *parentGameObject);
+
+    virtual ~Component() = default;
 };
 
 
