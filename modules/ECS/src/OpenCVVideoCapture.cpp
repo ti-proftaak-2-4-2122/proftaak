@@ -80,3 +80,9 @@ void OpenCVVideoCapture::Draw()
 
     tigl::end();
 }
+
+OpenCVVideoCapture::~OpenCVVideoCapture()
+{
+    delete this->detector;
+}
+

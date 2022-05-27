@@ -12,9 +12,11 @@ public:
     std::vector<GameObject *> gameobjects;
 
     void AddGameObject(GameObject *gameObject);
+    void RemoveGameObject(GameObject*& gameObject);
 
     void update();
 
     Scene();
+    ~Scene();
 };
 
