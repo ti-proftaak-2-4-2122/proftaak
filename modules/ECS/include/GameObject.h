@@ -54,5 +54,7 @@ public:
     void Draw();
 
     virtual void onTriggerEnter() {};
+
+    ~GameObject();
 };
 

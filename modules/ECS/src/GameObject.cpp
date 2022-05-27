@@ -59,3 +59,12 @@ void GameObject::Draw()
     for(auto child : this->children)
         child->Draw();
 }
+
+GameObject::~GameObject()
+{
+    for(auto child : this->children)
+        delete child;
+
+    for(auto component : this->components)
+        delete component;
+}
