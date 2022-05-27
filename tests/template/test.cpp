@@ -5,11 +5,19 @@
 
 #include "utest.h"
 
+TEST_CASE(demoTest, {
+
+    if(false)
+        TEST_FAILED("You suck at coding! (But now in test case!)");
+
+})
+
 TEST_MAIN({
 
-//    if(test_failed)
-//        TEST_FAILED("You suck at coding");
+    if(false)
+        TEST_FAILED("You suck at coding!");
+
+    RUN_TEST_CASE(demoTest);
 
     TEST_SUCCESS();
 })
-
