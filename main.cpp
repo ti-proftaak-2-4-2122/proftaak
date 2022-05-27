@@ -41,6 +41,8 @@ void draw();
 void worldInit();
 
 Scene *scene;
+GameObject* playfield;
+GameObject* suzanne;
 
 int currentWidth;
 int currentHeight;
@@ -90,6 +92,9 @@ void init()
     {
         if (key == GLFW_KEY_ESCAPE)
             glfwSetWindowShouldClose(window, true);
+
+        if(key == GLFW_KEY_SPACE)
+            playfield->RemoveChild(suzanne);
     });
 
     // Init OpenCV
@@ -111,11 +116,9 @@ void init()
 
 void worldInit()
 {
-    std::string str = "../resource/models/suzanne.obj";
-
     scene = new Scene();
 
-    auto* playfield = new GameObject();
+    playfield = new GameObject();
     playfield->AddComponent(new Mesh(ModelManager::getModel("../resource/models/plane.obj")));
 
     playfield->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
@@ -124,10 +127,10 @@ void worldInit()
 
     scene->AddGameObject(playfield);
 
-    GameObject* suzanne = new GameObject();
+    suzanne = new GameObject();
 
-    ObjModel* _objmodel = ModelManager::getModel(str);
-    Mesh* meshComponent = new Mesh(_objmodel);
+    Mesh* meshComponent = new Mesh(ModelManager::getModel("../resource/models/suzanne.obj"));
+    meshComponent->SetDiffuseColor({0.8f, 0, 0});
 
     auto lerpController = new LerpController();
     lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.1f);
@@ -148,16 +151,7 @@ void worldInit()
 //    ObjModel *_objmodel = ModelManager::getModel(str);
 //    Mesh *meshComponent = new Mesh(_objmodel);
 //    auto lerpController = new LerpController();
-    suzanne->AddComponent(meshComponent);
-    scene->AddGameObject(suzanne);
 
-    suzanne->transform.setScale({5, 5, 5});
-    auto mesh = suzanne->FindComponent<Mesh>();
-    if(mesh)
-    {
-        //mesh->SetColor({200,200,200,255});
-        mesh->SetDiffuseColor({0.8f, 0, 0});
-    }
 //
 //    //GameObject* cameraGameobject = new GameObject();
 //    //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
