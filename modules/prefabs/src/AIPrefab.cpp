@@ -12,7 +12,7 @@ AIPrefab::AIPrefab(CharacterStats* characterStats)
     this->collider = new Collider(aiContext->characterStats->range);
 }
 
-void AIPrefab::onTriggerEnter(Collider* other)
+void AIPrefab::onTriggerEnter(Collider* collider)
 {
     TagEnum result = other->getGameObject()->tagEnum;
     if(result == ENEMY) {

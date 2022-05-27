@@ -8,5 +8,6 @@ struct CharacterStats {
     float range;
     float health;
     float damage;
+    float moveSpeed;
 };
 #endif //PROFTAAK24_CHARACTERSTATS_H
