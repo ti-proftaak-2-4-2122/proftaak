@@ -33,6 +33,29 @@ void GameObject::AddChild(GameObject* child)
     child->AddComponent(new ParentTransform(this));
 }
 
+/**
+ * Removes the Child from the GameObject and destroys the child
+ * @param gameObject The pointer to GameObject-child to destroy.
+ * If the deletion was successful, child will be nullptr.
+ * Don't use the GameObject-child after calling this function!
+ */
+void GameObject::RemoveChild(GameObject *&child)
+{
+    auto pos = std::find(
+            this->children.begin(),
+            this->children.end(),
+            child
+    );
+
+    // If gameObject is in vector, remove
+    if(pos != this->children.end()) {
+        this->children.erase(pos);
+
+        delete child;
+        child = nullptr;
+    }
+}
+
 void GameObject::Awake()
 {
     for(auto component : this->components)
