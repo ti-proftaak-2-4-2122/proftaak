@@ -34,6 +34,7 @@ void Mesh::Draw()
 
     tigl::shader->setModelMatrix(modelMatrix);
     tigl::shader->setLightDiffuse(0, diffuseColor);
+    tigl::shader->setLightDiffuse(2, diffuseColor);
     tigl::drawVertices(GL_TRIANGLES, objModel->GetVertices());
 }
 

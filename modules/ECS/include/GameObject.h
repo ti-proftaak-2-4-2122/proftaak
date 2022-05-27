@@ -5,10 +5,13 @@
 #pragma once
 
 #include "vector"
+#include "TagEnum.h"
 #include <typeinfo>
+#include <iostream>
 
 class Component;
 class Transform;
+class Collider;
 
 class GameObject
 {
@@ -19,6 +22,8 @@ private:
 public:
     Transform &transform;
     GameObject();
+
+    TagEnum tagEnum;
 
     Component &AddComponent(Component *component);
 
@@ -54,8 +59,15 @@ public:
 
     void Draw();
 
-    virtual void onTriggerEnter() {};
 
     ~GameObject();
+    virtual void onTriggerEnter(Collider* collider) {
+        std::cout << "On Trigger Enter called" << std::endl;
+    };
+
+    virtual void onTriggerExit(Collider* collider) {
+        std::cout << "On Trigger Exit called" << std::endl;
+    };
+
 };
 
