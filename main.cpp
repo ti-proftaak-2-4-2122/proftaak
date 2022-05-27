@@ -39,6 +39,7 @@ void init();
 void update();
 void draw();
 void worldInit();
+void createMapObject(std::string filePath, glm::vec3 diffuseColor);
 
 Scene *scene;
 
@@ -103,10 +104,21 @@ void init()
 
     glfwSetTime(0);
 
+
+    //setting up lights and render stuff
+    tigl::shader->enableColor(false);
+    tigl::shader->enableTexture(true);
+    tigl::shader->enableLighting(true);
     tigl::shader->setLightCount(2);
 
-    tigl::shader->setLightAmbient(0, glm::vec3(0.5f, 0.5f, 0.5f));
+    tigl::shader->setLightDirectional(0, false);
+    tigl::shader->setLightPosition(0, glm::vec3(10,10,10));
 
+    tigl::shader->setLightAmbient(1, glm::vec3(0.1f, 0.1f, 0.15f));
+    tigl::shader->setLightDiffuse(0, glm::vec3(0.8f, 0.8f, 0.8f));
+    tigl::shader->setLightSpecular(0, glm::vec3(0, 0, 0));
+    tigl::shader->setShinyness(32.0f);
+    tigl::shader->setLightAmbient(0, glm::vec3(0.5f, 0.5f, 0.5f));
     tigl::shader->setLightDiffuse(1, glm::vec3(0.8f, 0.8f, 0.8f));
     tigl::shader->setLightDirectional(1, false);
     tigl::shader->setLightPosition(1, glm::vec3(2.0f, 0.0f, 2.0f));
@@ -118,49 +130,12 @@ void worldInit()
 
     scene = new Scene();
 
-    auto* playfield = new GameObject();
-    playfield->AddComponent(new Mesh(ModelManager::getModel("../resource/models/plane.obj")));
+    //building map
+    createMapObject("../resource/models/map_ground.obj", {0.0f, 1, 0});
+    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1});
+    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f});
+    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f});
 
-    playfield->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
-    playfield->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
-    playfield->transform.setScale(CONFIG_PLAYFIELD_SCALE);
-
-    scene->AddGameObject(playfield);
-
-    GameObject* suzanne = new GameObject();
-
-    ObjModel* _objmodel = ModelManager::getModel(str);
-    Mesh* meshComponent = new Mesh(_objmodel);
-
-    auto lerpController = new LerpController();
-    lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.1f);
-
-    auto parentTransform = new ParentTransform(playfield);
-    suzanne->transform.setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
-    suzanne->transform.setScale(glm::vec3(0.2f, 0.2f, 0.2f));
-
-    suzanne->AddComponent(meshComponent);
-    suzanne->AddComponent(lerpController);
-
-    //scene->AddGameObject(suzanne);
-
-    playfield->AddChild(suzanne);
-
-    //auto testFind = levelGO->FindComponent<Mesh>();
-//    GameObject *suzanne = new GameObject();
-//    ObjModel *_objmodel = ModelManager::getModel(str);
-//    Mesh *meshComponent = new Mesh(_objmodel);
-//    auto lerpController = new LerpController();
-    suzanne->AddComponent(meshComponent);
-    scene->AddGameObject(suzanne);
-
-    suzanne->transform.setScale({5, 5, 5});
-    auto mesh = suzanne->FindComponent<Mesh>();
-    if(mesh)
-    {
-        //mesh->SetColor({200,200,200,255});
-        mesh->SetDiffuseColor({0.8f, 0, 0});
-    }
 //
 //    //GameObject* cameraGameobject = new GameObject();
 //    //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
@@ -202,7 +177,6 @@ void draw()
     if (newWidth != currentWidth || newHeight != currentHeight)
         glViewport(0, 0, currentWidth = newWidth, currentHeight = newHeight);
 
-
     // Clear view
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -219,8 +193,6 @@ void draw()
 
     // Prepare for 3D Scene
     glEnable(GL_DEPTH_TEST);
-
-    tigl::shader->enableTexture(false);
     tigl::shader->enableLighting(true);
 
     tigl::shader->setProjectionMatrix(
@@ -229,18 +201,24 @@ void draw()
             glm::lookAt(glm::vec3(0, 0.5f, 2.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     glad_glEnable(GL_DEPTH_TEST);
-    tigl::shader->enableColor(false);
-    tigl::shader->enableTexture(false);
-    tigl::shader->enableLighting(true);
-    tigl::shader->setLightCount(2);
 
-    tigl::shader->setLightDirectional(0, true);
-    tigl::shader->setLightPosition(0, glm::vec3(10,10,10));
-    tigl::shader->setLightAmbient(1, glm::vec3(0.1f, 0.1f, 0.15f));
-    tigl::shader->setLightDiffuse(0, glm::vec3(0.8f, 0.8f, 0.8f));
-    tigl::shader->setLightSpecular(0, glm::vec3(0, 0, 0));
-    tigl::shader->setShinyness(32.0f);
 
     // Draw 3D Scene
     SceneManager::UpdatePoll(*scene);
+}
+
+void createMapObject(const std::string filePath, glm::vec3 diffuseColor)
+{
+    auto* map_object = new GameObject();
+    map_object->AddComponent(new Mesh(ModelManager::getModel(filePath)));
+    map_object->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
+    map_object->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
+    map_object->transform.setScale(CONFIG_PLAYFIELD_SCALE);
+    auto mesh_map_object = map_object->FindComponent<Mesh>();
+    if(mesh_map_object)
+    {
+        //mesh_map_ground->SetColor({200,200,200,255});
+        mesh_map_object->SetDiffuseColor(diffuseColor);
+    }
+    scene->AddGameObject(map_object);
 }
