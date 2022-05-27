@@ -39,6 +39,7 @@ void init();
 void update();
 void draw();
 void worldInit();
+void createMapObject(std::string filePath, glm::vec3 diffuseColor);
 
 Scene *scene;
 
@@ -100,6 +101,8 @@ void init()
 
     glfwSetTime(0);
 
+
+    //setting up lights and render stuff
     tigl::shader->enableColor(false);
     tigl::shader->enableTexture(true);
     tigl::shader->enableLighting(true);
@@ -124,93 +127,12 @@ void worldInit()
 
     scene = new Scene();
 
-    auto* map_ground = new GameObject();
-    map_ground->AddComponent(new Mesh(ModelManager::getModel("../resource/models/map_ground.obj")));
-    map_ground->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
-    map_ground->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
-    map_ground->transform.setScale(CONFIG_PLAYFIELD_SCALE);
-    auto mesh_map_ground = map_ground->FindComponent<Mesh>();
-    if(mesh_map_ground)
-    {
-        //mesh_map_ground->SetColor({200,200,200,255});
-        mesh_map_ground->SetDiffuseColor({0.0f, 1, 0});
-    }
-    scene->AddGameObject(map_ground);
+    //building map
+    createMapObject("../resource/models/map_ground.obj", {0.0f, 1, 0});
+    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1});
+    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f});
+    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f});
 
-    auto* map_river = new GameObject();
-    map_river->AddComponent(new Mesh(ModelManager::getModel("../resource/models/map_river.obj")));
-    map_river->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
-    map_river->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
-    map_river->transform.setScale(CONFIG_PLAYFIELD_SCALE);
-    auto mesh_map_river = map_river->FindComponent<Mesh>();
-    if(mesh_map_river)
-    {
-        //mesh_map_ground->SetColor({200,200,200,255});
-        mesh_map_river->SetDiffuseColor({0.0f, 0, 1});
-    }
-    scene->AddGameObject(map_river);
-
-    auto* map_bridges = new GameObject();
-    map_bridges->AddComponent(new Mesh(ModelManager::getModel("../resource/models/map_bridges.obj")));
-    map_bridges->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
-    map_bridges->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
-    map_bridges->transform.setScale(CONFIG_PLAYFIELD_SCALE);
-    auto mesh_map_bridges = map_bridges->FindComponent<Mesh>();
-    if(mesh_map_bridges)
-    {
-        //mesh_map_bridges->SetColor({200,200,200,255});
-        mesh_map_bridges->SetDiffuseColor({1.0f, 0.392f, 0.3137f});
-    }
-    scene->AddGameObject(map_bridges);
-
-    auto* map_towers = new GameObject();
-    map_towers->AddComponent(new Mesh(ModelManager::getModel("../resource/models/map_towers.obj")));
-    map_towers->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
-    map_towers->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
-    map_towers->transform.setScale(CONFIG_PLAYFIELD_SCALE);
-    auto mesh_map_towers = map_towers->FindComponent<Mesh>();
-    if(mesh_map_towers)
-    {
-        //mesh_map_towers->SetColor({183,176,156,200});
-        //mesh_map_towers->SetDiffuseColor({0.319f, 0.292f, 0.2137f});
-        mesh_map_towers->SetDiffuseColor({1.0f, 0.392f, 0.3137f});
-    }
-    scene->AddGameObject(map_towers);
-
-    GameObject* suzanne = new GameObject();
-
-    ObjModel* _objmodel = ModelManager::getModel(str);
-    Mesh* meshComponent = new Mesh(_objmodel);
-
-    auto lerpController = new LerpController();
-    lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.1f);
-
-    auto parentTransform = new ParentTransform(map_ground);
-    suzanne->transform.setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
-    suzanne->transform.setScale(glm::vec3(0.2f, 0.2f, 0.2f));
-
-    suzanne->AddComponent(meshComponent);
-    suzanne->AddComponent(lerpController);
-
-    //scene->AddGameObject(suzanne);
-
-    map_ground->AddChild(suzanne);
-
-    //auto testFind = levelGO->FindComponent<Mesh>();
-//    GameObject *suzanne = new GameObject();
-//    ObjModel *_objmodel = ModelManager::getModel(str);
-//    Mesh *meshComponent = new Mesh(_objmodel);
-//    auto lerpController = new LerpController();
-    suzanne->AddComponent(meshComponent);
-    scene->AddGameObject(suzanne);
-
-    suzanne->transform.setScale({5, 5, 5});
-    auto mesh = suzanne->FindComponent<Mesh>();
-    if(mesh)
-    {
-        //mesh->SetColor({200,200,200,255});
-        //mesh->SetDiffuseColor({0.8f, 0, 0});
-    }
 //
 //    //GameObject* cameraGameobject = new GameObject();
 //    //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
@@ -273,4 +195,20 @@ void draw()
 
     // Draw 3D Scene
     SceneManager::UpdatePoll(*scene);
+}
+
+void createMapObject(const std::string filePath, glm::vec3 diffuseColor)
+{
+    auto* map_object = new GameObject();
+    map_object->AddComponent(new Mesh(ModelManager::getModel(filePath)));
+    map_object->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
+    map_object->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
+    map_object->transform.setScale(CONFIG_PLAYFIELD_SCALE);
+    auto mesh_map_object = map_object->FindComponent<Mesh>();
+    if(mesh_map_object)
+    {
+        //mesh_map_ground->SetColor({200,200,200,255});
+        mesh_map_object->SetDiffuseColor(diffuseColor);
+    }
+    scene->AddGameObject(map_object);
 }
