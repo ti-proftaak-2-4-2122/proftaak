@@ -49,6 +49,7 @@ int currentHeight;
 //VirtualCamera* virtualCamera;
 int main()
 {
+    //Init GLFW
     if (!glfwInit())
         throw "Could not initialize glwf";
 
@@ -96,8 +97,10 @@ void init()
     // Init OpenCV
     capture = std::make_shared<cv::VideoCapture>(CONFIG_OPENCV_CAMERA_INDEX);
 
-    openCvComponent = new OpenCVVideoCapture(capture);
-    openCvComponent->Awake();
+    if(capture->isOpened()) {
+        openCvComponent = new OpenCVVideoCapture(capture);
+        openCvComponent->Awake();
+    }
 
     glfwSetTime(0);
 
@@ -157,7 +160,9 @@ void worldInit()
 
 void update()
 {
-    openCvComponent->Update();
+    if(capture->isOpened())
+        openCvComponent->Update();
+
     scene->update();
     GameTimer::update(glfwGetTime());
 }
@@ -176,11 +181,16 @@ void draw()
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Prepare for background
-    glDisable(GL_DEPTH_TEST);
-    tigl::shader->enableLighting(false);
-    // Draw Background
-    openCvComponent->Draw();
+    if(capture->isOpened()) {
+        // Prepare for background
+        glDisable(GL_DEPTH_TEST);
+
+        tigl::shader->enableLighting(false);
+
+        // Draw Background
+        openCvComponent->Draw();
+    }
+
     // Prepare for 3D Scene
     glEnable(GL_DEPTH_TEST);
     tigl::shader->enableLighting(true);
