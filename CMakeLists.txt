@@ -82,6 +82,9 @@ file(
 set(PROJECT_TEST_NAME "${CMAKE_PROJECT_NAME}_Tests")
 message("-- Configuring tests for project ${CMAKE_PROJECT_NAME} as ${PROJECT_TEST_NAME}")
 
+include_directories("libs/utest/include")
+add_subdirectory("libs/utest")
+
 # Add Tests
 message("-- Adding all tests in test folder")
 FOREACH(TEST ${TEST_LIST})
