@@ -11,7 +11,7 @@ class Collider : public Component
 
 public:
     Collider(float radius, glm::vec3 position);
-    bool CheckCollision(glm::vec3 position2, float radius2);
+    void CheckCollision(Collider* other);
     float radius;
     glm::vec3 position;
 };
