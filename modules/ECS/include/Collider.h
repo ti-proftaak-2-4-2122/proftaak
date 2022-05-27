@@ -1,30 +1,21 @@
 //
-// Created by robin on 20-May-22.
+// Created by Daan van Donk on 24/05/2022.
 //
 
 #pragma once
 
-#include "glm/glm.hpp"
 #include "Component.h"
-#include "CharacterStats.h"
-
-class Component;
-
-class GameObject;
-
+#include "glm/glm.hpp"
 class Collider : public Component
 {
 private:
-    float radius;
-
-    bool CheckCollision(Collider &other);
-
+    bool hasEntered;
 public:
+    float radius;
+    glm::vec3 position;
+    std::vector<Collider*> otherColliders;
+    Collider(float radius, glm::vec3 position);
+    void CheckCollision(Collider* other);
 
-    void CheckColliders(const std::vector<Collider *> &other);
-
-    Collider(float radius);
+    void Update() override;
 };
-
-
-

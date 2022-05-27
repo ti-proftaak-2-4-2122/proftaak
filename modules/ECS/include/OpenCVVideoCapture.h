@@ -28,4 +28,6 @@ public:
 
     void Draw() override;
 
+    ~OpenCVVideoCapture() override;
+
 };

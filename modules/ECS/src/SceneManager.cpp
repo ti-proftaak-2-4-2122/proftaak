@@ -5,13 +5,43 @@
 #include <future>
 #include "SceneManager.h"
 #include "Component.h"
+#include <iostream>
 
 void UpdatePoll(Scene scene);
 
+std::vector<Collider *> SceneManager::GetAllComponents(Scene& scene)
+{
+    std::vector<Collider*> result;
+
+    for(auto gameobject : scene.gameobjects) {
+        Collider* component = gameobject->FindComponent<Collider>();
+
+        if(component) {
+            result.push_back(component);
+        }
+    }
+
+    return result;
+}
+
 void SceneManager::LoadScene(Scene &scene)
 {
-    for (auto gameObject : scene.gameobjects)
+
+    for (const auto &gameObject : scene.gameobjects)
         gameObject->Awake();
+
+    std::vector<Collider*> colliders = GetAllComponents(scene);
+    for(Collider* collider : colliders) {
+        for(Collider* collider1 : colliders) {
+            if(collider == collider1) {
+                continue;
+            }
+            collider->otherColliders.push_back(collider1);
+        }
+    }
+
+    //auto f = std::async(std::launch::async, UpdatePoll, scene);
+    //UpdatePoll(scene);
 }
 
 void SceneManager::UpdatePoll(Scene &scene)
