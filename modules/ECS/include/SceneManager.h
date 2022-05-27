@@ -9,7 +9,25 @@
 class SceneManager
 {
 public:
+    static Scene* currentScene;
     static void LoadScene(Scene &scene);
 
     static void UpdatePoll(Scene &scene);
+
+    template<class T>
+    static std::vector<T*> GetAllComponents()
+    {
+        std::vector<T*> result;
+
+        for(auto gameobject : currentScene->gameobjects) {
+            T* component = gameobject->FindComponent<T>();
+
+            if(component) {
+                result.push_back(component);
+            }
+        }
+
+        return result;
+    }
+
 };

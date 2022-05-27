@@ -8,10 +8,12 @@
 #include "glm/glm.hpp"
 class Collider : public Component
 {
-
 public:
-    Collider(float radius, glm::vec3 position);
-    void CheckCollision(Collider* other);
     float radius;
     glm::vec3 position;
+    std::vector<Collider*> otherColliders;
+    Collider(float radius, glm::vec3 position);
+    void CheckCollision(Collider* other);
+
+    void Update() override;
 };

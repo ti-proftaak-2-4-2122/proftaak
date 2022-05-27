@@ -20,3 +20,11 @@ void Collider::CheckCollision(Collider* other)
     }
 }
 
+void Collider::Update()
+{
+    Component::Update();
+    for(auto other : otherColliders) {
+        CheckCollision(other);
+    }
+}
+
