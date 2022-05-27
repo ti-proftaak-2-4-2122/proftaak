@@ -53,14 +53,15 @@ public:
     void AddChild(GameObject* child);
     void RemoveChild(GameObject*& child);
 
-    void Awake();
+    virtual void Awake();
 
-    void Update();
+    virtual void Update();
 
     void Draw();
 
 
     ~GameObject();
+
     virtual void onTriggerEnter(Collider* collider) {
         std::cout << "On Trigger Enter called" << std::endl;
     };
