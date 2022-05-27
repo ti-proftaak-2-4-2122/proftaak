@@ -5,7 +5,14 @@
 #include "GameObject.h"
 #include "Transform.h"
 #include "Component.h"
+#include "ParentTransform.h"
 #include <typeinfo>
+#include <stdexcept>
+
+GameObject::GameObject() : transform((this->AddComponent<Transform>()))
+{
+
+}
 
 Component &GameObject::AddComponent(Component *component)
 {
@@ -14,15 +21,41 @@ Component &GameObject::AddComponent(Component *component)
     return *component;
 }
 
-GameObject::GameObject() : transform((this->AddComponent<Transform>()))
+void GameObject::AddChild(GameObject* child)
 {
+    if(child->FindComponent<ParentTransform>() != nullptr)
+        throw std::invalid_argument("child cannot already have a parent transform");
 
+    if(child == this)
+        throw std::invalid_argument("Parent cannot contain itself as child");
+
+    this->children.push_back(child);
+    child->AddComponent(new ParentTransform(this));
 }
 
-template<class T>
-T &GameObject::AddComponent()
+void GameObject::Awake()
 {
-    auto component = new T();
-    AddComponent(component);
-    return *component;
+    for(auto component : this->components)
+        component->Awake();
+
+    for(auto child : this->children)
+        child->Awake();
+}
+
+void GameObject::Update()
+{
+    for(auto component : this->components)
+        component->Update();
+
+    for(auto child : this->children)
+        child->Update();
+}
+
+void GameObject::Draw()
+{
+    for(auto component : this->components)
+        component->Draw();
+
+    for(auto child : this->children)
+        child->Draw();
 }

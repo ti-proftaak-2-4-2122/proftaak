@@ -19,9 +19,8 @@
 #include "AIPrefab.h"
 #include "GameTimer.h"
 
-
-// set camera id of camera you want to use
-#define CAMERA_ID 0
+#include "user-config.h"
+#include "ParentTransform.h"
 
 //aspect ratio should always be 4:3 when using realsense camera
 #define WINDOW_WIDTH 1440
@@ -42,6 +41,9 @@ void draw();
 void worldInit();
 
 Scene *scene;
+
+int currentWidth;
+int currentHeight;
 
 //VirtualCamera* virtualCamera;
 int main()
@@ -91,21 +93,60 @@ void init()
     });
 
     // Init OpenCV
-    capture = std::make_shared<cv::VideoCapture>(CAMERA_ID);
+    capture = std::make_shared<cv::VideoCapture>(CONFIG_OPENCV_CAMERA_INDEX);
 
     openCvComponent = new OpenCVVideoCapture(capture);
     openCvComponent->Awake();
 
     glfwSetTime(0);
+
+    tigl::shader->setLightCount(2);
+
+    tigl::shader->setLightAmbient(0, glm::vec3(0.5f, 0.5f, 0.5f));
+
+    tigl::shader->setLightDiffuse(1, glm::vec3(0.8f, 0.8f, 0.8f));
+    tigl::shader->setLightDirectional(1, false);
+    tigl::shader->setLightPosition(1, glm::vec3(2.0f, 0.0f, 2.0f));
 }
 
 void worldInit()
 {
     std::string str = "../resource/models/suzanne.obj";
+
     scene = new Scene();
-    auto* suzanne = new GameObject();
-    ObjModel *_objmodel = ModelManager::getModel(str);
-    Mesh *meshComponent = new Mesh(_objmodel);
+
+    auto* playfield = new GameObject();
+    playfield->AddComponent(new Mesh(ModelManager::getModel("../resource/models/plane.obj")));
+
+    playfield->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
+    playfield->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
+    playfield->transform.setScale(CONFIG_PLAYFIELD_SCALE);
+
+    scene->AddGameObject(playfield);
+
+    GameObject* suzanne = new GameObject();
+
+    ObjModel* _objmodel = ModelManager::getModel(str);
+    Mesh* meshComponent = new Mesh(_objmodel);
+
+    auto lerpController = new LerpController();
+    lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.1f);
+
+    auto parentTransform = new ParentTransform(playfield);
+    suzanne->transform.setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
+    suzanne->transform.setScale(glm::vec3(0.2f, 0.2f, 0.2f));
+
+    suzanne->AddComponent(meshComponent);
+    suzanne->AddComponent(lerpController);
+
+    //scene->AddGameObject(suzanne);
+
+    playfield->AddChild(suzanne);
+
+    //auto testFind = levelGO->FindComponent<Mesh>();
+//    GameObject *suzanne = new GameObject();
+//    ObjModel *_objmodel = ModelManager::getModel(str);
+//    Mesh *meshComponent = new Mesh(_objmodel);
 //    auto lerpController = new LerpController();
     suzanne->AddComponent(meshComponent);
     scene->AddGameObject(suzanne);
@@ -137,9 +178,6 @@ void worldInit()
     //                                       200.0f});
     //cameraGameobject->AddComponent(virtualCamera);
     //scene->AddGameObject(cameraGameobject);
-
-    int viewport[4];
-    glGetIntegerv(GL_VIEWPORT, viewport);
 }
 
 void update()
@@ -149,32 +187,39 @@ void update()
     GameTimer::update(glfwGetTime());
 }
 
-int width;
-int height;
-
 void draw()
 {
+    // Resize viewport, when needed
+    int newWidth = currentWidth;
+    int newHeight = currentHeight;
+
+    glfwGetFramebufferSize(window, &newWidth, &newHeight);
+    if (newWidth != currentWidth || newHeight != currentHeight)
+        glViewport(0, 0, currentWidth = newWidth, currentHeight = newHeight);
+
+
+    // Clear view
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glad_glDisable(GL_DEPTH_TEST); //makes sure background is behind everything
+    // Prepare for background
+    glDisable(GL_DEPTH_TEST);
+
+    tigl::shader->enableLighting(false);
+
     // Draw Background
     openCvComponent->Draw();
 
-    int testWidth = width;
-    int testHeight = height;
+    // Prepare for 3D Scene
+    glEnable(GL_DEPTH_TEST);
 
-    glfwGetFramebufferSize(window, &width, &height);
-
-    if (testWidth != width || testHeight != height)
-    {
-        glViewport(0, 0, width, height);
-    }
+    tigl::shader->enableTexture(false);
+    tigl::shader->enableLighting(true);
 
     tigl::shader->setProjectionMatrix(
             glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0, 15, 15), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+            glm::lookAt(glm::vec3(0, 0.5f, 2.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     glad_glEnable(GL_DEPTH_TEST);
     tigl::shader->enableColor(false);
@@ -189,7 +234,6 @@ void draw()
     tigl::shader->setLightSpecular(0, glm::vec3(0, 0, 0));
     tigl::shader->setShinyness(32.0f);
 
-
-
+    // Draw 3D Scene
     SceneManager::UpdatePoll(*scene);
 }

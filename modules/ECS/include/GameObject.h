@@ -8,13 +8,15 @@
 #include <typeinfo>
 
 class Component;
-
 class Transform;
 
 class GameObject
 {
-public:
+private:
     std::vector<Component *> components;
+    std::vector<GameObject*> children;
+
+public:
     Transform &transform;
     GameObject();
 
@@ -23,20 +25,33 @@ public:
     template<class T>
     T *FindComponent()
     {
-        for (auto component: components)
+        for (auto component : this->components)
         {
             auto derived = dynamic_cast<T *>(component);
+
             if (derived)
-            {
-                //outComponent = derived;
                 return derived;
-            }
+
         }
+
         return nullptr;
     }
 
     template<class T>
-    T &AddComponent();
+    T& AddComponent()
+    {
+        auto component = new T();
+        this->AddComponent(component);
+        return *component;
+    }
+
+    void AddChild(GameObject* child);
+
+    void Awake();
+
+    void Update();
+
+    void Draw();
 
     virtual void onTriggerEnter() {};
 };
