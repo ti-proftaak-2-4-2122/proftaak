@@ -6,8 +6,6 @@
 #include "tigl.h"
 #include "ObjModel.h"
 #include "Transform.h"
-#include "ParentTransform.h"
-
 #include <glm/vec3.hpp> // glm::vec3
 #include <glm/mat4x4.hpp> // glm::mat4
 #include <glm/ext/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale
@@ -15,13 +13,9 @@
 
 void Mesh::Draw()
 {
-    auto transform = this->gameObject->transform;
+    auto transform = gameObject->transform;
 
-    auto* parentTransform = this->gameObject->FindComponent<ParentTransform>();
-
-    auto modelMatrix = parentTransform == nullptr ?
-            glm::mat4(1.0f)
-            : parentTransform->GetParentModelMatrix();
+    auto modelMatrix = glm::mat4(1.0f);
 
     modelMatrix = glm::scale(modelMatrix, transform.getScale());
 
@@ -33,20 +27,17 @@ void Mesh::Draw()
     modelMatrix = glm::rotate(modelMatrix, rotation.z, glm::vec3(0, 0, 1));
 
     tigl::shader->setModelMatrix(modelMatrix);
-    tigl::shader->setLightDiffuse(0, diffuseColor);
-    tigl::drawVertices(GL_TRIANGLES, objModel->GetVertices());
+
+
+    tigl::begin(GL_TRIANGLES);
+
+    for (const auto &item: objModel->GetVertices())
+    {
+        tigl::addVertex(item);
+    }
+
+    tigl::end();
+
 }
 
 Mesh::Mesh(ObjModel *_objmodel) : objModel(_objmodel) {}
-
-void Mesh::SetColor(const glm::vec4& color)
-{
-    for(auto &vertex : objModel->GetVertices())
-        vertex.color = color;
-
-}
-
-void Mesh::SetDiffuseColor(const glm::vec3& color)
-{
-    this->diffuseColor = color;
-}

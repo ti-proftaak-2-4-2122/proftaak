@@ -46,7 +46,7 @@ FOREACH(MODULE ${MODULE_LIST})
     add_subdirectory(${MODULES_DIR_PATH}/${MODULE})
 ENDFOREACH()
 
-add_executable(${CMAKE_PROJECT_NAME} main.cpp user-config.h)
+add_executable(${CMAKE_PROJECT_NAME} main.cpp)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} libglfw3.a )
 target_link_libraries(${CMAKE_PROJECT_NAME} glm )

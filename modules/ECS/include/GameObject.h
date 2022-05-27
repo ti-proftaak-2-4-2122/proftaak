@@ -15,11 +15,8 @@ class Collider;
 
 class GameObject
 {
-private:
-    std::vector<Component *> components;
-    std::vector<GameObject*> children;
-
 public:
+    std::vector<Component *> components;
     Transform &transform;
     GameObject();
 
@@ -30,33 +27,20 @@ public:
     template<class T>
     T *FindComponent()
     {
-        for (auto component : this->components)
+        for (auto component: components)
         {
             auto derived = dynamic_cast<T *>(component);
-
             if (derived)
+            {
+                //outComponent = derived;
                 return derived;
-
+            }
         }
-
         return nullptr;
     }
 
     template<class T>
-    T& AddComponent()
-    {
-        auto component = new T();
-        this->AddComponent(component);
-        return *component;
-    }
-
-    void AddChild(GameObject* child);
-
-    void Awake();
-
-    void Update();
-
-    void Draw();
+    T &AddComponent();
 
     virtual void onTriggerEnter(Collider* collider) {
         std::cout << "On Trigger Enter called" << std::endl;

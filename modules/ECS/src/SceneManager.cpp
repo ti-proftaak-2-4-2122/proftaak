@@ -26,10 +26,13 @@ void SceneManager::LoadScene(Scene &scene)
 
 void SceneManager::UpdatePoll(Scene &scene)
 {
-    for (const auto &gameObject : scene.gameobjects)
-        gameObject->Update();
-
-    for (const auto &gameObject : scene.gameobjects)
-        gameObject->Draw();
+    for (const auto &gameObject: scene.gameobjects)
+    {
+        for (auto *component: gameObject->components)
+        {
+            component->Update();
+            component->Draw();
+        }
+    }
 }
 

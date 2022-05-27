@@ -26,7 +26,7 @@ public:
 
     explicit ObjModel(const std::string &fileName);
 
-    std::vector<tigl::Vertex>& GetVertices();
+    std::vector<tigl::Vertex> GetVertices();
 
     std::string toString();
 };
