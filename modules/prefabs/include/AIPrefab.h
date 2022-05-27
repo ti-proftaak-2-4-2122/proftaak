@@ -15,5 +15,5 @@ private:
 public:
     AIPrefab();
 
-    void onTriggerEnter() override;
+    void onTriggerEnter(Collider* collider) override;
 };

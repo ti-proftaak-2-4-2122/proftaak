@@ -18,6 +18,7 @@
 #include "LerpController.h"
 #include "AIPrefab.h"
 #include "GameTimer.h"
+#include "Collider.h"
 
 #include "user-config.h"
 #include "ParentTransform.h"
@@ -25,8 +26,6 @@
 //aspect ratio should always be 4:3 when using realsense camera
 #define WINDOW_WIDTH 1440
 #define WINDOW_HEIGTH 1080
-
-#include "CharacterStats.h"
 
 using tigl::Vertex;
 
@@ -126,16 +125,71 @@ void init()
 
 void worldInit()
 {
-    std::string str = "../resource/models/suzanne.obj";
-
     scene = new Scene();
+  
+    GameObject* collisionTest = new GameObject();
+    Collider* collider = new Collider(1.0f, glm::vec3(0,0,0));
+    collisionTest->AddComponent(collider);
+    GameObject* collisionTest1 = new GameObject();
+    Collider* collider1 = new Collider(1.0f, glm::vec3(1.0f,0,0));
+    collisionTest1->AddComponent(collider1);
 
+    scene->AddGameObject(collisionTest);
+    scene->AddGameObject(collisionTest1);
+
+    SceneManager::LoadScene(*scene);
+//    std::string str = "../resource/models/suzanne.obj";
+//
+//    scene = new Scene();
+//
+//    auto* playfield = new GameObject();
+//    playfield->AddComponent(new Mesh(ModelManager::getModel("../resource/models/plane.obj")));
+//
+//    playfield->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
+//    playfield->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
+//    playfield->transform.setScale(CONFIG_PLAYFIELD_SCALE);
+//
+//    scene->AddGameObject(playfield);
+//
+//    GameObject* suzanne = new GameObject();
+//
+//    ObjModel* _objmodel = ModelManager::getModel(str);
+//    Mesh* meshComponent = new Mesh(_objmodel);
+//
+//    auto lerpController = new LerpController();
+//    lerpController->Move(glm::vec3(0, 0, 0), glm::vec3(5, 0, 0), 0.1f);
+//
+//    auto parentTransform = new ParentTransform(playfield);
+//    suzanne->transform.setPosition(glm::vec3(0.0f, 1.0f, 0.0f));
+//    suzanne->transform.setScale(glm::vec3(0.2f, 0.2f, 0.2f));
+//
+//    suzanne->AddComponent(meshComponent);
+//    suzanne->AddComponent(lerpController);
+
+    //scene->AddGameObject(suzanne);
+
+//    playfield->AddChild(suzanne);
+
+    //auto testFind = levelGO->FindComponent<Mesh>();
+//    GameObject *suzanne = new GameObject();
+//    ObjModel *_objmodel = ModelManager::getModel(str);
+//    Mesh *meshComponent = new Mesh(_objmodel);
+//    auto lerpController = new LerpController();
+//    suzanne->AddComponent(meshComponent);
+//    scene->AddGameObject(suzanne);
+//
+//    suzanne->transform.setScale({5, 5, 5});
+//    auto mesh = suzanne->FindComponent<Mesh>();
+//    if(mesh)
+//    {
+//        //mesh->SetColor({200,200,200,255});
+//        mesh->SetDiffuseColor({0.8f, 0, 0});
+//    }
     //building map
     createMapObject("../resource/models/map_ground.obj", {0.0f, 1, 0});
     createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1});
     createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f});
     createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f});
-
 //
 //    //GameObject* cameraGameobject = new GameObject();
 //    //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
@@ -148,8 +202,7 @@ void worldInit()
 //    int viewport[4];
 //    glGetIntegerv(GL_VIEWPORT, viewport);
 
-    auto aiPrefab = new AIPrefab();
-    aiPrefab->onTriggerEnter();
+    //auto aiPrefab = new AIPrefab();
 
     //GameObject* cameraGameobject = new GameObject();
     //    virtualCamera = new VirtualCamera({70.0f, (float)windowWidth / (float) windowHeight , 0.1f,
