@@ -101,9 +101,14 @@ void worldInit()
     GameObject* collisionTest = new GameObject();
     Collider* collider = new Collider(1.0f, glm::vec3(0,0,0));
     collisionTest->AddComponent(collider);
-    Collider* collider1 = new Collider(1.0f, glm::vec3(2.1f,0,0));
+    GameObject* collisionTest1 = new GameObject();
+    Collider* collider1 = new Collider(1.0f, glm::vec3(1.0f,0,0));
+    collisionTest1->AddComponent(collider1);
 
-    collider->CheckCollision(collider1);
+    scene->AddGameObject(collisionTest);
+    scene->AddGameObject(collisionTest1);
+
+    SceneManager::LoadScene(*scene);
 }
 
 void update()

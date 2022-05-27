@@ -5,6 +5,7 @@
 #include <future>
 #include "SceneManager.h"
 #include "Component.h"
+#include <iostream>
 
 void UpdatePoll(Scene scene);
 
@@ -33,7 +34,16 @@ void SceneManager::LoadScene(Scene &scene)
         }
     }
 
-    GetAllComponents(scene);
+    std::vector<Collider*> colliders = GetAllComponents(scene);
+    for(Collider* collider : colliders) {
+        for(Collider* collider1 : colliders) {
+            if(collider == collider1) {
+                std::cout << "These Colliders are the same" << std::endl;
+                continue;
+            }
+            collider->otherColliders.push_back(collider1);
+        }
+    }
 
     //auto f = std::async(std::launch::async, UpdatePoll, scene);
     //UpdatePoll(scene);
