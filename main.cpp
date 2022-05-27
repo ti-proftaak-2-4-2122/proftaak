@@ -31,9 +31,6 @@ using tigl::Vertex;
 
 GLFWwindow *window;
 
-std::shared_ptr<cv::VideoCapture> capture;
-OpenCVVideoCapture *openCvComponent;
-
 void init();
 void update();
 void draw();
@@ -104,14 +101,13 @@ void worldInit()
     GameObject* collisionTest = new GameObject();
     Collider* collider = new Collider(1.0f, glm::vec3(0,0,0));
     collisionTest->AddComponent(collider);
-    Collider* collider1 = new Collider(1.0f, glm::vec3(1.0f,0,0));
+    Collider* collider1 = new Collider(1.0f, glm::vec3(2.1f,0,0));
 
     collider->CheckCollision(collider1);
 }
 
 void update()
 {
-    openCvComponent->Update();
     scene->update();
     GameTimer::update(glfwGetTime());
 }
@@ -123,8 +119,6 @@ void draw()
 {
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    // Draw Background
-    openCvComponent->Draw();
 
     int testWidth = width;
     int testHeight = height;

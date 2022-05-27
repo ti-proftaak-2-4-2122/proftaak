@@ -8,6 +8,21 @@
 
 void UpdatePoll(Scene scene);
 
+std::vector<Collider *> SceneManager::GetAllComponents(Scene& scene)
+{
+    std::vector<Collider*> result;
+
+    for(auto gameobject : scene.gameobjects) {
+        Collider* component = gameobject->FindComponent<Collider>();
+
+        if(component) {
+            result.push_back(component);
+        }
+    }
+
+    return result;
+}
+
 void SceneManager::LoadScene(Scene &scene)
 {
     for (auto gameObject: scene.gameobjects)
@@ -18,7 +33,7 @@ void SceneManager::LoadScene(Scene &scene)
         }
     }
 
-    GetAllComponents<Collider>();
+    GetAllComponents(scene);
 
     //auto f = std::async(std::launch::async, UpdatePoll, scene);
     //UpdatePoll(scene);
@@ -35,4 +50,3 @@ void SceneManager::UpdatePoll(Scene &scene)
         }
     }
 }
-
