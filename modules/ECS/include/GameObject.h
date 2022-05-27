@@ -7,6 +7,7 @@
 #include "vector"
 #include "TagEnum.h"
 #include <typeinfo>
+#include <iostream>
 
 class Component;
 class Transform;
@@ -41,6 +42,8 @@ public:
     template<class T>
     T &AddComponent();
 
-    virtual void onTriggerEnter(Collider* collider) {};
+    virtual void onTriggerEnter(Collider* collider) {
+        std::cout << "On Trigger Enter called" << std::endl;
+    };
 };
 

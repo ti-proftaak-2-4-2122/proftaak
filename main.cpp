@@ -101,15 +101,12 @@ void worldInit()
 {
     scene = new Scene();
 
+    GameObject* collisionTest = new GameObject();
     Collider* collider = new Collider(1.0f, glm::vec3(0,0,0));
-    Collider* collider1 = new Collider(1.0f, glm::vec3(2.1f,0,0));
+    collisionTest->AddComponent(collider);
+    Collider* collider1 = new Collider(1.0f, glm::vec3(1.0f,0,0));
 
-
-    if(collider->CheckCollision(collider1->position, collider1->radius)) {
-        std::cout << "Is colliding" << std::endl;
-    }
-    int viewport[4];
-    glGetIntegerv(GL_VIEWPORT, viewport);
+    collider->CheckCollision(collider1);
 }
 
 void update()
