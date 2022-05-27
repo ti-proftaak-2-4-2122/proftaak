@@ -9,7 +9,7 @@
 class Collider : public Component
 {
 private:
-    bool hasEntered;
+    bool hasEntered = true;
 public:
     float radius;
     std::vector<Collider*> otherColliders;

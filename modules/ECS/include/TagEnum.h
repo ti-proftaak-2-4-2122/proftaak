@@ -9,5 +9,6 @@
 enum TagEnum {
     ENEMY,
     STATE,
+    TOWER,
 };
 #endif //PROFTAAK24_TAGENUM_H

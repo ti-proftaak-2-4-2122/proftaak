@@ -59,14 +59,13 @@ public:
 
     void Draw();
 
-
     ~GameObject();
 
-    virtual void onTriggerEnter(Collider* collider) {
+    virtual void onTriggerEnter(Collider* other) {
         std::cout << "On Trigger Enter called" << std::endl;
     };
 
-    virtual void onTriggerExit(Collider* collider) {
+    virtual void onTriggerExit(Collider* other) {
         std::cout << "On Trigger Exit called" << std::endl;
     };
 

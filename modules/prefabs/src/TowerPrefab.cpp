@@ -10,6 +10,7 @@ TowerPrefab::TowerPrefab(Transform *transform, CharacterStats *characterStats) :
     AddComponent(new Mesh(ModelManager::getModel("../resource/models/tower.obj")));
     AddComponent(this->collider);
     AddComponent(this->combatController);
+    AddComponent(characterStats);
 }
 
 void TowerPrefab::onTriggerEnter(Collider *collider)
