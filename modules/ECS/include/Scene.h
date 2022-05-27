@@ -17,5 +17,6 @@ public:
     void update();
 
     Scene();
+    ~Scene();
 };
 

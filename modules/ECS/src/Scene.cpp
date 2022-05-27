@@ -41,3 +41,9 @@ void Scene::update()
 {
 
 }
+
+Scene::~Scene()
+{
+    for(auto gameObject : this->gameobjects)
+        delete gameObject;
+}
