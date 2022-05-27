@@ -6,22 +6,16 @@
 #include <opencv2/highgui.hpp>
 #include <memory>
 
-
-#include "ObjModel.h"
 #include "Mesh.h"
 #include "ModelManager.h"
 #include "OpenCVVideoCapture.h"
 #include "Scene.h"
 #include "SceneManager.h"
-#include "VirtualCamera.h"
 #include "Transform.h"
-#include "LerpController.h"
-#include "AIPrefab.h"
 #include "GameTimer.h"
 #include "Collider.h"
 
 #include "user-config.h"
-#include "ParentTransform.h"
 
 //aspect ratio should always be 4:3 when using realsense camera
 #define WINDOW_WIDTH 1440
@@ -35,14 +29,16 @@ std::shared_ptr<cv::VideoCapture> capture;
 OpenCVVideoCapture *openCvComponent;
 
 void init();
+
 void update();
+
 void draw();
+
 void worldInit();
-void createMapObject(std::string filePath, glm::vec3 diffuseColor);
+
+void createMapObject(const std::string &filePath, glm::vec3 diffuseColor);
 
 Scene *scene;
-GameObject* playfield;
-GameObject* suzanne;
 
 int currentWidth;
 int currentHeight;
@@ -93,15 +89,13 @@ void init()
     {
         if (key == GLFW_KEY_ESCAPE)
             glfwSetWindowShouldClose(window, true);
-
-        if(key == GLFW_KEY_SPACE)
-            playfield->RemoveChild(suzanne);
     });
 
     // Init OpenCV
     capture = std::make_shared<cv::VideoCapture>(CONFIG_OPENCV_CAMERA_INDEX);
 
-    if(capture->isOpened()) {
+    if (capture->isOpened())
+    {
         openCvComponent = new OpenCVVideoCapture(capture);
         openCvComponent->Awake();
     }
@@ -116,7 +110,7 @@ void init()
     tigl::shader->setLightCount(2);
 
     tigl::shader->setLightDirectional(0, false);
-    tigl::shader->setLightPosition(0, glm::vec3(10,10,10));
+    tigl::shader->setLightPosition(0, glm::vec3(10, 10, 10));
 
     tigl::shader->setLightAmbient(1, glm::vec3(0.1f, 0.1f, 0.15f));
     tigl::shader->setLightDiffuse(0, glm::vec3(0.8f, 0.8f, 0.8f));
@@ -131,12 +125,12 @@ void init()
 void worldInit()
 {
     scene = new Scene();
-  
-    GameObject* collisionTest = new GameObject();
-    Collider* collider = new Collider(1.0f, glm::vec3(0,0,0));
+
+    auto *collisionTest = new GameObject();
+    auto *collider = new Collider(1.0f, glm::vec3(0, 0, 0));
     collisionTest->AddComponent(collider);
-    GameObject* collisionTest1 = new GameObject();
-    Collider* collider1 = new Collider(1.0f, glm::vec3(1.0f,0,0));
+    auto *collisionTest1 = new GameObject();
+    auto *collider1 = new Collider(1.0f, glm::vec3(1.0f, 0, 0));
     collisionTest1->AddComponent(collider1);
 
     scene->AddGameObject(collisionTest);
@@ -153,7 +147,7 @@ void worldInit()
 
 void update()
 {
-    if(capture->isOpened())
+    if (capture->isOpened())
         openCvComponent->Update();
 
     scene->update();
@@ -174,7 +168,8 @@ void draw()
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if(capture->isOpened()) {
+    if (capture->isOpened())
+    {
         // Prepare for background
         glDisable(GL_DEPTH_TEST);
 
@@ -189,7 +184,8 @@ void draw()
     tigl::shader->enableLighting(true);
 
     tigl::shader->setProjectionMatrix(
-            glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH, 0.1f, 200.0f));
+            glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH,
+                             0.1f, 200.0f));
     tigl::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 0.5f, 2.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
@@ -200,15 +196,15 @@ void draw()
     SceneManager::UpdatePoll(*scene);
 }
 
-void createMapObject(const std::string filePath, glm::vec3 diffuseColor)
+void createMapObject(const std::string &filePath, glm::vec3 diffuseColor)
 {
-    auto* map_object = new GameObject();
+    auto *map_object = new GameObject();
     map_object->AddComponent(new Mesh(ModelManager::getModel(filePath)));
     map_object->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
     map_object->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
     map_object->transform.setScale(CONFIG_PLAYFIELD_SCALE);
     auto mesh_map_object = map_object->FindComponent<Mesh>();
-    if(mesh_map_object)
+    if (mesh_map_object)
     {
         //mesh_map_ground->SetColor({200,200,200,255});
         mesh_map_object->SetDiffuseColor(diffuseColor);
