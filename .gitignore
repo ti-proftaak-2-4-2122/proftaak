@@ -114,3 +114,5 @@ fabric.properties
 
 
 !/resource/models/
+
+user-config.h

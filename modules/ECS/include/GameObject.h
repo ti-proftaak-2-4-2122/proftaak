@@ -2,19 +2,57 @@
 // Created by Daan van Donk on 11/05/2022.
 //
 
-#include "Transform.h"
+#pragma once
+
 #include "vector"
-#include "Component.h"
+#include <typeinfo>
 
-#ifndef PROFTAAK24_GAMEOBJECT_H
-#define PROFTAAK24_GAMEOBJECT_H
+class Component;
+class Transform;
 
-class GameObject {
+class GameObject
+{
+private:
+    std::vector<Component *> components;
+    std::vector<GameObject*> children;
+
 public:
-    std::vector<Component*> components;
-    void AddComponent(Component* component);
-    GameObject() {
-        this->AddComponent(new Transform);
+    Transform &transform;
+    GameObject();
+
+    Component &AddComponent(Component *component);
+
+    template<class T>
+    T *FindComponent()
+    {
+        for (auto component : this->components)
+        {
+            auto derived = dynamic_cast<T *>(component);
+
+            if (derived)
+                return derived;
+
+        }
+
+        return nullptr;
     }
+
+    template<class T>
+    T& AddComponent()
+    {
+        auto component = new T();
+        this->AddComponent(component);
+        return *component;
+    }
+
+    void AddChild(GameObject* child);
+
+    void Awake();
+
+    void Update();
+
+    void Draw();
+
+    virtual void onTriggerEnter() {};
 };
-#endif //PROFTAAK24_GAMEOBJECT_H
+

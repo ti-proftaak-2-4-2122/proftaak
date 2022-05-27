@@ -3,9 +3,15 @@
 #include <vector>
 #include <string>
 #include <glm/glm.hpp>
+#include "tigl.h"
 
 class ObjModel
 {
+private:
+    void loadVertices();
+
+    std::vector<tigl::Vertex> vertices;
+
 public:
     class Face
     {
@@ -18,9 +24,9 @@ public:
     std::vector<glm::vec3> normals;
     std::vector<Face> faces;
 
-    ObjModel(const std::string &fileName);
+    explicit ObjModel(const std::string &fileName);
 
-    ObjModel();
+    std::vector<tigl::Vertex>& GetVertices();
 
     std::string toString();
 };

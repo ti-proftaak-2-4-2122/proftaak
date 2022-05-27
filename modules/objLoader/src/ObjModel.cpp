@@ -38,7 +38,7 @@ ObjModel::ObjModel(const std::string &fileName)
         }
         if (firstPart == "f")
         {
-            Face face;
+            Face face{};
             for (int i = 0; i < 3; i++)
             {
                 char junk;
@@ -53,13 +53,15 @@ ObjModel::ObjModel(const std::string &fileName)
             faces.push_back(face);
         }
     }
+    loadVertices();
 }
 
 std::string ObjModel::toString()
 {
     std::ostringstream oss;
 
-    for(auto face : this->faces) {
+    for (auto face: this->faces)
+    {
         for (int i = 0; i < 3; ++i)
         {
             auto vertexPosition = positions[face.pos[i]];
@@ -80,4 +82,23 @@ std::string ObjModel::toString()
 
     return oss.str();
 
+}
+
+void ObjModel::loadVertices()
+{
+    for (const auto &face: this->faces)
+    {
+        for (int i = 0; i < 3; ++i)
+        {
+            auto vertexPosition = this->positions[face.pos[i]];
+            auto normalPosition = this->normals[face.normal[i]];
+            vertices.push_back(tigl::Vertex::PCN(vertexPosition, {100,100,100,100},
+                                                 normalPosition));
+        }
+    }
+}
+
+std::vector<tigl::Vertex>& ObjModel::GetVertices()
+{
+    return vertices;
 }
