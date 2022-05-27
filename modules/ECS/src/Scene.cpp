@@ -2,10 +2,21 @@
 // Created by Daan van Donk on 10/05/2022.
 //
 
+#include <stdexcept>
+
 #include "Scene.h"
 
 void Scene::AddGameObject(GameObject *gameObject)
 {
+    auto pos = std::find(
+            this->gameobjects.begin(),
+            this->gameobjects.end(),
+            gameObject
+    );
+
+    if(pos != this->gameobjects.end())
+        throw std::invalid_argument("GameObject was already added to scene");
+
     gameobjects.push_back(gameObject);
 }
 

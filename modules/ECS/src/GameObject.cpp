@@ -16,6 +16,15 @@ GameObject::GameObject() : transform((this->AddComponent<Transform>()))
 
 Component &GameObject::AddComponent(Component *component)
 {
+    auto pos = std::find(
+        this->components.begin(),
+        this->components.end(),
+        component
+    );
+
+    if(pos != this->components.end())
+        throw std::invalid_argument("Component was already added to GameObject");
+
     component->SetParent(this);
     components.push_back(component);
     return *component;
@@ -28,6 +37,15 @@ void GameObject::AddChild(GameObject* child)
 
     if(child == this)
         throw std::invalid_argument("Parent cannot contain itself as child");
+
+    auto pos = std::find(
+        this->children.begin(),
+        this->children.end(),
+        child
+    );
+
+    if(pos != this->children.end())
+        throw std::invalid_argument("GameObject already contains child");
 
     this->children.push_back(child);
     child->AddComponent(new ParentTransform(this));
