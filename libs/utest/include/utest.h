@@ -16,10 +16,12 @@
     std::string(__FILE__) + ":" + std::to_string(__LINE__)\
 )
 
-#define TEST_MAIN(code) int main() \
+#define TEST_MAIN() \
+int test_main(); \
+int main() \
 { \
     try { \
-        code; \
+        return test_main(); \
         TEST_SUCCESS(); \
     } \
     catch(utest::test_case_exception& ex) { \
@@ -33,19 +35,16 @@
         << "Test fail location: " << ex.location << std::endl;       \
         return 1; \
     } \
-}
+} \
+int test_main()
 
-#define RUN_TEST_CASE(caseName) caseName ()
+#define RUN_TEST_CASE(caseName) utest::run(#caseName, caseName)
 
-#define TEST_CASE(caseName, code) int caseName () { \
-    try { \
-        code; \
-        TEST_SUCCESS(); \
-    } \
-    catch(utest::test_exception& ex) { \
-        throw utest::test_case_exception(std::string(#caseName), ex); \
-    } \
-    TEST_SUCCESS(); \
+#define TEST_CASE(caseName) int caseName ()
+
+namespace utest
+{
+    int run(std::string caseName, int (*test_func)(void));
 }
 
 // EOF
