@@ -11,6 +11,9 @@ Transform::Transform()
     scale = glm::vec3(1, 1, 1);
 }
 
+Transform::Transform(const glm::vec3 &position, const glm::vec3 &rotation, const glm::vec3 &scale)
+        : position(position), rotation(rotation), scale(scale) {}
+
 const glm::vec3 &Transform::getPosition() const
 {
     return position;
@@ -41,5 +44,7 @@ void Transform::setScale(const glm::vec3 &newScale)
 {
     Transform::scale = newScale;
 }
+
+
 
 

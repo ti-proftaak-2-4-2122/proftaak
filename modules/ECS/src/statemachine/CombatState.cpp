@@ -12,7 +12,7 @@ void CombatState::actionSwitched()
                                   0); //Moves character
     std::cout << "CombatAction switched!" << std::endl;
 
-    context->combatController->Damage(*(context->characterStats), otherStats);
+    context->combatController->Damage(*(context->characterStats), *otherStats);
 }
 
 CombatState::CombatState(AIContext *context) : State(context)

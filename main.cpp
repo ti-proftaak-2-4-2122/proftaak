@@ -126,17 +126,17 @@ void init()
 void worldInit()
 {
     scene = new Scene();
-  
-    GameObject* collisionTest = new GameObject();
-    Collider* collider = new Collider(1.0f, glm::vec3(0,0,0));
-    collisionTest->AddComponent(collider);
-    GameObject* collisionTest1 = new GameObject();
-    Collider* collider1 = new Collider(1.0f, glm::vec3(1.0f,0,0));
-    collisionTest1->AddComponent(collider1);
 
-    scene->AddGameObject(collisionTest);
-    scene->AddGameObject(collisionTest1);
+    CharacterStats* characterStats = new CharacterStats{1.0f, 100.0f, 10.0f, 1.0f};
+    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(0.0f, 9.0f,1.0f), glm::vec3(0,0,0),
+                                                    glm::vec3(0.25f,0.25f,0.25f)),characterStats);
 
+    CharacterStats* towerstats = new CharacterStats{1.0f, 100.0f, 10.0f, 1.0f};
+//    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(0.0f, 9.0f,1.0f), glm::vec3(0,0,0),
+//                                                    glm::vec3(0.25f,0.25f,0.25f)),characterStats);
+    
+
+    scene->AddGameObject(aiPrefab);
     SceneManager::LoadScene(*scene);
 //    std::string str = "../resource/models/suzanne.obj";
 //
@@ -251,7 +251,7 @@ void draw()
     tigl::shader->setProjectionMatrix(
             glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0, 0.5f, 2.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+            glm::lookAt(glm::vec3(0, 7.5f, 7.5f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     glad_glEnable(GL_DEPTH_TEST);
 
@@ -262,7 +262,8 @@ void draw()
 
 void createMapObject(const std::string filePath, glm::vec3 diffuseColor)
 {
-    auto* map_object = new GameObject();
+    auto* map_object = new GameObject(new Transform());
+
     map_object->AddComponent(new Mesh(ModelManager::getModel(filePath)));
     map_object->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
     map_object->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);

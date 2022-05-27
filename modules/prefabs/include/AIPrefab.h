@@ -7,6 +7,7 @@
 #include "GameObject.h"
 #include "Collider.h"
 #include "CharacterStats.h"
+#include "Mesh.h"
 
 class CombatState;
 
@@ -16,7 +17,7 @@ private:
     AIContext *aiContext;
     Collider* collider;
 public:
-    AIPrefab(CharacterStats* characterStats);
+    AIPrefab(Transform *transform, CharacterStats *characterStats);
 
     void onTriggerEnter(Collider* collider) override;
 };

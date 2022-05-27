@@ -23,4 +23,6 @@ public:
     State *currentState;
 
     void switchState(State *newState);
+
+    void Awake() override;
 };

@@ -13,8 +13,12 @@ void AIContext::switchState(State* newState)
 
 AIContext::AIContext()
 {
+
+}
+
+void AIContext::Awake()
+{
     currentState = new WalkState(this);
-    this->lerpController = new LerpController();
 }
 
 
