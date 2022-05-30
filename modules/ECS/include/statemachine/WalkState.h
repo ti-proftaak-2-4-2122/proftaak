@@ -10,8 +10,6 @@ class State;
 class WalkState: public State
 {
 public:
-
-    WalkState(AIContext* aiContext);
-
+    WalkState(AIContext& context);
     void actionSwitched() override;
 };

@@ -14,11 +14,11 @@ class State;
 class AIContext : public Component
 {
 public:
-    LerpController *lerpController;
-    CombatController *combatController;
-    CharacterStats* characterStats;
+    LerpController& lerpController;
+    CombatController& combatController;
+    CharacterStats& characterStats;
 
-    AIContext();
+    AIContext(LerpController& lerpController, CombatController& combatController, CharacterStats& characterStats);
 
     State *currentState;
 

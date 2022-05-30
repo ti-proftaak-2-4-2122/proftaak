@@ -7,14 +7,15 @@
 
 void CombatState::actionSwitched()
 {
-    context->lerpController->Move(glm::vec3(0, 0, 0),
+    context.lerpController.Move(glm::vec3(0, 0, 0),
                                   glm::vec3(0, 0, 0),
                                   0); //Moves character
     std::cout << "CombatAction switched!" << std::endl;
 
-    context->combatController->Damage(*(context->characterStats), *otherStats);
+    context.combatController.Damage(context.characterStats, otherStats);
 }
 
-CombatState::CombatState(AIContext *context) : State(context)
+CombatState::CombatState(AIContext& context, CharacterStats& otherStats) : State(context),
+otherStats(otherStats)
 {
 }

@@ -3,49 +3,44 @@
 //
 #include "AIPrefab.h"
 #include "statemachine/CombatState.h"
-#include "statemachine/WalkState.h"
-#include "glm/glm.hpp"
 #include "Transform.h"
-#include "ModelManager.h"
+#include "statemachine/WalkState.h"
 #include <iostream>
 
-AIPrefab::AIPrefab(Transform *transform, CharacterStats *characterStats) : GameObject(transform)
+AIPrefab::AIPrefab(Transform* transform, CharacterStats* characterStats) : GameObject(transform)
 {
-    aiContext = new AIContext();
-    aiContext->characterStats = characterStats;
-    LerpController* _lerpController = new LerpController();
-    aiContext->lerpController = _lerpController;
-    this->collider = new Collider(characterStats->range);
-
-    AddComponent(aiContext);
-    AddComponent(this->collider);
-    AddComponent(new Mesh(ModelManager::getModel("../resource/models/box.obj")));
-    AddComponent(_lerpController);
+    LerpController* lerpController = new LerpController();
+    AddComponent(lerpController);
+    CombatController* combatController = new CombatController();
+    AddComponent(combatController);
     AddComponent(characterStats);
 
-    aiContext->Awake();
-    aiContext->switchState(new WalkState(aiContext));
+    Collider* collider = new Collider(characterStats->range);
+
+    this->collider = collider;
+    AddComponent(collider);
+
+    AIContext* aiContext = new AIContext(*lerpController, *combatController, *characterStats);
+    this->aiContext = aiContext;
+    AddComponent(aiContext);
 }
 
-void AIPrefab::onTriggerEnter(Collider *collider)
+void AIPrefab::onTriggerEnter(Collider *other)
 {
-    GameObject::onTriggerEnter(collider);
+    GameObject::onTriggerEnter(other);
 
-    auto* combatState = new CombatState(aiContext);
-    CharacterStats* otherStats = collider->getGameObject()->FindComponent<CharacterStats>();
+    CharacterStats* otherStats = other->getGameObject()->FindComponent<CharacterStats>();
 
-    if(otherStats) {
-        otherStats->health -= 10;
-        std::cout << "The character got damaged, his health is: " << otherStats->health << std::endl;
+    if(otherStats){
+        aiContext->switchState((State *)new CombatState(*aiContext, *otherStats));
     }
+}
 
-//    TagEnum result = collider->getGameObject()->tagEnum;
-//    if(result == ENEMY) {
-//
-//    } else if(result == STATE) {
-//        auto* moveState = new WalkState(aiContext);
-//        aiContext->switchState(moveState);
-//    }
+void AIPrefab::onTriggerExit(Collider *other)
+{
+    GameObject::onTriggerExit(other);
+
+    aiContext->switchState((State *)new WalkState(*aiContext));
 }
 
 

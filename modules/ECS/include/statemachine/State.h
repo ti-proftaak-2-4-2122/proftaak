@@ -11,9 +11,9 @@ class AIContext;
 class State
 {
 public:
-    AIContext* context;
-
-    State(AIContext* context);
+    AIContext& context;
+    CharacterStats& otherStats;
+    State(AIContext& context);
 
     virtual void actionSwitched() {};
 };

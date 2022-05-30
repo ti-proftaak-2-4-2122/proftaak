@@ -11,14 +11,16 @@ void AIContext::switchState(State* newState)
     this->currentState->actionSwitched();
 }
 
-AIContext::AIContext()
-{
-
-}
-
 void AIContext::Awake()
 {
-    currentState = new WalkState(this);
+    currentState = (State*) new WalkState(*(this));
+}
+
+AIContext::AIContext(LerpController &lerpController, CombatController &combatController,
+                     CharacterStats &characterStats) : lerpController(lerpController),
+                     combatController(combatController), characterStats(characterStats)
+{
+
 }
 
 

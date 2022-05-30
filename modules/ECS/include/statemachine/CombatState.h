@@ -9,7 +9,7 @@ class State;
 class CombatState : public State
 {
 public:
-    CombatState(AIContext *context);
+    CharacterStats& otherStats;
+    CombatState(AIContext& context, CharacterStats& otherStats);
     void actionSwitched() override;
-    CharacterStats* otherStats;
 };

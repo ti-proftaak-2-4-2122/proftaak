@@ -14,10 +14,11 @@ class CombatState;
 class AIPrefab : public GameObject
 {
 private:
-    AIContext *aiContext;
+    AIContext* aiContext;
     Collider* collider;
 public:
-    AIPrefab(Transform *transform, CharacterStats *characterStats);
+    AIPrefab(Transform* transform, CharacterStats* characterStats);
 
-    void onTriggerEnter(Collider* collider) override;
+    void onTriggerEnter(Collider* other) override;
+    void onTriggerExit(Collider* other) override;
 };
