@@ -5,7 +5,7 @@
 #include <stdexcept>
 
 #include "Scene.h"
-
+#include "Collider.h"
 void Scene::AddGameObject(GameObject *gameObject)
 {
     auto pos = std::find(
@@ -36,10 +36,15 @@ void Scene::RemoveGameObject(GameObject* gameObject)
 
     // If gameObject is in vector, remove
     if(pos != this->gameobjects.end()) {
+        auto* collider = gameObject->FindComponent<Collider>();
+        if(collider)
+        {
+            Collider::CleanUp(collider);
+        }
         this->gameobjects.erase(pos);
 
         delete gameObject;
-//        gameObject = nullptr;
+       gameObject = nullptr;
     }
 }
 

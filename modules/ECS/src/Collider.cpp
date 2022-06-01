@@ -4,7 +4,6 @@
 
 #include "Collider.h"
 #include "Transform.h"
-
 Collider::Collider(float radius) : radius(radius) {
 
 }
@@ -13,6 +12,7 @@ void Collider::CheckCollision(Collider* other)
 {
     glm::vec3 pos= gameObject->transform.getPosition();
     glm::vec3 otherPos = other->gameObject->transform.getPosition();
+
     //Distance calculation between this collider and other collider
     double distance = sqrt((((otherPos.x+other->radius)-(pos.x+this->radius))*(
             (otherPos.x+other->radius)-
@@ -36,7 +36,36 @@ void Collider::Update()
 {
     Component::Update();
     for(auto other : otherColliders) {
+        if(other == this)
+            continue;
         CheckCollision(other);
+    }
+}
+
+void Collider::CleanUp(Collider* collider)
+{
+    auto pos = std::find(
+            otherColliders.begin(),
+            otherColliders.end(),
+            collider
+            );
+
+    std::cout << " Erasing collider from list" << std::endl;
+
+    otherColliders.erase(pos);
+}
+
+void Collider::addCollider(Collider *collider)
+{
+    auto pos = std::find(
+            otherColliders.begin(),
+            otherColliders.end(),
+            collider
+            );
+
+    if(pos == otherColliders.end())
+    {
+        otherColliders.push_back(collider);
     }
 }
 

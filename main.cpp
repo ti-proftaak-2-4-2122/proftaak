@@ -130,7 +130,7 @@ void worldInit()
     AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(0.0f, 9.0f,1.0f), glm::vec3(0,0,0),
                                                     glm::vec3(0.25f,0.25f,0.25f)),characterStats);
 
-    CharacterStats* towerstats = new CharacterStats{2.0f, 100.0f, 0.0f, 0.0f, 1.0f, TOWER};
+    CharacterStats* towerstats = new CharacterStats{2.0f, 10.0f, 0.0f, 0.0f, 1.0f, TOWER};
     TowerPrefab* towerPrefab = new TowerPrefab(new Transform(
             glm::vec3(7.0f, 9.0f, 1.0f), glm::vec3(0,0,0),
             glm::vec3(0.25f, 0.25f, 0.25f)),
