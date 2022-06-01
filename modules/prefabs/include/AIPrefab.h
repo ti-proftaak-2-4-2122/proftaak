@@ -15,13 +15,17 @@ class CombatState;
 class AIPrefab : public GameObject
 {
 private:
+    bool test = false;
     LerpController* lerpController;
     CombatController* combatController;
     Collider* collider;
     CharacterStats* characterStats;
+    const std::vector<glm::vec3> checkPoints {glm::vec3(7,0,12.0f), glm::vec3(25.0f, 0.0f, -12.0f)
+                                              , glm::vec3(24.0f, 0, 12.0f)};
 public:
     AIPrefab(Transform* transform, CharacterStats* characterStats);
 
     void onTriggerEnter(Collider* other) override;
     void onTriggerExit(Collider* other) override;
+    void Update() override;
 };
