@@ -26,7 +26,7 @@ void Scene::AddGameObject(GameObject *gameObject)
  * If the deletion was successful, gameObject will be nullptr.
  * Don't use the GameObject after calling this function!
  */
-void Scene::RemoveGameObject(GameObject*& gameObject)
+void Scene::RemoveGameObject(GameObject* gameObject)
 {
     auto pos = std::find(
         this->gameobjects.begin(),
@@ -39,13 +39,8 @@ void Scene::RemoveGameObject(GameObject*& gameObject)
         this->gameobjects.erase(pos);
 
         delete gameObject;
-        gameObject = nullptr;
+//        gameObject = nullptr;
     }
-}
-
-Scene::Scene()
-{
-    gameobjects = std::vector<GameObject *>();
 }
 
 void Scene::update()

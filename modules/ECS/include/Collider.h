@@ -9,12 +9,11 @@
 class Collider : public Component
 {
 private:
-    bool hasEntered;
+    bool hasEntered = true;
 public:
     float radius;
-    glm::vec3 position;
     std::vector<Collider*> otherColliders;
-    Collider(float radius, glm::vec3 position);
+    Collider(float radius);
     void CheckCollision(Collider* other);
 
     void Update() override;

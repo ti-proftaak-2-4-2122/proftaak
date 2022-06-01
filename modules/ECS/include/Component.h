@@ -13,6 +13,8 @@ class Component
 protected:
     GameObject *gameObject = nullptr;
 public:
+
+    GameObject* getGameObject();
     virtual void Awake() {};
 
     virtual void Update() {};

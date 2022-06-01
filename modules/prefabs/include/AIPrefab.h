@@ -3,17 +3,25 @@
 //
 #pragma once
 
-#include "statemachine/AIContext.h"
 #include "GameObject.h"
+#include "Collider.h"
+#include "CharacterStats.h"
+#include "Mesh.h"
+#include "LerpController.h"
+#include "CombatController.h"
 
 class CombatState;
 
 class AIPrefab : public GameObject
 {
 private:
-    AIContext *aiContext;
+    LerpController* lerpController;
+    CombatController* combatController;
+    Collider* collider;
+    CharacterStats* characterStats;
 public:
-    AIPrefab();
+    AIPrefab(Transform* transform, CharacterStats* characterStats);
 
-    void onTriggerEnter(Collider* collider) override;
+    void onTriggerEnter(Collider* other) override;
+    void onTriggerExit(Collider* other) override;
 };

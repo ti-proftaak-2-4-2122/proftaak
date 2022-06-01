@@ -15,9 +15,13 @@
 #include "GameTimer.h"
 #include "Collider.h"
 #include "ImageProvider.h"
+#include "CharacterStats.h"
 
 #include "user-config.h"
 #include "Spawner.h"
+#include "AIPrefab.h"
+#include "TowerPrefab.h"
+#include "UnitTypeEnum.h"
 
 //aspect ratio should always be 4:3 when using realsense camera
 #define WINDOW_WIDTH 1440
@@ -39,8 +43,6 @@ void draw();
 void worldInit();
 
 void createMapObject(const std::string &filePath, glm::vec3 diffuseColor);
-
-Scene *scene;
 
 int currentWidth;
 int currentHeight;
@@ -125,29 +127,29 @@ void init()
 
 void worldInit()
 {
-    scene = new Scene();
+    CharacterStats* characterStats = new CharacterStats{1.0f, 100.0f, 10.0f, 1.0f, 2.0f, LAND};
+    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(0.0f, 9.0f,1.0f), glm::vec3(0,0,0),
+                                                    glm::vec3(0.25f,0.25f,0.25f)),characterStats);
 
-    auto *collisionTest = new GameObject();
-    auto *collider = new Collider(1.0f, glm::vec3(0, 0, 0));
-    collisionTest->AddComponent(collider);
-    auto *collisionTest1 = new GameObject();
-    auto *collider1 = new Collider(1.0f, glm::vec3(1.0f, 0, 0));
-    collisionTest1->AddComponent(collider1);
+    CharacterStats* towerstats = new CharacterStats{2.0f, 100.0f, 0.0f, 0.0f, 1.0f, TOWER};
+    TowerPrefab* towerPrefab = new TowerPrefab(new Transform(
+            glm::vec3(7.0f, 9.0f, 1.0f), glm::vec3(0,0,0),
+            glm::vec3(0.25f, 0.25f, 0.25f)),
+            towerstats);
+//
+//    //building map
+//    createMapObject("../resource/models/map_ground.obj", {0.0f, 1, 0});
+//    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1});
+//    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f});
+//    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f});
 
-    scene->AddGameObject(collisionTest);
-    scene->AddGameObject(collisionTest1);
+    Scene::getSingleton().AddGameObject(towerPrefab);
+    Scene::getSingleton().AddGameObject(aiPrefab);
 
-    //building map
-    createMapObject("../resource/models/map_ground.obj", {0.0f, 1, 0});
-    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1});
-    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f});
-    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f});
-
+    SceneManager::LoadScene(Scene::getSingleton());
     auto *spawnManager = new GameObject();
     auto *spawner = new Spawner();
     spawnManager->AddComponent(spawner);
-
-    SceneManager::LoadScene(*scene);
 }
 
 void update()
@@ -155,7 +157,7 @@ void update()
     if (capture->isOpened())
         imageProvider->Update();
 
-    scene->update();
+    Scene::getSingleton().update();
     GameTimer::update(glfwGetTime());
 }
 
@@ -192,18 +194,19 @@ void draw()
             glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH,
                              0.1f, 200.0f));
     tigl::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0, 0.5f, 2.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+            glm::lookAt(glm::vec3(0, 7.5f, 7.5f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     glad_glEnable(GL_DEPTH_TEST);
 
 
     // Draw 3D Scene
-    SceneManager::UpdatePoll(*scene);
+    SceneManager::UpdatePoll(Scene::getSingleton());
 }
 
 void createMapObject(const std::string &filePath, glm::vec3 diffuseColor)
 {
-    auto *map_object = new GameObject();
+    auto* map_object = new GameObject(new Transform());
+
     map_object->AddComponent(new Mesh(ModelManager::getModel(filePath)));
     map_object->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
     map_object->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
@@ -214,5 +217,5 @@ void createMapObject(const std::string &filePath, glm::vec3 diffuseColor)
         //mesh_map_ground->SetColor({200,200,200,255});
         mesh_map_object->SetDiffuseColor(diffuseColor);
     }
-    scene->AddGameObject(map_object);
+    Scene::getSingleton().AddGameObject(map_object);
 }

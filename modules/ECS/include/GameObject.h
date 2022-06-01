@@ -21,7 +21,7 @@ private:
 
 public:
     Transform &transform;
-    GameObject();
+    GameObject(Transform* transform);
 
     TagEnum tagEnum;
 
@@ -53,19 +53,19 @@ public:
     void AddChild(GameObject* child);
     void RemoveChild(GameObject*& child);
 
-    void Awake();
+    virtual void Awake();
 
-    void Update();
+    virtual void Update();
 
     void Draw();
 
-
     ~GameObject();
-    virtual void onTriggerEnter(Collider* collider) {
+
+    virtual void onTriggerEnter(Collider* other) {
         std::cout << "On Trigger Enter called" << std::endl;
     };
 
-    virtual void onTriggerExit(Collider* collider) {
+    virtual void onTriggerExit(Collider* other) {
         std::cout << "On Trigger Exit called" << std::endl;
     };
 

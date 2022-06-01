@@ -2,15 +2,46 @@
 // Created by doguk on 5/24/2022.
 //
 #include "AIPrefab.h"
-#include "statemachine/CombatState.h"
+#include "Transform.h"
+#include "ModelManager.h"
 
-AIPrefab::AIPrefab()
+#include <iostream>
+
+AIPrefab::AIPrefab(Transform* transform, CharacterStats* characterStats) : GameObject(transform)
 {
-    aiContext = new AIContext();
+    this->lerpController = new LerpController();
+    AddComponent(lerpController);
+
+    this->combatController = new CombatController();
+    AddComponent(combatController);
+
+    Mesh* renderMesh = new Mesh(ModelManager::getModel("../resource/models/box.obj"));
+    AddComponent(renderMesh);
+
+    this->characterStats = characterStats;
+    AddComponent(this->characterStats);
+
+    this->collider = new Collider(characterStats->range);
+    AddComponent(collider);
+
+    lerpController->Move(this->transform.getPosition(), glm::vec3(5.5f, 9.0f, 1.0f),
+                         characterStats->moveSpeed);
 }
 
-void AIPrefab::onTriggerEnter(Collider* collider)
+void AIPrefab::onTriggerEnter(Collider *other)
 {
-    auto* combatState = new CombatState(aiContext);
-    aiContext->switchState(combatState);
+    GameObject::onTriggerEnter(other);
+
+    CharacterStats* otherStats = other->getGameObject()->FindComponent<CharacterStats>();
+
+    if(otherStats){
+        combatController->StartCombat(this->characterStats, otherStats);
+    }
 }
+
+void AIPrefab::onTriggerExit(Collider *other)
+{
+    GameObject::onTriggerExit(other);
+}
+
+

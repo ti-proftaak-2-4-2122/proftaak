@@ -9,10 +9,7 @@
 #include <typeinfo>
 #include <stdexcept>
 
-GameObject::GameObject() : transform((this->AddComponent<Transform>()))
-{
 
-}
 
 Component &GameObject::AddComponent(Component *component)
 {
@@ -28,6 +25,11 @@ Component &GameObject::AddComponent(Component *component)
     component->SetParent(this);
     components.push_back(component);
     return *component;
+}
+
+GameObject::GameObject(Transform* _transform) : transform(*_transform)
+{
+    this->AddComponent(&transform);
 }
 
 void GameObject::AddChild(GameObject* child)

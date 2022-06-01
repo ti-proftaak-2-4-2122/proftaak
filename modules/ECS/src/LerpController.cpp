@@ -6,6 +6,7 @@
 #include "LerpController.h"
 #include "Transform.h"
 #include "glm/vec3.hpp"
+#include "GameTimer.h"
 
 void LerpController::Move(glm::vec3 startPos, glm::vec3 endPos, float speed)
 {
@@ -21,7 +22,7 @@ void LerpController::Move(glm::vec3 startPos, glm::vec3 endPos, float speed)
     {
         if (std::isinf(slope[i]))
         {
-            slope[i] = 0;
+            this->slope[i] = 0;
         }
     }
     // startPos*speed + endPos*(1.f-speed);
@@ -36,7 +37,8 @@ void LerpController::Update()
 
     if (stepCount >= stepAmount) return;
     //Move the gameobject
-    gameObject->transform.setPosition(gameObject->transform.getPosition() + slope);
+    //TODO implement delta time
+    gameObject->transform.setPosition((gameObject->transform.getPosition() + this->slope ));
     stepCount++;
 
 }
