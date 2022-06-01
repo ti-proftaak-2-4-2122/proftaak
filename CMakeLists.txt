@@ -1,9 +1,12 @@
 cmake_minimum_required(VERSION 3.21)
 project(Proftaak24)
 
-set(CMAKE_CXX_STANDARD 14)
-set(OpenCV_DIR "libs/opencv")
+set(CMAKE_CXX_STANDARD 20)
 
+include(CTest)
+
+# Add OpenCV
+set(OpenCV_DIR "libs/opencv")
 find_package(OpenCV REQUIRED)
 
 # Get All Modules
@@ -18,6 +21,19 @@ FOREACH(MODULE_DIR_FILE ${MODULE_DIR_FILE_LIST})
     ENDIF()
 ENDFOREACH()
 
+# Get All Tests
+set(TESTS_DIR_PATH "${CMAKE_CURRENT_SOURCE_DIR}/tests")
+set(TEST_LIST "")
+
+FILE(GLOB TEST_DIR_FILE_LIST RELATIVE ${TESTS_DIR_PATH} ${TESTS_DIR_PATH}/*)
+
+FOREACH(TEST_DIR_FILE ${TEST_DIR_FILE_LIST})
+    IF(IS_DIRECTORY "${TESTS_DIR_PATH}/${TEST_DIR_FILE}")
+        LIST(APPEND TEST_LIST ${TEST_DIR_FILE})
+    ENDIF()
+ENDFOREACH()
+
+# Add link directories
 link_directories("libs/glfw/lib-mingw-w64")
 link_directories("libs/glm/glm")
 
@@ -36,6 +52,8 @@ ENDFOREACH()
 
 #internal libaries .h files directory
 add_subdirectory(libs/glm)
+add_subdirectory(libs/tigl)
+add_subdirectory(libs/glad)
 
 #add modules
 message("-- Adding all modules in modules folder")
@@ -44,10 +62,12 @@ FOREACH(MODULE ${MODULE_LIST})
     add_subdirectory(${MODULES_DIR_PATH}/${MODULE})
 ENDFOREACH()
 
-add_executable(${CMAKE_PROJECT_NAME} main.cpp libs/glad/glad.c libs/tigl/tigl.cpp)
+add_executable(${CMAKE_PROJECT_NAME} main.cpp user-config.h)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} libglfw3.a )
 target_link_libraries(${CMAKE_PROJECT_NAME} glm )
+target_link_libraries(${CMAKE_PROJECT_NAME} tigl )
+target_link_libraries(${CMAKE_PROJECT_NAME} glad )
 target_link_libraries(${CMAKE_PROJECT_NAME} ${MODULE_LIST} )
 target_link_libraries(${CMAKE_PROJECT_NAME} opencv_core opencv_imgproc opencv_highgui opencv_imgcodecs )
 
@@ -57,3 +77,17 @@ file(
         COPY "libs/opencv/x64/mingw/bin/"
         DESTINATION "${CMAKE_CURRENT_BINARY_DIR}"
 )
+
+# Configure Unit Tests
+set(PROJECT_TEST_NAME "${CMAKE_PROJECT_NAME}_Tests")
+message("-- Configuring tests for project ${CMAKE_PROJECT_NAME} as ${PROJECT_TEST_NAME}")
+
+include_directories("libs/utest/include")
+add_subdirectory("libs/utest")
+
+# Add Tests
+message("-- Adding all tests in test folder")
+FOREACH(TEST ${TEST_LIST})
+    message("       Added ${TEST}")
+    add_subdirectory(${TESTS_DIR_PATH}/${TEST})
+ENDFOREACH()

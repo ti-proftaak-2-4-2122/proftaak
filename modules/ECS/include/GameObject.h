@@ -4,17 +4,69 @@
 
 #include "Transform.h"
 #include "vector"
-#include "Component.h"
+#include "TagEnum.h"
+#include <typeinfo>
+#include <iostream>
 
-#ifndef PROFTAAK24_GAMEOBJECT_H
-#define PROFTAAK24_GAMEOBJECT_H
+class Component;
+class Transform;
+class Collider;
 
-class GameObject {
+class GameObject
+{
+private:
+    std::vector<Component *> components;
+    std::vector<GameObject*> children;
+
 public:
-    std::vector<Component*> components;
-    void AddComponent(Component* component);
-    GameObject() {
-        this->AddComponent(new Transform);
+    Transform &transform;
+    GameObject();
+
+    TagEnum tagEnum;
+
+    Component &AddComponent(Component *component);
+
+    template<class T>
+    T *FindComponent()
+    {
+        for (auto component : this->components)
+        {
+            auto derived = dynamic_cast<T *>(component);
+
+            if (derived)
+                return derived;
+
+        }
+
+        return nullptr;
     }
+
+    template<class T>
+    T& AddComponent()
+    {
+        auto component = new T();
+        this->AddComponent(component);
+        return *component;
+    }
+
+    void AddChild(GameObject* child);
+    void RemoveChild(GameObject*& child);
+
+    void Awake();
+
+    void Update();
+
+    void Draw();
+
+
+    ~GameObject();
+    virtual void onTriggerEnter(Collider* collider) {
+        std::cout << "On Trigger Enter called" << std::endl;
+    };
+
+    virtual void onTriggerExit(Collider* collider) {
+        std::cout << "On Trigger Exit called" << std::endl;
+    };
+
 };
 #endif //PROFTAAK24_GAMEOBJECT_H
