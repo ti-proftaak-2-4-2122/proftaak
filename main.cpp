@@ -174,6 +174,7 @@ void draw()
         glDisable(GL_DEPTH_TEST);
 
         tigl::shader->enableLighting(false);
+        tigl::shader->enableTexture(true);
 
         // Draw Background
         openCvComponent->Draw();
@@ -182,6 +183,7 @@ void draw()
     // Prepare for 3D Scene
     glEnable(GL_DEPTH_TEST);
     tigl::shader->enableLighting(true);
+    tigl::shader->enableTexture(CONFIG_LIGHT_ENABLE_RTX);
 
     tigl::shader->setProjectionMatrix(
             glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH,
