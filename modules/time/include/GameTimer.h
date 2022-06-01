@@ -5,8 +5,7 @@
  * @date 24-05-2022
  */
 
-#ifndef GAMETIMER_H
-#define GAMETIMER_H
+#pragma once
 
 /**
  * @brief Class for keeping track of the time between 2 frames
@@ -14,22 +13,32 @@
 class GameTimer
 {
 private:
-    inline static double lastTime = 0;
+    inline static double currentTime = 0.0f;
+    inline static float deltaTime = 0.0f;
 
 public:
-    /**
-     * Variable containing the delta time from the previous to the current frame
-     */
-    inline static float deltatime = 0.0f;
 
     /**
-     * Updates the internal timer and delta time with the new time
-     * @param time Time since program start or a timestamp.
-     * Must be larger than internal timer and non-negative.
+     * Updates the start time of the current frame and calculates the delta time
+     * @param time Time in seconds, must be a timestamp or offset from the start of the program
      */
     static void update(double time);
 
+    /**
+     * Resets the GameTimer to 0
+     */
+    static void reset();
+
+    /**
+     * Gets the start time of the current frame
+     * @return Time in seconds
+     */
+    static double getCurrentTime();
+
+    /**
+     * Gets the delta time between the previous and the current frame
+     * @return Time in seconds
+     */
+    static float getDeltaTime();
+
 };
-
-
-#endif // GAMETIMER_H
