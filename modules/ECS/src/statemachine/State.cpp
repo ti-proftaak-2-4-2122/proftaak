@@ -4,7 +4,7 @@
 
 #include "statemachine/State.h"
 
-State::State(AIContext* context) : context(context)
+State::State(AIContext& context) : context(context)
 {
 
 }

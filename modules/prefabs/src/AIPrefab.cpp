@@ -5,6 +5,7 @@
 #include "statemachine/CombatState.h"
 #include "Transform.h"
 #include "statemachine/WalkState.h"
+#include "ModelManager.h"
 #include <iostream>
 
 AIPrefab::AIPrefab(Transform* transform, CharacterStats* characterStats) : GameObject(transform)
@@ -13,6 +14,8 @@ AIPrefab::AIPrefab(Transform* transform, CharacterStats* characterStats) : GameO
     AddComponent(lerpController);
     CombatController* combatController = new CombatController();
     AddComponent(combatController);
+    Mesh* renderMesh = new Mesh(ModelManager::getModel("../resource/models/box.obj"));
+    AddComponent(renderMesh);
     AddComponent(characterStats);
 
     Collider* collider = new Collider(characterStats->range);

@@ -5,6 +5,7 @@
 #ifndef PROFTAAK24_STATE_H
 #define PROFTAAK24_STATE_H
 #include "AIContext.h"
+#include "CharacterStats.h"
 
 class AIContext;
 
@@ -12,7 +13,6 @@ class State
 {
 public:
     AIContext& context;
-    CharacterStats& otherStats;
     State(AIContext& context);
 
     virtual void actionSwitched() {};

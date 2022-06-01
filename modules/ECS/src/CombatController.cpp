@@ -7,4 +7,5 @@
 void CombatController::Damage(CharacterStats &yourStats, CharacterStats &otherStats)
 {
     otherStats.health -= yourStats.damage;
+    std::cout << "Player did damage done to tower, remaining health: " << otherStats.health <<"\n";
 }
