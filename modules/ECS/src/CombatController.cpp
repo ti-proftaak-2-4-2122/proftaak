@@ -4,9 +4,12 @@
 
 #include "CombatController.h"
 #include "GameTimer.h"
+#include "Scene.h"
+
 void CombatController::Damage()
 {
     if(otherStats->health-yourStats->damage < 0) {
+        Scene::getSingleton().RemoveGameObject(otherStats->getGameObject());
         StopCombat();
         return;
     }

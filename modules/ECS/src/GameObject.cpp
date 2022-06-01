@@ -111,3 +111,8 @@ GameObject::~GameObject()
     for(auto component : this->components)
         delete component;
 }
+
+const std::vector<Component *> &GameObject::getComponents() const
+{
+    return components;
+}

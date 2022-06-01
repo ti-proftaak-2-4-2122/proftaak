@@ -42,6 +42,8 @@ public:
         return nullptr;
     }
 
+    const std::vector<Component *> &getComponents() const;
+
     template<class T>
     T& AddComponent()
     {
