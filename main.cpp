@@ -42,8 +42,6 @@ void worldInit();
 
 void createMapObject(const std::string &filePath, glm::vec3 diffuseColor);
 
-Scene *scene;
-
 int currentWidth;
 int currentHeight;
 
@@ -128,13 +126,11 @@ void init()
 
 void worldInit()
 {
-    scene = new Scene();
-
     CharacterStats* characterStats = new CharacterStats{1.0f, 100.0f, 10.0f, 1.0f, 2.0f, LAND};
     AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(0.0f, 9.0f,1.0f), glm::vec3(0,0,0),
                                                     glm::vec3(0.25f,0.25f,0.25f)),characterStats);
 
-    CharacterStats* towerstats = new CharacterStats{2.0f, 100.0f, 5.0f, 0.0f, 1.0f, TOWER};
+    CharacterStats* towerstats = new CharacterStats{2.0f, 100.0f, 0.0f, 0.0f, 1.0f, TOWER};
     TowerPrefab* towerPrefab = new TowerPrefab(new Transform(
             glm::vec3(7.0f, 9.0f, 1.0f), glm::vec3(0,0,0),
             glm::vec3(0.25f, 0.25f, 0.25f)),
@@ -146,10 +142,10 @@ void worldInit()
 //    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f});
 //    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f});
 
-    scene->AddGameObject(towerPrefab);
-    scene->AddGameObject(aiPrefab);
+    Scene::getSingleton().AddGameObject(towerPrefab);
+    Scene::getSingleton().AddGameObject(aiPrefab);
 
-    SceneManager::LoadScene(*scene);
+    SceneManager::LoadScene(Scene::getSingleton());
 }
 
 void update()
@@ -157,7 +153,7 @@ void update()
     if (capture->isOpened())
         openCvComponent->Update();
 
-    scene->update();
+    Scene::getSingleton().update();
     GameTimer::update(glfwGetTime());
 }
 
@@ -200,7 +196,7 @@ void draw()
 
 
     // Draw 3D Scene
-    SceneManager::UpdatePoll(*scene);
+    SceneManager::UpdatePoll(Scene::getSingleton());
 }
 
 void createMapObject(const std::string &filePath, glm::vec3 diffuseColor)
@@ -217,5 +213,5 @@ void createMapObject(const std::string &filePath, glm::vec3 diffuseColor)
         //mesh_map_ground->SetColor({200,200,200,255});
         mesh_map_object->SetDiffuseColor(diffuseColor);
     }
-    scene->AddGameObject(map_object);
+    Scene::getSingleton().AddGameObject(map_object);
 }
