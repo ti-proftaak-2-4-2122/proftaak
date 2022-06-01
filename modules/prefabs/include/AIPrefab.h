@@ -20,7 +20,7 @@ private:
     Collider* collider;
     CharacterStats* characterStats;
 public:
-    AIPrefab(Transform* transform, CharacterStats* characterStats);
+    AIPrefab(const Transform& AItransform, CharacterStats* characterStats);
 
     void onTriggerEnter(Collider* other) override;
     void onTriggerExit(Collider* other) override;

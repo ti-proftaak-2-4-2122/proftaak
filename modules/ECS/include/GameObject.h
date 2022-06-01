@@ -21,7 +21,7 @@ private:
 
 public:
     Transform &transform;
-    GameObject(Transform* transform);
+    GameObject();
 
     TagEnum tagEnum;
 

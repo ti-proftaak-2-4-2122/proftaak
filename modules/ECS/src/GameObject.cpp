@@ -27,9 +27,9 @@ Component &GameObject::AddComponent(Component *component)
     return *component;
 }
 
-GameObject::GameObject(Transform* _transform) : transform(*_transform)
+GameObject::GameObject() : transform(this->AddComponent<Transform>())
 {
-    this->AddComponent(&transform);
+
 }
 
 void GameObject::AddChild(GameObject* child)
@@ -111,3 +111,4 @@ GameObject::~GameObject()
     for(auto component : this->components)
         delete component;
 }
+

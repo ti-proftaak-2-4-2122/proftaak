@@ -23,7 +23,7 @@ public:
 
     void setPosition(const glm::vec3 &position);
 
-    [[nodiscard]] const glm::vec3 &getRotation() const;
+    [[nodiscard]] const glm::vec3 getRotation() const;
 
     void setRotation(const glm::vec3 &rotation);
 

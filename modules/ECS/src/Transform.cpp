@@ -25,9 +25,9 @@ void Transform::setPosition(const glm::vec3 &newPosition)
 
 }
 
-const glm::vec3 &Transform::getRotation() const
+const glm::vec3 Transform::getRotation() const
 {
-    return rotation;
+    return glm::degrees(rotation);
 }
 
 void Transform::setRotation(const glm::vec3 &newRotation)

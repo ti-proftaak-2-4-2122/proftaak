@@ -7,15 +7,20 @@
 
 #include <iostream>
 
-AIPrefab::AIPrefab(Transform* transform, CharacterStats* characterStats) : GameObject(transform)
+AIPrefab::AIPrefab(const Transform &AItransform, CharacterStats *characterStats) : GameObject()
 {
+    this->transform.setPosition(AItransform.getPosition());
+    this->transform.setRotation(AItransform.getRotation());
+    this->transform.setScale(AItransform.getRotation());
+
+
     this->lerpController = new LerpController();
     AddComponent(lerpController);
 
     this->combatController = new CombatController();
     AddComponent(combatController);
 
-    Mesh* renderMesh = new Mesh(ModelManager::getModel("../resource/models/box.obj"));
+    Mesh *renderMesh = new Mesh(ModelManager::getModel("../resource/models/box.obj"));
     AddComponent(renderMesh);
 
     this->characterStats = characterStats;
@@ -32,9 +37,10 @@ void AIPrefab::onTriggerEnter(Collider *other)
 {
     GameObject::onTriggerEnter(other);
 
-    CharacterStats* otherStats = other->getGameObject()->FindComponent<CharacterStats>();
+    CharacterStats *otherStats = other->getGameObject()->FindComponent<CharacterStats>();
 
-    if(otherStats){
+    if (otherStats)
+    {
         combatController->StartCombat(this->characterStats, otherStats);
     }
 }

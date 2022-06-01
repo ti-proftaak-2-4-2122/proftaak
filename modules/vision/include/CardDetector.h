@@ -12,22 +12,20 @@
 
 class CardDetector
 {
-
-protected:
+public:
     struct Card
     {
         unsigned int color;
         double x;
         double y;
+        bool isUsed;
     };
-
-
 
 private:
     CardDetector()
     = default;
 
-    inline zstatic CardDetector* singleton_;
+    inline static CardDetector* singleton_;
 
     cv::Mat loaded_img;
     bool initialized = false;
@@ -61,6 +59,7 @@ private:
     static cv::Scalar GetColor(unsigned int colorCode);
 
 public:
+
     /**
  * Static methods should be defined outside the class.
  */

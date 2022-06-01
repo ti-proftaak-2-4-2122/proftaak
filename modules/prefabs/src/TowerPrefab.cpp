@@ -2,9 +2,13 @@
 #include "ModelManager.h"
 #include <iostream>
 
-TowerPrefab::TowerPrefab(Transform *transform, CharacterStats *characterStats) : GameObject
-(transform), characterStats(characterStats)
+TowerPrefab::TowerPrefab(const Transform &towerTransform, CharacterStats *characterStats) : GameObject(),
+                                                                                            characterStats(characterStats)
 {
+    this->transform.setPosition(towerTransform.getPosition());
+    this->transform.setRotation(towerTransform.getRotation());
+    this->transform.setScale(towerTransform.getRotation());
+
     std::cout << "Constructor call for tower" << std::endl;
     this->combatController = new CombatController();
     this->collider = new Collider(characterStats->range);

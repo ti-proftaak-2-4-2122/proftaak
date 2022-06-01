@@ -127,12 +127,12 @@ void init()
 
 void worldInit()
 {
-    CharacterStats* characterStats = new CharacterStats{1.0f, 100.0f, 10.0f, 1.0f, 2.0f, LAND};
-    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(0.0f, 9.0f,1.0f), glm::vec3(0,0,0),
+    auto* characterStats = new CharacterStats{1.0f, 100.0f, 10.0f, 1.0f, 2.0f, LAND};
+    auto* aiPrefab = new AIPrefab(Transform(glm::vec3(0.0f, 9.0f,1.0f), glm::vec3(0,0,0),
                                                     glm::vec3(0.25f,0.25f,0.25f)),characterStats);
 
-    CharacterStats* towerstats = new CharacterStats{2.0f, 100.0f, 0.0f, 0.0f, 1.0f, TOWER};
-    TowerPrefab* towerPrefab = new TowerPrefab(new Transform(
+    auto* towerstats = new CharacterStats{2.0f, 100.0f, 0.0f, 0.0f, 1.0f, TOWER};
+    auto* towerPrefab = new TowerPrefab(Transform(
             glm::vec3(7.0f, 9.0f, 1.0f), glm::vec3(0,0,0),
             glm::vec3(0.25f, 0.25f, 0.25f)),
             towerstats);
@@ -143,13 +143,15 @@ void worldInit()
 //    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f});
 //    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f});
 
-    Scene::getSingleton().AddGameObject(towerPrefab);
-    Scene::getSingleton().AddGameObject(aiPrefab);
+//    Scene::getSingleton().AddGameObject(towerPrefab);
+//    Scene::getSingleton().AddGameObject(aiPrefab);
 
-    SceneManager::LoadScene(Scene::getSingleton());
     auto *spawnManager = new GameObject();
     auto *spawner = new Spawner();
     spawnManager->AddComponent(spawner);
+    Scene::getSingleton().AddGameObject(spawnManager);
+
+    SceneManager::LoadScene(Scene::getSingleton());
 }
 
 void update()
@@ -205,7 +207,7 @@ void draw()
 
 void createMapObject(const std::string &filePath, glm::vec3 diffuseColor)
 {
-    auto* map_object = new GameObject(new Transform());
+    auto* map_object = new GameObject();
 
     map_object->AddComponent(new Mesh(ModelManager::getModel(filePath)));
     map_object->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
