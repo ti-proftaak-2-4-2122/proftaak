@@ -4,25 +4,25 @@
 
 #include <memory>
 
-#include <glad/glad.h>
-#include <opencv2/imgcodecs.hpp>
-#include <opencv2/highgui.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include "glad/glad.h"
+#include "opencv2/imgcodecs.hpp"
+#include "opencv2/highgui.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 #include <utility>
-#include <tigl.h>
+#include "tigl.h"
 
-#include "OpenCVVideoCapture.h"
+#include "ImageProvider.h"
 #include "CardDetector.h"
 
 using tigl::Vertex;
 
-OpenCVVideoCapture::OpenCVVideoCapture(std::shared_ptr<cv::VideoCapture> capture)
+ImageProvider::ImageProvider(std::shared_ptr<cv::VideoCapture> capture)
 {
     this->capture = std::move(capture);
     this->captureTextureId = -1;
 }
 
-void OpenCVVideoCapture::Awake()
+void ImageProvider::Awake()
 {
     glGenTextures(1, &captureTextureId);
     glBindTexture(GL_TEXTURE_2D, captureTextureId);
@@ -31,7 +31,7 @@ void OpenCVVideoCapture::Awake()
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
-void OpenCVVideoCapture::Update()
+void ImageProvider::Update()
 {
     cv::Mat captureImage, cvImage;
 
@@ -56,7 +56,7 @@ void OpenCVVideoCapture::Update()
     );
 }
 
-void OpenCVVideoCapture::Draw()
+void ImageProvider::Draw()
 {
     tigl::shader->setProjectionMatrix(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(glm::lookAt(
@@ -81,7 +81,7 @@ void OpenCVVideoCapture::Draw()
     tigl::end();
 }
 
-OpenCVVideoCapture::~OpenCVVideoCapture()
+ImageProvider::~ImageProvider()
 {
     delete this->detector;
 }

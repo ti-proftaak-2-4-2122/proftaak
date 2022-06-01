@@ -8,12 +8,13 @@
 
 #include "Mesh.h"
 #include "ModelManager.h"
-#include "OpenCVVideoCapture.h"
+#include "ImageProvider.h"
 #include "Scene.h"
 #include "SceneManager.h"
 #include "Transform.h"
 #include "GameTimer.h"
 #include "Collider.h"
+#include "ImageProvider.h"
 
 #include "user-config.h"
 
@@ -26,7 +27,7 @@ using tigl::Vertex;
 GLFWwindow *window;
 
 std::shared_ptr<cv::VideoCapture> capture;
-OpenCVVideoCapture *openCvComponent;
+ImageProvider *openCvComponent;
 
 void init();
 
@@ -96,7 +97,7 @@ void init()
 
     if (capture->isOpened())
     {
-        openCvComponent = new OpenCVVideoCapture(capture);
+        openCvComponent = new ImageProvider(capture);
         openCvComponent->Awake();
     }
 
