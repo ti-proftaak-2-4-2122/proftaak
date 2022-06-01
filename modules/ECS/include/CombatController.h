@@ -9,6 +9,18 @@ class Component;
 
 class CombatController : public Component
 {
+private:
+    void Damage();
+    bool IsAttacking = false;
+
+    float currentTime;
+    float maxTime;
+    CharacterStats* yourStats;
+    CharacterStats* otherStats;
 public:
-    void Damage(CharacterStats& yourStats,  CharacterStats& otherStats);
+    void StartCombat(CharacterStats* yourStats, CharacterStats* otherStats);
+    void StopCombat();
+    void Update() override;
+
+    CombatController();
 };

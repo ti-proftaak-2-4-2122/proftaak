@@ -19,6 +19,7 @@
 #include "user-config.h"
 #include "AIPrefab.h"
 #include "TowerPrefab.h"
+#include "UnitTypeEnum.h"
 
 //aspect ratio should always be 4:3 when using realsense camera
 #define WINDOW_WIDTH 1440
@@ -129,11 +130,11 @@ void worldInit()
 {
     scene = new Scene();
 
-    CharacterStats* characterStats = new CharacterStats{1.0f, 100.0f, 10.0f, 1.0f};
+    CharacterStats* characterStats = new CharacterStats{1.0f, 100.0f, 10.0f, 1.0f, 2.0f, LAND};
     AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(0.0f, 9.0f,1.0f), glm::vec3(0,0,0),
                                                     glm::vec3(0.25f,0.25f,0.25f)),characterStats);
 
-    CharacterStats* towerstats = new CharacterStats{1.0f, 100.0f, 5.0f, 0.0f};
+    CharacterStats* towerstats = new CharacterStats{2.0f, 100.0f, 5.0f, 0.0f, 1.0f, TOWER};
     TowerPrefab* towerPrefab = new TowerPrefab(new Transform(
             glm::vec3(7.0f, 9.0f, 1.0f), glm::vec3(0,0,0),
             glm::vec3(0.25f, 0.25f, 0.25f)),
@@ -145,8 +146,8 @@ void worldInit()
 //    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f});
 //    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f});
 
-    scene->AddGameObject(aiPrefab);
     scene->AddGameObject(towerPrefab);
+    scene->AddGameObject(aiPrefab);
 
     SceneManager::LoadScene(*scene);
 }

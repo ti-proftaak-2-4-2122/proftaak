@@ -4,17 +4,27 @@
 
 #ifndef PROFTAAK24_CHARACTERSTATS_H
 #define PROFTAAK24_CHARACTERSTATS_H
+
+#include "UnitTypeEnum.h"
+
 struct CharacterStats : public Component
 {
     float range;
     float health;
     float damage;
     float moveSpeed;
+    float attackSpeed;
+    UnitTypeEnum type;
 
-    CharacterStats(float range, float health, float damage, float moveSpeed) : range(range),
+    CharacterStats(float range, float health, float damage, float moveSpeed, float attackSpeed,
+                   UnitTypeEnum typeEnum)
+    : range(range),
                                                                                health(health),
                                                                                damage(damage),
-                                                                               moveSpeed(
-                                                                                       moveSpeed) {}
+                                                                               moveSpeed
+                                                                               (moveSpeed),
+                                                                               attackSpeed
+                                                                               (attackSpeed),
+                                                                               type(typeEnum) {}
 };
 #endif //PROFTAAK24_CHARACTERSTATS_H

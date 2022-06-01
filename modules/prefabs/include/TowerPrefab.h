@@ -14,14 +14,13 @@ class GameObject;
 class TowerPrefab : public GameObject
 {
 private:
-    bool enemyIsNear;
     Collider* collider;
     CombatController* combatController;
     CharacterStats* characterStats;
 public:
     TowerPrefab(Transform *transform, CharacterStats *characterStats);
 
-    void onTriggerEnter(Collider* collider) override;
+    void onTriggerEnter(Collider* other) override;
 
     void Update() override;
 };

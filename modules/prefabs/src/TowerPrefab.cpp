@@ -2,32 +2,33 @@
 #include "ModelManager.h"
 #include <iostream>
 
-TowerPrefab::TowerPrefab(Transform *transform, CharacterStats *characterStats) : GameObject(transform)
+TowerPrefab::TowerPrefab(Transform *transform, CharacterStats *characterStats) : GameObject
+(transform), characterStats(characterStats)
 {
-    this->collider = new Collider(characterStats->range);
+    std::cout << "Constructor call for tower" << std::endl;
     this->combatController = new CombatController();
-    this->characterStats = characterStats;
+    this->collider = new Collider(characterStats->range);
     AddComponent(new Mesh(ModelManager::getModel("../resource/models/tower.obj")));
     AddComponent(this->collider);
     AddComponent(this->combatController);
-    AddComponent(characterStats);
+    AddComponent(this->characterStats);
 }
 
-void TowerPrefab::onTriggerEnter(Collider *collider)
+void TowerPrefab::onTriggerEnter(Collider *other)
 {
-    GameObject::onTriggerEnter(collider);
-    CharacterStats* otherStats = collider->getGameObject()->FindComponent<CharacterStats>();
+    std::cout << "On Trigger Enter for tower" << std::endl;
+    GameObject::onTriggerEnter(other);
+    CharacterStats* otherStats = other->getGameObject()->FindComponent<CharacterStats>();
 
     if(otherStats) {
-        combatController->Damage(*this->characterStats, *otherStats);
+        combatController->StartCombat(this->characterStats, otherStats);
         std::cout << "The character got damaged, his health is: " << otherStats->health <<
         std::endl;
     }
 }
 
-void TowerPrefab::Update() {
-    if(enemyIsNear) {
-        //TODO Factor in attackSpeed and constantly update damage values see onTriggerEnter for
-        // logic
-    }
+void TowerPrefab::Update()
+{
+    GameObject::Update();
 }
+
