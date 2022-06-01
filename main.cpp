@@ -107,18 +107,19 @@ void init()
     tigl::shader->enableColor(false);
     tigl::shader->enableTexture(true);
     tigl::shader->enableLighting(true);
+
     tigl::shader->setLightCount(2);
+    tigl::shader->setShinyness(32.0f);
 
     tigl::shader->setLightDirectional(0, false);
+    tigl::shader->setLightAmbient(0, glm::vec3(0.5f, 0.5f, 0.5f));
     tigl::shader->setLightPosition(0, glm::vec3(10, 10, 10));
-
-    tigl::shader->setLightAmbient(1, glm::vec3(0.1f, 0.1f, 0.15f));
     tigl::shader->setLightDiffuse(0, glm::vec3(0.8f, 0.8f, 0.8f));
     tigl::shader->setLightSpecular(0, glm::vec3(0, 0, 0));
-    tigl::shader->setShinyness(32.0f);
-    tigl::shader->setLightAmbient(0, glm::vec3(0.5f, 0.5f, 0.5f));
-    tigl::shader->setLightDiffuse(1, glm::vec3(0.8f, 0.8f, 0.8f));
+
     tigl::shader->setLightDirectional(1, false);
+    tigl::shader->setLightAmbient(1, glm::vec3(0.1f, 0.1f, 0.15f));
+    tigl::shader->setLightDiffuse(1, glm::vec3(0.8f, 0.8f, 0.8f));
     tigl::shader->setLightPosition(1, glm::vec3(2.0f, 0.0f, 2.0f));
 }
 
