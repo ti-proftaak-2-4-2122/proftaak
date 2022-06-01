@@ -100,7 +100,7 @@ IF(DOXYGEN_FOUND)
     set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
 
     configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
-    message("-- Doxygen build started")
+    message("-- Add doxygen step to build")
 
     add_custom_target(Documentation ALL
             COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
