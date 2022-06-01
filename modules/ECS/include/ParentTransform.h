@@ -1,6 +1,9 @@
-//
-// Created by twanh on 20-5-2022.
-//
+/**
+ * @file
+ * @brief Header file for the ParentTransform class
+ * @author twanh
+ * @date 20-05-2022
+ */
 
 #pragma once
 

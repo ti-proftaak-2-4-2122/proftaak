@@ -1,6 +1,9 @@
-//
-// Created by Daan van Donk on 12/05/2022.
-//
+/**
+ * @file
+ * @brief Header file for the Mesh class
+ * @author Daan van Donk
+ * @date 12-05-2022
+ */
 
 #pragma once
 

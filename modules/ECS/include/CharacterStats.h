@@ -1,6 +1,9 @@
-//
-// Created by Daan van Donk on 24/05/2022.
-//
+/**
+ * @file
+ * @brief Header file for the CharacterStats struct
+ * @author Daan van Donk
+ * @date 24-05-2022
+ */
 
 #ifndef PROFTAAK24_CHARACTERSTATS_H
 #define PROFTAAK24_CHARACTERSTATS_H
