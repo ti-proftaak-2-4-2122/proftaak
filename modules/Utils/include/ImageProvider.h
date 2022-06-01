@@ -16,7 +16,7 @@ class ImageProvider
 {
 private:
     std::shared_ptr<cv::VideoCapture> capture;
-    CardDetector *detector = new CardDetector();
+    CardDetector *detector = CardDetector::GetInstance();
     uint captureTextureId;
 
 public:

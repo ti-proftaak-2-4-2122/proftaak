@@ -6,6 +6,8 @@
 #include <vector>
 #include <iostream> //Dit is ffe voor debug waardes bekijken
 
+
+
 cv::Mat CardDetector::GetBlurredImage(const cv::Mat &input_img)
 {
     cv::Mat output_img;

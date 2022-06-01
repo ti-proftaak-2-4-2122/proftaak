@@ -38,9 +38,10 @@ void ImageProvider::Update()
     // Todo: Replace with image provider
     this->capture->read(captureImage);
 
+    // Provide image to vision
     cvImage = detector->UpdateCards(captureImage);
-    detector->PrintCards();
-    
+
+    // Provide image to graphics
     glBindTexture(GL_TEXTURE_2D, this->captureTextureId);
 
     glTexImage2D(

@@ -17,6 +17,7 @@
 #include "ImageProvider.h"
 
 #include "user-config.h"
+#include "Spawner.h"
 
 //aspect ratio should always be 4:3 when using realsense camera
 #define WINDOW_WIDTH 1440
@@ -27,7 +28,7 @@ using tigl::Vertex;
 GLFWwindow *window;
 
 std::shared_ptr<cv::VideoCapture> capture;
-ImageProvider *openCvComponent;
+ImageProvider *imageProvider;
 
 void init();
 
@@ -97,12 +98,11 @@ void init()
 
     if (capture->isOpened())
     {
-        openCvComponent = new ImageProvider(capture);
-        openCvComponent->Awake();
+        imageProvider = new ImageProvider(capture);
+        imageProvider->Awake();
     }
 
     glfwSetTime(0);
-
 
     //setting up lights and render stuff
     tigl::shader->enableColor(false);
@@ -143,13 +143,17 @@ void worldInit()
     createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f});
     createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f});
 
+    auto *spawnManager = new GameObject();
+    auto *spawner = new Spawner();
+    spawnManager->AddComponent(spawner);
+
     SceneManager::LoadScene(*scene);
 }
 
 void update()
 {
     if (capture->isOpened())
-        openCvComponent->Update();
+        imageProvider->Update();
 
     scene->update();
     GameTimer::update(glfwGetTime());
@@ -177,7 +181,7 @@ void draw()
         tigl::shader->enableLighting(false);
 
         // Draw Background
-        openCvComponent->Draw();
+        imageProvider->Draw();
     }
 
     // Prepare for 3D Scene

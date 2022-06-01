@@ -12,6 +12,7 @@
 
 class CardDetector
 {
+
 protected:
     struct Card
     {
@@ -20,7 +21,14 @@ protected:
         double y;
     };
 
+
+
 private:
+    CardDetector()
+    = default;
+
+    inline zstatic CardDetector* singleton_;
+
     cv::Mat loaded_img;
     bool initialized = false;
 
@@ -53,6 +61,21 @@ private:
     static cv::Scalar GetColor(unsigned int colorCode);
 
 public:
+    /**
+ * Static methods should be defined outside the class.
+ */
+    static CardDetector *GetInstance()
+    {
+        /**
+         * This is a safer way to create an instance. instance = new Singleton is
+         * dangeruous in case two instance threads wants to access at the same time
+         */
+        if(singleton_==nullptr){
+            singleton_ = new CardDetector();
+        }
+        return singleton_;
+    }
+
     cv::Mat UpdateCards(const cv::Mat &input_image);
 
     std::vector<Card> GetDetectedCards();
