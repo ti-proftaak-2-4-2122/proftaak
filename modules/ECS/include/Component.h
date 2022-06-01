@@ -2,8 +2,7 @@
 // Created by Daan van Donk on 10/05/2022.
 //
 
-#ifndef PROFTAAK24_COMPONENT_H
-#define PROFTAAK24_COMPONENT_H
+#pragma once
 
 #include "GameObject.h"
 
@@ -28,4 +27,3 @@ public:
 };
 
 
-#endif //PROFTAAK24_COMPONENT_H

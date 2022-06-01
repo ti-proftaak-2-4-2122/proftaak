@@ -2,7 +2,8 @@
 // Created by Daan van Donk on 11/05/2022.
 //
 
-#include "Transform.h"
+#pragma once
+
 #include "vector"
 #include "TagEnum.h"
 #include <typeinfo>
@@ -69,4 +70,4 @@ public:
     };
 
 };
-#endif //PROFTAAK24_GAMEOBJECT_H
+

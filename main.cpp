@@ -4,11 +4,10 @@
 #include <iostream>
 #include <tigl.h>
 #include <opencv2/highgui.hpp>
-#include <opencv2/imgproc.hpp>
-
 #include <memory>
 
 #include "Mesh.h"
+#include "ModelManager.h"
 #include "OpenCVVideoCapture.h"
 #include "Scene.h"
 #include "SceneManager.h"
@@ -27,7 +26,7 @@ using tigl::Vertex;
 GLFWwindow *window;
 
 std::shared_ptr<cv::VideoCapture> capture;
-OpenCVVideoCapture* openCvComponent;
+OpenCVVideoCapture *openCvComponent;
 
 void init();
 
@@ -35,7 +34,7 @@ void update();
 
 void draw();
 
-std::string str =  "../resource/models/suzanne.obj";
+void worldInit();
 
 void createMapObject(const std::string &filePath, glm::vec3 diffuseColor);
 
@@ -67,8 +66,8 @@ int main()
 
     tigl::init();
     init();
+    worldInit();
 
-    std::cout << objModel.toString();
 
     while (!glfwWindowShouldClose(window))
     {
@@ -80,7 +79,6 @@ int main()
 
     glfwTerminate();
 
-
     return 0;
 }
 
@@ -91,9 +89,7 @@ void init()
     {
         if (key == GLFW_KEY_ESCAPE)
             glfwSetWindowShouldClose(window, true);
-
     });
-
 
     // Init OpenCV
     capture = std::make_shared<cv::VideoCapture>(CONFIG_OPENCV_CAMERA_INDEX);

@@ -53,13 +53,15 @@ ObjModel::ObjModel(const std::string &fileName)
             faces.push_back(face);
         }
     }
+    loadVertices();
 }
 
 std::string ObjModel::toString()
 {
     std::ostringstream oss;
 
-    for(auto face : this->faces) {
+    for (auto face: this->faces)
+    {
         for (int i = 0; i < 3; ++i)
         {
             auto vertexPosition = positions[face.pos[i]];

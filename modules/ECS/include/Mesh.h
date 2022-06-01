@@ -5,8 +5,7 @@
 #pragma once
 
 #include <vector>
-#include "glm/vec3.hpp"
-#include "glad/glad.h"
+#include "glm/glm.hpp"
 #include "Component.h"
 #include "tigl.h"
 #include "ObjModel.h"
