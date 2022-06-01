@@ -13,13 +13,15 @@
 #include <glm/ext/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale
 #include <iostream>
 
+void Mesh::Awake() {
+    this->parentTransform = this->gameObject->FindComponent<ParentTransform>();
+}
+
 void Mesh::Draw()
 {
     auto transform = this->gameObject->transform;
 
-    auto* parentTransform = this->gameObject->FindComponent<ParentTransform>();
-
-    auto modelMatrix = parentTransform == nullptr ?
+    auto modelMatrix = this->parentTransform == nullptr ?
             glm::mat4(1.0f)
             : parentTransform->GetParentModelMatrix();
 
