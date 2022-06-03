@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include <tigl.h>
+#include <CelShader.h>
 #include <opencv2/highgui.hpp>
 #include <memory>
 
@@ -65,6 +66,8 @@ int main()
     }
 
     tigl::init();
+    cs::init();
+
     init();
     worldInit();
 
@@ -177,6 +180,8 @@ void draw()
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_BLEND);
 
+        tigl::shader->use();
+
         tigl::shader->enableLighting(false);
         tigl::shader->enableTexture(true);
         tigl::shader->enableColor(false);
@@ -202,6 +207,8 @@ void draw()
             glm::lookAt(glm::vec3(0, 0.5f, 2.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     glad_glEnable(GL_DEPTH_TEST);
+
+    cs::shader->use();
 
     // Draw 3D Scene
     SceneManager::UpdatePoll(*scene);

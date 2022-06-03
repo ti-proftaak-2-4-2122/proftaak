@@ -45,8 +45,13 @@ namespace cs {
         public:
             CelShader();
 
+            void use();
+
         private:
             void loadShader();
+
+            void printShaderCompileError(GLuint shaderId);
+            void printProgramCompileError();
 
         };
     }

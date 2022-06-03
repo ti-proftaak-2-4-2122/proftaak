@@ -20,14 +20,14 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
 // WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include <cstdlib>
-#include <ctime>
 #include <cmath>
 #include <iostream>
-#include <fstream>
 
 #include "glad/glad.h"
 #include "glm/gtc/type_ptr.hpp"
+
+#include "celShaderFrag.h"
+#include "celShaderVS.h"
 
 #include "CelShader.h"
 
@@ -38,51 +38,86 @@ namespace cs {
             this->loadShader();
         }
 
+        void CelShader::use() {
+            glUseProgram(this->celShaderProgram);
+        }
+
         void CelShader::loadShader() {
-            GLuint vertexShader;
-            GLuint fragmentShader;
+            GLuint vertexShaderId;
+            GLuint fragmentShaderId;
             GLint vertCompiled;
             GLint fragCompiled;
-            GLint linked;
-            GLchar* vertexShaderSource;
-            GLchar* fragmentShaderSource;
+            GLint linkedProgram;
 
             // Create shader objects
-            vertexShader = glCreateShader(GL_VERTEX_SHADER);
-            fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+            vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
+            fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
 
             // Associate the shaders with their source files
-            glShaderSource(vertexShader, 1, const_cast<const GLchar**>(&vertexShaderSource), nullptr);
-            glShaderSource(fragmentShader, 1, const_cast<const GLchar**>(&fragmentShaderSource), nullptr);
+            glShaderSource(vertexShaderId, 1, &CEL_SHADER_VERTEX_SRC, nullptr);
+            glShaderSource(fragmentShaderId, 1, &CEL_SHADER_FRAG_SRC, nullptr);
 
             //Compile the vertex shader
-            glCompileShader(vertexShader);
-            glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &vertCompiled);
+            glCompileShader(vertexShaderId);
+            glGetShaderiv(vertexShaderId, GL_COMPILE_STATUS, &vertCompiled);
+
+            if(vertexShaderId == GL_FALSE) {
+                this->printShaderCompileError(vertexShaderId);
+                return;
+            }
 
             //Compile the fragment shader
-            glCompileShader(fragmentShader);
-            glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &fragCompiled);
+            glCompileShader(fragmentShaderId);
+            glGetShaderiv(fragmentShaderId, GL_COMPILE_STATUS, &fragCompiled);
 
-            if ((!vertCompiled) || (!fragCompiled)) {
-                std::cout << "compile error " << vertCompiled << " " << fragCompiled << std::endl;
+            if(fragmentShaderId == GL_FALSE) {
+                this->printShaderCompileError(fragmentShaderId);
                 return;
             }
 
             // Create a program object to attach the shaders too
             this->celShaderProgram = glCreateProgram();
-            glAttachShader(this->celShaderProgram, vertexShader);
-            glAttachShader(this->celShaderProgram, fragmentShader);
+            glAttachShader(this->celShaderProgram, vertexShaderId);
+            glAttachShader(this->celShaderProgram, fragmentShaderId);
 
             // Link the program
             glLinkProgram(this->celShaderProgram);
-            glGetProgramiv(this->celShaderProgram, GL_LINK_STATUS, &linked);
+            glGetProgramiv(this->celShaderProgram, GL_LINK_STATUS, &linkedProgram);
 
-            if (!linked) {
-                std::cout << "Linking vertex and fragment shader failed" << std::endl;
+            if (linkedProgram == GL_FALSE) {
+                printProgramCompileError();
                 return;
             }
 
-            glUseProgram(this->celShaderProgram);
+            use();
+        }
+
+        void CelShader::printShaderCompileError(const GLuint shaderId) {
+            int length, charsWritten;
+
+            glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &length);
+
+            char* infolog = new char[length + 1];
+            memset(infolog, 0, length + 1);
+
+            glGetShaderInfoLog(shaderId, length, &charsWritten, infolog);
+            std::cout << "Error compiling shader "  << shaderId << ":\n" << infolog << std::endl;
+
+            delete[] infolog;
+        }
+
+        void CelShader::printProgramCompileError() {
+            int length, charsWritten;
+
+            glGetProgramiv(this->celShaderProgram, GL_INFO_LOG_LENGTH, &length);
+
+            char* infolog = new char[length + 1];
+            memset(infolog, 0, length + 1);
+
+            glGetProgramInfoLog(this->celShaderProgram, length, &charsWritten, infolog);
+            std::cout << "Error compiling cel-shader program:\n" << infolog << std::endl;
+
+            delete[] infolog;
         }
 
     }
@@ -97,38 +132,6 @@ namespace cs {
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
         glEnableVertexAttribArray(3);
-    }
-
-    std::vector<Vertex> vertices;
-    GLenum shape = 0;
-
-    void begin(GLenum shape)
-    {
-        assert(cs::shape == 0);
-        cs::shape = shape;
-        cs::vertices.clear();
-    }
-    void addVertex(const Vertex& vertex)
-    {
-        vertices.push_back(vertex);
-    }
-    void end()
-    {
-        assert(shape != 0);
-        cs::drawVertices(shape, vertices);
-        shape = 0;
-    }
-
-    void drawVertices(GLenum shape, const std::vector<Vertex>& vertices)
-    {
-        if (!vertices.empty())
-        {
-            glVertexAttribPointer(0, 3, GL_FLOAT, false, sizeof(Vertex), &vertices[0].position);
-            glVertexAttribPointer(1, 4, GL_FLOAT, false, sizeof(Vertex), &vertices[0].color);
-            glVertexAttribPointer(2, 2, GL_FLOAT, false, sizeof(Vertex), &vertices[0].texcoord);
-            glVertexAttribPointer(3, 3, GL_FLOAT, false, sizeof(Vertex), &vertices[0].normal);
-            glDrawArrays(shape, 0, (GLsizei)vertices.size());
-        }
     }
 }
 
