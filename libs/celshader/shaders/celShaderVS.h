@@ -6,15 +6,27 @@
 
 #include <string>
 
-const char* const CEL_SHADER_VERTEX_SRC = R"ESC(varying vec3 normal;
-varying vec3 position;
+const char* const CEL_SHADER_VERTEX_SRC = R"ESC(#version 330
+
+layout (location = 0) in vec3 a_position;
+layout (location = 1) in vec4 a_color;
+layout (location = 2) in vec3 a_normal;
+
+uniform mat4 modelMatrix = mat4(1.0);
+uniform mat4 viewMatrix = mat4(1.0);
+uniform mat4 projectionMatrix = mat4(1.0);
+uniform mat3 normalMatrix = mat3(1.0);
+
+out vec3 position;
+out vec4 color;
+out vec3 normal;
 
 void main()
 {
-	gl_FrontColor = gl_Color;
-	normal = gl_NormalMatrix * gl_Normal;
-	position = gl_ModelViewMatrix * gl_Vertex;
+    position = vec3(modelMatrix * vec4(a_position, 1));
+    color = a_color;
+    normal = normalMatrix * a_normal;
 
-	gl_Position = ftransform();
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(a_position, 1);
 }
 )ESC";
