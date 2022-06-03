@@ -13,6 +13,8 @@ namespace tigl
 		{
 		public:
 			virtual ~Shader() {};
+
+            virtual void use() = 0;
 			
 			// Sets the projection matrix
 			virtual void setProjectionMatrix(const glm::mat4& matrix) = 0;
