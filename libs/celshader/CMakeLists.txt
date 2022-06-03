@@ -5,6 +5,8 @@ file(GLOB_RECURSE CELSHADER_SRC CONFIGURE_DEPENDS
 		"include/*.h"
 		"shaders/*.h")
 
+include_directories("shaders")
+
 add_library(CelShader ${CELSHADER_SRC})
 
 target_link_libraries(CelShader tigl glad glm)

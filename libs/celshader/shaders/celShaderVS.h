@@ -6,7 +6,7 @@
 
 #include <string>
 
-std::string CEL_SHADER_VS_SRC = R"ESC(varying vec3 normal;
+const char* const CEL_SHADER_VERTEX_SRC = R"ESC(varying vec3 normal;
 varying vec3 position;
 
 void main()

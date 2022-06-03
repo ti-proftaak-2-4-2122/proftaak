@@ -6,7 +6,7 @@
 
 #include <string>
 
-const std::string CEL_SHADER_FRAG_SRC = R"ESC(varying vec3 normal;
+const char* const CEL_SHADER_FRAG_SRC = R"ESC(varying vec3 normal;
 varying vec3 position;
 
 void main()
