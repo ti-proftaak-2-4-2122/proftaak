@@ -44,6 +44,7 @@ include_directories("libs/tigl/include")
 include_directories("libs/opencv/include")
 include_directories("libs/glm")
 include_directories(${OpenCV_INCLUDE_DIRS})
+include_directories("libs/celshader/include")
 
 #include modules
 FOREACH(MODULE ${MODULE_LIST})
@@ -54,6 +55,7 @@ ENDFOREACH()
 add_subdirectory(libs/glm)
 add_subdirectory(libs/tigl)
 add_subdirectory(libs/glad)
+add_subdirectory(libs/celshader)
 
 #add modules
 message("-- Adding all modules in modules folder")
@@ -68,6 +70,7 @@ target_link_libraries(${CMAKE_PROJECT_NAME} libglfw3.a )
 target_link_libraries(${CMAKE_PROJECT_NAME} glm )
 target_link_libraries(${CMAKE_PROJECT_NAME} tigl )
 target_link_libraries(${CMAKE_PROJECT_NAME} glad )
+target_link_libraries(${CMAKE_PROJECT_NAME} CelShader)
 target_link_libraries(${CMAKE_PROJECT_NAME} ${MODULE_LIST} )
 target_link_libraries(${CMAKE_PROJECT_NAME} opencv_core opencv_imgproc opencv_highgui opencv_imgcodecs opencv_features2d)
 
