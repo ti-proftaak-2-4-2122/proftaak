@@ -72,9 +72,9 @@ cv::Mat CardDetector::FilterTheBlob(const cv::Mat *img, const ColorFilter &color
     //Met een for-loop de info uit de vector halen.
     for (auto &key_point: key_points)
     {
-        std::cout << " Size of blob: " << key_point.size << std::endl;
-        std::cout << " Point x of blob: " << key_point.pt.x << "\t" << "Point y of blob: " <<
-                  key_point.pt.y << std::endl;
+//        std::cout << " Size of blob: " << key_point.size << std::endl;
+//        std::cout << " Point x of blob: " << key_point.pt.x << "\t" << "Point y of blob: " <<
+//                  key_point.pt.y << std::endl;
         cv::circle(img_with_keypoints, cv::Point((int) key_point.pt.x, (int) key_point.pt.y),
                    (int) key_point.size, cv::Scalar(255, 255, 255), 5);
 

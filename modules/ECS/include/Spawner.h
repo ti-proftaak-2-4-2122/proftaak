@@ -10,6 +10,11 @@
 #include "GameObject.h"
 #include "Scene.h"
 #include "Transform.h"
+#include "Mesh.h"
+#include "ModelManager.h"
+#include "glm/ext/matrix_projection.hpp"
+#include "glm/ext/matrix_clip_space.hpp"
+#include <windows.h>
 
 class Spawner : public Component
 {
@@ -22,6 +27,8 @@ private:
     std::map<unsigned int, GameObject*> spawnedObjects;
     std::vector<CardDetector::Card> receivedCards;
 
-
     bool HasCard(unsigned int color);
+
+
+    glm::vec3 convertCords(CardDetector::Card card);
 };

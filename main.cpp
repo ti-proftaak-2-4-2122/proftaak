@@ -137,11 +137,11 @@ void worldInit()
             glm::vec3(0.25f, 0.25f, 0.25f)),
             towerstats);
 //
-//    //building map
-//    createMapObject("../resource/models/map_ground.obj", {0.0f, 1, 0});
-//    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1});
-//    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f});
-//    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f});
+    //building map
+    createMapObject("../resource/models/map_ground.obj", {0.0f, 1, 0});
+    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1});
+    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f});
+    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f});
 
 //    Scene::getSingleton().AddGameObject(towerPrefab);
 //    Scene::getSingleton().AddGameObject(aiPrefab);
@@ -195,8 +195,9 @@ void draw()
     tigl::shader->setProjectionMatrix(
             glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH,
                              0.1f, 200.0f));
+
     tigl::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0, 7.5f, 7.5f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+            glm::lookAt(glm::vec3(0, 15.0f, 5.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     glad_glEnable(GL_DEPTH_TEST);
 
