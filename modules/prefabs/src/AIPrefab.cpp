@@ -24,7 +24,7 @@ AIPrefab::AIPrefab(Transform* transform, CharacterStats* characterStats) : GameO
     this->collider = new Collider(characterStats->range);
     AddComponent(collider);
 
-    lerpController->Move(this->transform.getPosition(), checkPoints[0],
+    lerpController->Move(this->transform.getPosition(), glm::vec3(30.0f, 0.0f, -12.0f),
                          characterStats->moveSpeed);
 }
 
@@ -32,11 +32,13 @@ void AIPrefab::onTriggerEnter(Collider *other)
 {
     GameObject::onTriggerEnter(other);
 
-    CharacterStats* otherStats = other->getGameObject()->FindComponent<CharacterStats>();
-
-    if(otherStats){
-        combatController->StartCombat(this->characterStats, otherStats);
-    }
+    lerpController->Move(this->transform.getPosition(), glm::vec3(50.0f, 0.0f, 0.0f),
+                         characterStats->moveSpeed);
+//    CharacterStats* otherStats = other->getGameObject()->FindComponent<CharacterStats>();
+//
+//    if(otherStats){
+//        combatController->StartCombat(this->characterStats, otherStats);
+//    }
 
 }
 
