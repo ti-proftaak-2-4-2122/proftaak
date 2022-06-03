@@ -13,14 +13,10 @@ void LerpController::Move(glm::vec3 startPos, glm::vec3 endPos, float speed)
     this->endPos = endPos;
 
     std::cout << "Going to move" << std::endl;
-    //Reset lerp
-    //Calculate 3D slope
 
-    float deltaZ = startPos.z-endPos.z;
-    float deltaX = startPos.x-endPos.x;
+    float deltaZ = endPos.z-startPos.z;
+    float deltaX = endPos.x-startPos.x;
 
-    if(deltaZ == 0) deltaZ = 1;
-    if(deltaX == 0) deltaX = 1;
     slope = glm::vec3(1,0, deltaZ/ deltaX);
 }
 
@@ -41,11 +37,8 @@ LerpController::LerpController()
     slope = glm::vec3(0, 0, 0);
 }
 
-bool LerpController::CheckPos(glm::vec3 currentPos, glm::vec3 resultPos)
+bool LerpController::CheckPos(glm::vec3 currentPos, glm::vec3 resultPos) const
 {
-    double distance = sqrt(pow(resultPos.x - currentPos.x, 2) +
-                           pow(resultPos.y - currentPos.y, 2) +
-                           pow(resultPos.z - currentPos.z, 2));
-
+    auto distance = glm::length(resultPos - currentPos);
     return distance <= roundValue;
 }

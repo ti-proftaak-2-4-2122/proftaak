@@ -24,7 +24,7 @@ AIPrefab::AIPrefab(Transform* transform, CharacterStats* characterStats) : GameO
     this->collider = new Collider(characterStats->range);
     AddComponent(collider);
 
-    lerpController->Move(this->transform.getPosition(), glm::vec3(30.0f, 0.0f, -12.0f),
+    lerpController->Move(this->transform.getPosition(), glm::vec3(25.0f, 0.0f, -12.0f),
                          characterStats->moveSpeed);
 }
 

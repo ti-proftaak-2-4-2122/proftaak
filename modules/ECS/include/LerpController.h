@@ -21,9 +21,9 @@ public:
     LerpController();
 
 private:
-    bool CheckPos(glm::vec3 currentPos, glm::vec3 resultPos);
+    bool CheckPos(glm::vec3 currentPos, glm::vec3 resultPos) const;
     glm::vec3 slope{};
     glm::vec3 endPos;
-    const float roundValue = 0.1f;
+    const float roundValue = 1.0f;
     const float speedMult = 10.0f;
 };

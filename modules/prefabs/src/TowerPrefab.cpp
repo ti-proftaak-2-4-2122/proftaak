@@ -11,7 +11,7 @@ TowerPrefab::TowerPrefab(Transform *transform, CharacterStats *characterStats) :
     Mesh* mesh = new Mesh(ModelManager::getModel("../resource/models/tower.obj"));
     mesh->SetDiffuseColor({0.619, 0, 0.537});
     AddComponent(mesh);
-//    AddComponent(this->collider);
+    AddComponent(this->collider);
     AddComponent(this->combatController);
     AddComponent(this->characterStats);
 }
