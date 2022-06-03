@@ -18,17 +18,14 @@ class ObjModel;
 
 class GameObject;
 
-class ParentTransform;
-
 class Mesh : public Component
 {
 private:
     ObjModel *objModel;
     glm::vec3 diffuseColor = {0.8f, 0.8f, 0.8f};
-    ParentTransform* parentTransform;
 public:
 
-    explicit Mesh(ObjModel *_objmodel);
+    explicit Mesh(GameObject &gameObject, ObjModel *_objmodel);
     void SetColor(const glm::vec4& color);
     void SetDiffuseColor(const glm::vec3& color);
 

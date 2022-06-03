@@ -7,22 +7,28 @@
 
 class Component;
 
+struct CombatStats {
+    float health;
+    float damage;
+    float attackSpeed;
+};
+
 class CombatController : public Component
 {
 private:
     void Damage();
-
+    CombatStats yourStats;
+    CombatStats otherStats;
     float currentTime;
     float maxTime;
-    CharacterStats* yourStats;
-    CharacterStats* otherStats;
 public:
     bool IsAttacking = false;
     bool hasFought = false;
 
-    void StartCombat(CharacterStats* yourStats, CharacterStats* otherStats);
+    void StartCombat(float yourDamage, float yourHealth, float yourAttackspeed, float
+    otherDamage, float otherHealth, float otherAttackspeed);
     void StopCombat();
     void Update() override;
 
-    CombatController();
+    CombatController(GameObject &gameObject);
 };

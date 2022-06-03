@@ -7,21 +7,19 @@
 
 #include <iostream>
 
-AIPrefab::AIPrefab(Transform* transform, CharacterStats* characterStats) : GameObject(transform)
+AIPrefab::AIPrefab(Transform& transform, CharacterStats* characterStats) : GameObject(transform)
 {
-    this->lerpController = new LerpController();
+    this->lerpController = new LerpController(*this);
     AddComponent(lerpController);
 
-    this->combatController = new CombatController();
-    AddComponent(combatController);
-
-    Mesh* renderMesh = new Mesh(ModelManager::getModel("../resource/models/box.obj"));
+    Mesh* renderMesh = new Mesh(*this,
+                                ModelManager::getModel("../resource/models/box.obj"));
     AddComponent(renderMesh);
 
     this->characterStats = characterStats;
     AddComponent(this->characterStats);
 
-    this->collider = new Collider(characterStats->range);
+    this->collider = new Collider(*this, characterStats->range);
     AddComponent(collider);
 
     lerpController->Move(this->transform.getPosition(), glm::vec3(25.0f, 0.0f, -12.0f),
@@ -34,11 +32,13 @@ void AIPrefab::onTriggerEnter(Collider *other)
 
     lerpController->Move(this->transform.getPosition(), glm::vec3(50.0f, 0.0f, 0.0f),
                          characterStats->moveSpeed);
-//    CharacterStats* otherStats = other->getGameObject()->FindComponent<CharacterStats>();
-//
-//    if(otherStats){
-//        combatController->StartCombat(this->characterStats, otherStats);
-//    }
+    CharacterStats& otherStats = other->getGameObject().FindComponent<CharacterStats>();
+
+    this->combatController = new CombatController(*this, this->characterStats, otherStats);
+    AddComponent(combatController);
+    if(otherStats){
+        combatController->StartCombat(this->characterStats, otherStats);
+    }
 
 }
 

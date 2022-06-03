@@ -2,13 +2,14 @@
 #include "ModelManager.h"
 #include <iostream>
 
-TowerPrefab::TowerPrefab(Transform *transform, CharacterStats *characterStats) : GameObject
+TowerPrefab::TowerPrefab(Transform& transform, CharacterStats *characterStats) : GameObject
 (transform), characterStats(characterStats)
 {
+
+    this->combatController = new CombatController(*this);
     std::cout << "Constructor call for tower" << std::endl;
-    this->combatController = new CombatController();
-    this->collider = new Collider(characterStats->range);
-    Mesh* mesh = new Mesh(ModelManager::getModel("../resource/models/tower.obj"));
+    this->collider = new Collider(*this, characterStats->range);
+    Mesh* mesh = new Mesh(*this, ModelManager::getModel("../resource/models/tower.obj"));
     mesh->SetDiffuseColor({0.619, 0, 0.537});
     AddComponent(mesh);
     AddComponent(this->collider);
@@ -20,11 +21,11 @@ void TowerPrefab::onTriggerEnter(Collider *other)
 {
     std::cout << "On Trigger Enter for tower" << std::endl;
     GameObject::onTriggerEnter(other);
-    CharacterStats* otherStats = other->getGameObject()->FindComponent<CharacterStats>();
+    CharacterStats& otherStats = other->getGameObject().FindComponent<CharacterStats>();
 
     if(otherStats) {
         combatController->StartCombat(this->characterStats, otherStats);
-        std::cout << "The character got damaged, his health is: " << otherStats->health <<
+        std::cout << "The character got damaged, his health is: " << otherStats.health <<
         std::endl;
     }
 }

@@ -23,7 +23,7 @@ private:
     const std::vector<glm::vec3> checkPoints {glm::vec3(50.0f, 0.0f, 0), glm::vec3(25.0f, 0.0f, -12.0f)
                                               , glm::vec3(50.0f, 0.0f, 0)};
 public:
-    AIPrefab(Transform* transform, CharacterStats* characterStats);
+    AIPrefab(Transform& transform, CharacterStats* characterStats);
 
     void onTriggerEnter(Collider* other) override;
     void onTriggerExit(Collider* other) override;

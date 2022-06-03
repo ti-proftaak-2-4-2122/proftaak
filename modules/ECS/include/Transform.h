@@ -15,9 +15,10 @@ class Transform : public Component
     glm::vec3 rotation{};
     glm::vec3 scale{};
 public:
-    Transform(const glm::vec3 &position, const glm::vec3 &rotation, const glm::vec3 &scale);
+    Transform(GameObject &gameObject, const glm::vec3 &position,
+              const glm::vec3 &rotation, const glm::vec3 &scale);
 
-    Transform();
+    Transform(GameObject &gameObject);
 
     [[nodiscard]] const glm::vec3 &getPosition() const;
 

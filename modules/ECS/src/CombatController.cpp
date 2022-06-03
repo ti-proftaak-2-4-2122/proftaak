@@ -9,22 +9,23 @@
 
 void CombatController::Damage()
 {
-    if(otherStats->health-yourStats->damage < 0) {
-        Scene::getSingleton().RemoveGameObject(otherStats->getGameObject());
+    if(otherStats.health-yourStats.damage < 0) {
+        Scene::getSingleton().RemoveGameObject(otherStats.getGameObject());
         StopCombat();
         std::cout << "Stopping combat" << std::endl;
         return;
     }
-    otherStats->health -= yourStats->damage;
-    std::cout << "Did Damage from: " << ToString(yourStats->type) << " to: " << ToString
-    (otherStats->type) << " new amount: " << otherStats->health << std::endl;
+    otherStats.health -= yourStats.damage;
+//    std::cout << "Did Damage from: " << ToString(yourStats.type) << " to: " << ToString
+//    (otherStats->type) << " new amount: " << otherStats->health << std::endl;
 }
 
-void CombatController::StartCombat(CharacterStats* yourStats, CharacterStats* otherStats)
+void CombatController::StartCombat(float yourDamage, float yourHealth, float yourAttackspeed, float
+otherDamage, float otherHealth, float otherAttackspeed)
 {
-    this->yourStats = yourStats;
-    this->otherStats = otherStats;
-    this->maxTime = yourStats->attackSpeed;
+    yourStats = {yourDamage, yourHealth,yourAttackspeed };
+    otherStats = {otherDamage, otherHealth, otherAttackspeed};
+    this->maxTime = yourStats.attackSpeed;
     IsAttacking = true;
 }
 
@@ -41,7 +42,7 @@ void CombatController::Update()
 }
 
 
-CombatController::CombatController()
+CombatController::CombatController(GameObject &gameObject) : Component(gameObject)
 {
 }
 

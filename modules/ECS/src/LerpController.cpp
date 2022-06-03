@@ -25,14 +25,14 @@ void LerpController::Update()
 {
     Component::Update();
 
-    if (CheckPos(gameObject->transform.getPosition(), endPos)) return;
+    if (CheckPos(gameObject.transform.getPosition(), endPos)) return;
 
-    gameObject->transform.setPosition((gameObject->transform.getPosition() + (this->slope *
+    gameObject.transform.setPosition((gameObject.transform.getPosition() + (this->slope *
     GameTimer::getDeltaTime() * speedMult)));
 
 }
 
-LerpController::LerpController()
+LerpController::LerpController(GameObject &gameObject) : Component(gameObject)
 {
     slope = glm::vec3(0, 0, 0);
 }

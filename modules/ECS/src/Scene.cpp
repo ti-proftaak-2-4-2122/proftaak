@@ -6,17 +6,8 @@
 
 #include "Scene.h"
 #include "Collider.h"
-void Scene::AddGameObject(GameObject *gameObject)
+void Scene::AddGameObject(GameObject& gameObject)
 {
-    auto pos = std::find(
-            this->gameobjects.begin(),
-            this->gameobjects.end(),
-            gameObject
-    );
-
-    if(pos != this->gameobjects.end())
-        throw std::invalid_argument("GameObject was already added to scene");
-
     gameobjects.push_back(gameObject);
 }
 
@@ -26,26 +17,26 @@ void Scene::AddGameObject(GameObject *gameObject)
  * If the deletion was successful, gameObject will be nullptr.
  * Don't use the GameObject after calling this function!
  */
-void Scene::RemoveGameObject(GameObject* gameObject)
+void Scene::RemoveGameObject(GameObject& gameObject)
 {
-    auto pos = std::find(
-        this->gameobjects.begin(),
-        this->gameobjects.end(),
-        gameObject
-    );
-
-    // If gameObject is in vector, remove
-    if(pos != this->gameobjects.end()) {
-        auto* collider = gameObject->FindComponent<Collider>();
-        if(collider)
-        {
-            Collider::CleanUp(collider);
-        }
-        this->gameobjects.erase(pos);
-
-        delete gameObject;
-       gameObject = nullptr;
-    }
+//    auto pos = std::find(
+//        this->gameobjects.begin(),
+//        this->gameobjects.end(),
+//        gameObject
+//    );
+//
+//    // If gameObject is in vector, remove
+//    if(pos != this->gameobjects.end()) {
+//        auto& collider = gameObject->FindComponent<Collider>();
+//        if(collider)
+//        {
+//            Collider::CleanUp(collider);
+//        }
+//        this->gameobjects.erase(pos);
+//
+//        delete gameObject;
+//       gameObject = nullptr;
+//    }
 }
 
 void Scene::update()
@@ -55,6 +46,6 @@ void Scene::update()
 
 Scene::~Scene()
 {
-    for(auto gameObject : this->gameobjects)
-        delete gameObject;
+//    for(auto gameObject : this->gameobjects)
+//        delete gameObject;
 }

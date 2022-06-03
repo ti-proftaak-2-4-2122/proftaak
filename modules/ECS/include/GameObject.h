@@ -8,6 +8,7 @@
 #include "TagEnum.h"
 #include <typeinfo>
 #include <iostream>
+#include <functional>
 
 class Component;
 class Transform;
@@ -16,33 +17,31 @@ class Collider;
 class GameObject
 {
 private:
-    std::vector<Component *> components;
-    std::vector<GameObject*> children;
+    std::vector<std::reference_wrapper<Component>> components;
 
 public:
-    Transform &transform;
-    GameObject(Transform* transform);
+    Transform& transform;
+    GameObject(Transform& transform1);
 
     TagEnum tagEnum;
 
     Component &AddComponent(Component *component);
 
     template<class T>
-    T *FindComponent()
+    T& FindComponent()
     {
         for (auto component : this->components)
         {
-            auto derived = dynamic_cast<T *>(component);
+            auto derived = dynamic_cast<T*>(component.get());
 
             if (derived)
-                return derived;
-
+                return component;
         }
 
         return nullptr;
     }
 
-    const std::vector<Component *> &getComponents() const;
+    const std::vector<std::reference_wrapper<Component>>& getComponents() const;
 
     template<class T>
     T& AddComponent()

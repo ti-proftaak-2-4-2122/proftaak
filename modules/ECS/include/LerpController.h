@@ -18,7 +18,7 @@ public:
 
     void Update() override;
 
-    LerpController();
+    LerpController(GameObject &gameObject);
 
 private:
     bool CheckPos(glm::vec3 currentPos, glm::vec3 resultPos) const;

@@ -6,7 +6,6 @@
 #include "tigl.h"
 #include "ObjModel.h"
 #include "Transform.h"
-#include "ParentTransform.h"
 
 #include <glm/vec3.hpp> // glm::vec3
 #include <glm/mat4x4.hpp> // glm::mat4
@@ -14,16 +13,13 @@
 #include <iostream>
 
 void Mesh::Awake() {
-    this->parentTransform = this->gameObject->FindComponent<ParentTransform>();
 }
 
 void Mesh::Draw()
 {
-    auto transform = this->gameObject->transform;
+    auto transform = this->gameObject.transform;
 
-    auto modelMatrix = this->parentTransform == nullptr ?
-            glm::mat4(1.0f)
-            : parentTransform->GetParentModelMatrix();
+    auto modelMatrix = glm::mat4(1.0f);
 
     modelMatrix = glm::scale(modelMatrix, transform.getScale());
 
@@ -40,7 +36,8 @@ void Mesh::Draw()
     tigl::drawVertices(GL_TRIANGLES, objModel->GetVertices());
 }
 
-Mesh::Mesh(ObjModel *_objmodel) : objModel(_objmodel) {}
+Mesh::Mesh(GameObject &gameObject, ObjModel *_objmodel) : Component(gameObject),
+                                                          objModel(_objmodel) {}
 
 void Mesh::SetColor(const glm::vec4& color)
 {

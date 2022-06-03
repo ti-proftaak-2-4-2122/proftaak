@@ -11,18 +11,17 @@ class GameObject;
 class Component
 {
 protected:
-    GameObject *gameObject = nullptr;
+    GameObject& gameObject;
 public:
 
-    GameObject* getGameObject();
+    GameObject& getGameObject();
     virtual void Awake() {};
 
     virtual void Update() {};
 
     virtual void Draw() {};
-    Component();
 
-    void SetParent(GameObject *parentGameObject);
+    Component(GameObject& _gameObject);
 
     virtual ~Component() = default;
 };

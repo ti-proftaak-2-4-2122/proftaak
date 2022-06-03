@@ -15,7 +15,7 @@ private:
 public:
     float radius;
 
-    Collider(float radius);
+    Collider(GameObject &gameObject, float radius);
     void CheckCollision(Collider* other);
 
     void Update() override;

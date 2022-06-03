@@ -8,7 +8,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
-VirtualCamera::VirtualCamera(VCamRenderSettings _vCamRenderSettings)
+VirtualCamera::VirtualCamera(GameObject &gameObject, VCamRenderSettings _vCamRenderSettings)
+        : Component(gameObject)
 {
     vCamRenderSettings = _vCamRenderSettings;
 }
@@ -20,5 +21,5 @@ void VirtualCamera::LookAt(glm::vec3 lookAtVec3)
                                                        vCamRenderSettings.nearClipping,
                                                        vCamRenderSettings.farClipping));
     tigl::shader->setViewMatrix(
-            glm::lookAt(lookAtVec3, gameObject->transform.getPosition(), glm::vec3(0, 1, 0)));
+            glm::lookAt(lookAtVec3, gameObject.transform.getPosition(), glm::vec3(0, 1, 0)));
 }

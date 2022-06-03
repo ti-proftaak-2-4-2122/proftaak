@@ -13,7 +13,6 @@ private:
     inline static Scene* singleton = nullptr;
 
     Scene() {
-        gameobjects = std::vector<GameObject *>();
     }
     ~Scene();
 
@@ -29,10 +28,10 @@ public:
     }
 
 
-    std::vector<GameObject *> gameobjects;
+    std::vector<std::reference_wrapper<GameObject>> gameobjects;
 
-    void AddGameObject(GameObject *gameObject);
-    void RemoveGameObject(GameObject* gameObject);
+    void AddGameObject(GameObject& gameObject);
+    void RemoveGameObject(GameObject& gameObject);
 
     void update();
 };

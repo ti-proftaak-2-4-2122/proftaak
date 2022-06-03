@@ -126,29 +126,37 @@ void init()
 
 void worldInit()
 {
-    CharacterStats* characterStats = new CharacterStats{4.0f, 100.0f, 5.0f, 2.0f, 2.0f, LAND};
-    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(7.0f, 0.0f, -12.0f), glm::vec3(0,0,
-                                                                                             0),glm::vec3(1.0f,1.0f,1.0f)),characterStats);
+    CharacterStats* characterStats = new CharacterStats{<#initializer#>, 4.0f, 100.0f, 5.0f, 2.0f,
+                                                        2.0f, LAND};
+    AIPrefab* aiPrefab = new AIPrefab(new Transform(<#initializer#>, glm::vec3(7.0f, 0.0f, -12.0f),
+                                                    glm::vec3(0, 0,
+                                                              0), glm::vec3(1.0f, 1.0f, 1.0f)), characterStats);
 
-    CharacterStats* towerstats = new CharacterStats{8.0f, 5.0f, 5.0f, 0.0f, 1.0f, TOWER};
-    TowerPrefab* towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f), glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)),towerstats);
+    CharacterStats* towerstats = new CharacterStats{<#initializer#>, 8.0f, 5.0f, 5.0f, 0.0f, 1.0f,
+                                                    TOWER};
+    TowerPrefab* towerPrefab = new TowerPrefab(new Transform(<#initializer#>,
+                                                             glm::vec3(30.0f, 0.0f, -12.0f),
+                                                             glm::vec3(0, 0, 0),
+                                                             glm::vec3(1.0f, 1.0f, 1.0f)), towerstats);
 //    TowerPrefab* towerPrefab1 = new TowerPrefab(new Transform(glm::vec3(50.0f, 0.0f, 0), glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)),
 //                                               towerstats);
 
 
 
-    GameObject* field = new GameObject(new Transform(glm::vec3(0, 0, 0),
-                                                          glm::vec3(0,0,0),
-                                                          glm::vec3(1, 1, 1)));
-
-    Mesh* fieldMesh = new Mesh(ModelManager::getModel("../resource/models/map_ground.obj"));
-    field->AddComponent(fieldMesh);
-
-    GameObject* bridge = new GameObject(new Transform(glm::vec3(0, 0, 0),
-                                                     glm::vec3(0,0,0),
+    GameObject* field = new GameObject(new Transform(<#initializer#>, glm::vec3(0, 0, 0),
+                                                     glm::vec3(0, 0, 0),
                                                      glm::vec3(1, 1, 1)));
 
-    Mesh* bridgeRender = new Mesh(ModelManager::getModel("../resource/models/map_bridges.obj"));
+    Mesh* fieldMesh = new Mesh(<#initializer#>,
+                               ModelManager::getModel("../resource/models/map_ground.obj"));
+    field->AddComponent(fieldMesh);
+
+    GameObject* bridge = new GameObject(new Transform(<#initializer#>, glm::vec3(0, 0, 0),
+                                                      glm::vec3(0, 0, 0),
+                                                      glm::vec3(1, 1, 1)));
+
+    Mesh* bridgeRender = new Mesh(<#initializer#>,
+                                  ModelManager::getModel("../resource/models/map_bridges.obj"));
     bridge->AddComponent(bridgeRender);
 
     //Setting colour
@@ -225,9 +233,10 @@ void draw()
 
 void createMapObject(const std::string &filePath, glm::vec3 diffuseColor)
 {
-    auto* map_object = new GameObject(new Transform());
+    auto* map_object = new GameObject(new Transform(<#initializer#>, <#initializer#>,
+                                                    <#initializer#>, <#initializer#>));
 
-    map_object->AddComponent(new Mesh(ModelManager::getModel(filePath)));
+    map_object->AddComponent(new Mesh(<#initializer#>, ModelManager::getModel(filePath)));
     map_object->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
     map_object->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
     map_object->transform.setScale(CONFIG_PLAYFIELD_SCALE);

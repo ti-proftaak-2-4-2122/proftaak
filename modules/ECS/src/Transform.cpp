@@ -4,15 +4,16 @@
 
 #include "Transform.h"
 
-Transform::Transform()
+Transform::Transform(GameObject &gameObject) : Component(gameObject)
 {
     position = glm::vec3(0, 0, 0);
     rotation = glm::vec3(0, 0, 0);
     scale = glm::vec3(1, 1, 1);
 }
 
-Transform::Transform(const glm::vec3 &position, const glm::vec3 &rotation, const glm::vec3 &scale)
-        : position(position), rotation(rotation), scale(scale) {}
+Transform::Transform(GameObject &gameObject, const glm::vec3 &position,
+                     const glm::vec3 &rotation, const glm::vec3 &scale)
+        : Component(gameObject), position(position), rotation(rotation), scale(scale) {}
 
 const glm::vec3 &Transform::getPosition() const
 {
