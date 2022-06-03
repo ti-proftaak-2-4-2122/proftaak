@@ -127,14 +127,12 @@ void init()
 void worldInit()
 {
     CharacterStats* characterStats = new CharacterStats{4.0f, 100.0f, 5.0f, 2.0f, 2.0f, LAND};
-    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(7.0f, 0.0f,-12.0f), glm::vec3(0,0,0),
-                                                    glm::vec3(1.0f,1.0f,1.0f)),characterStats);
+    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f), glm::vec3(0,0,0),glm::vec3(1.0f,1.0f,1.0f)),characterStats);
 
     CharacterStats* towerstats = new CharacterStats{8.0f, 5.0f, 5.0f, 0.0f, 1.0f, TOWER};
-    TowerPrefab* towerPrefab = new TowerPrefab(new Transform(
-            glm::vec3(30.0f, 0.0f, -12.0f), glm::vec3(0,0,0),
-            glm::vec3(1.0f, 1.0f, 1.0f)),
-            towerstats);
+    TowerPrefab* towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f), glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)),towerstats);
+//    TowerPrefab* towerPrefab1 = new TowerPrefab(new Transform(glm::vec3(50.0f, 0.0f, 0), glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)),
+//                                               towerstats);
 
 
 
@@ -145,13 +143,6 @@ void worldInit()
     Mesh* fieldMesh = new Mesh(ModelManager::getModel("../resource/models/map_ground.obj"));
     field->AddComponent(fieldMesh);
 
-    GameObject* tower = new GameObject(new Transform(glm::vec3(0, 0, 0),
-                                                          glm::vec3(0,0,0),
-                                                          glm::vec3(1, 1, 1)));
-
-    Mesh* towerMesh = new Mesh(ModelManager::getModel("../resource/models/map_towers.obj"));
-    tower->AddComponent(towerMesh);
-
     GameObject* bridge = new GameObject(new Transform(glm::vec3(0, 0, 0),
                                                      glm::vec3(0,0,0),
                                                      glm::vec3(1, 1, 1)));
@@ -161,7 +152,6 @@ void worldInit()
 
     //Setting colour
     fieldMesh->SetDiffuseColor({0.474, 0.643, 0.376});
-    towerMesh->SetDiffuseColor({1.0, 0.392f, 0.3137f});
     bridgeRender->SetDiffuseColor({1.0f, 0.392f, 0.3137f});
 //    //building map
 //    createMapObject("../resource/models/map_ground.obj", {0.0f, 0, 0});
@@ -170,6 +160,7 @@ void worldInit()
 //    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f});
 
     Scene::getSingleton().AddGameObject(towerPrefab);
+//    Scene::getSingleton().AddGameObject(towerPrefab1);
     Scene::getSingleton().AddGameObject(field);
     Scene::getSingleton().AddGameObject(bridge);
     Scene::getSingleton().AddGameObject(aiPrefab);
@@ -221,7 +212,7 @@ void draw()
             glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH,
                              0.1f, 200.0f));
     tigl::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0, 40, 0.01f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+            glm::lookAt(glm::vec3(0, 60, 0.01f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     glad_glEnable(GL_DEPTH_TEST);
 

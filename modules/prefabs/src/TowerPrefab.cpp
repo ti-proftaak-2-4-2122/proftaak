@@ -8,8 +8,10 @@ TowerPrefab::TowerPrefab(Transform *transform, CharacterStats *characterStats) :
     std::cout << "Constructor call for tower" << std::endl;
     this->combatController = new CombatController();
     this->collider = new Collider(characterStats->range);
-    AddComponent(new Mesh(ModelManager::getModel("../resource/models/tower.obj")));
-    AddComponent(this->collider);
+    Mesh* mesh = new Mesh(ModelManager::getModel("../resource/models/tower.obj"));
+    mesh->SetDiffuseColor({0.619, 0, 0.537});
+    AddComponent(mesh);
+//    AddComponent(this->collider);
     AddComponent(this->combatController);
     AddComponent(this->characterStats);
 }

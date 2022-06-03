@@ -20,8 +20,8 @@ private:
     CombatController* combatController;
     Collider* collider;
     CharacterStats* characterStats;
-    const std::vector<glm::vec3> checkPoints {glm::vec3(7,0,12.0f), glm::vec3(25.0f, 0.0f, -12.0f)
-                                              , glm::vec3(24.0f, 0, 12.0f)};
+    const std::vector<glm::vec3> checkPoints {glm::vec3(50.0f, 0.0f, 0), glm::vec3(25.0f, 0.0f, -12.0f)
+                                              , glm::vec3(50.0f, 0.0f, 0)};
 public:
     AIPrefab(Transform* transform, CharacterStats* characterStats);
 
