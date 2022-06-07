@@ -95,7 +95,7 @@ glm::vec3 Spawner::ConvertCords(CardDetector::Card card)
 
     glm::vec3 glPos = glm::unProject(cvPos, model, projection, viewport);
 
-    glPos = {glPos.x*1.0f, glPos.y*1.0f, glPos.z*1.0f};
+    glPos = {glPos.x*1.0f, glPos.y*0.0f + 1.0f, glPos.z*1.0f};
 
     return glPos;
 }
