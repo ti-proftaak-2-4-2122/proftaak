@@ -22,6 +22,7 @@ Component &GameObject::AddComponent(Component *component)
         component
     );
 
+
     if(pos != this->components.end())
         throw std::invalid_argument("Component was already added to GameObject");
 

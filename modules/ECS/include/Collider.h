@@ -17,5 +17,6 @@ public:
     Collider(float radius, glm::vec3 position);
     void CheckCollision(Collider* other);
 
+
     void Update() override;
 };

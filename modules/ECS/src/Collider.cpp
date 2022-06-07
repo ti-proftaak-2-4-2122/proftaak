@@ -36,4 +36,3 @@ void Collider::Update()
         CheckCollision(other);
     }
 }
-

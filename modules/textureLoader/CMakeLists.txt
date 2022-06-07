@@ -8,4 +8,4 @@ add_library(${MODULE} ${MODULE_SRC})
 
 # Use this method to add library dependencies to another library
 # Replace [Dependency] with the required module/libary name
-target_link_libraries(${MODULE} textureLoader)
+#target_link_libraries(${MODULE} [Dependency])

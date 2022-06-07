@@ -16,6 +16,7 @@
 #include "Collider.h"
 
 #include "user-config.h"
+#include "gui/Gui.h"
 
 //aspect ratio should always be 4:3 when using realsense camera
 #define WINDOW_WIDTH 1440
@@ -133,6 +134,10 @@ void worldInit()
     auto *collider1 = new Collider(1.0f, glm::vec3(1.0f, 0, 0));
     collisionTest1->AddComponent(collider1);
 
+    auto guiWorld = new GameObject;
+    guiWorld->AddComponent<Gui>();
+
+    scene->AddGameObject(guiWorld);
     scene->AddGameObject(collisionTest);
     scene->AddGameObject(collisionTest1);
 
