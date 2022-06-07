@@ -51,4 +51,7 @@ void SceneManager::UpdatePoll(Scene &scene)
 
     for (const auto &gameObject : scene.gameobjects)
         gameObject->Draw();
+
+    for (const auto &gameObject : scene.gameobjects)
+        gameObject->UpdateAfterDraw();
 }

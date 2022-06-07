@@ -19,7 +19,7 @@
 class Spawner : public Component
 {
 public:
-    void Update() override;
+    void UpdateAfterDraw() override;
     void Awake() override;
 
 private:
@@ -30,5 +30,5 @@ private:
     bool HasCard(unsigned int color);
 
 
-    glm::vec3 convertCords(CardDetector::Card card);
+    static glm::vec3 ConvertCords(CardDetector::Card card);
 };

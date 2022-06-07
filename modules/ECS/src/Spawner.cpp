@@ -3,6 +3,7 @@
 //
 
 #include "Spawner.h"
+#include "glm/gtc/type_ptr.hpp"
 
 bool Spawner::HasCard(unsigned int color)
 {
@@ -13,7 +14,7 @@ bool Spawner::HasCard(unsigned int color)
     return false;
 }
 
-void Spawner::Update()
+void Spawner::UpdateAfterDraw()
 {
     receivedCards = detector->GetDetectedCards();
     for(auto card : receivedCards)
@@ -25,7 +26,7 @@ void Spawner::Update()
             auto *charGameObject = new GameObject();
             charGameObject->AddComponent(new Mesh(ModelManager::getModel("../resource/models/tower.obj")));
 
-            glm::vec3 glPos = convertCords(card);
+            glm::vec3 glPos = ConvertCords(card);
 
             charGameObject->transform.setPosition(glPos);
 
@@ -44,7 +45,7 @@ void Spawner::Update()
         {
             std::cout << "Drawing known card" << std::endl;
 
-            glm::vec3 glPos = convertCords(card);
+            glm::vec3 glPos = ConvertCords(card);
 
             std::cout << "Trying to spawn on color: "<< card.color << " on X:" << glPos.x
                       << ", Y:" << glPos.y << ", Z:" << glPos.z << "\n";
@@ -81,7 +82,7 @@ void Spawner::Awake()
     spawnedObjects = std::map<unsigned int, GameObject*>();
 }
 
-glm::vec3 Spawner::convertCords(CardDetector::Card card)
+glm::vec3 Spawner::ConvertCords(CardDetector::Card card)
 {
     glm::mat4 model = glm::lookAt(glm::vec3(0, 15.0f, 5.0f), glm::vec3(0, 0, 0), glm::vec3(0,1,0)); //viewmatrix
     glm::mat4 projection = glm::perspective(glm::radians(90.0f), (float) 1440 /
