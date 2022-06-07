@@ -47,13 +47,13 @@ void Spawner::Update()
             glm::vec3 glPos = convertCords(card);
 
             std::cout << "Trying to spawn on color: "<< card.color << " on X:" << glPos.x
-                      << ", Y:" << glPos.y << "\n";
+                      << ", Y:" << glPos.y << ", Z:" << glPos.z << "\n";
 
             foundModel->second->transform.setPosition(glPos);
 //            Scene::getSingleton().AddGameObject(foundModel->second);
         }
 
-        if(GetKeyState(VK_RETURN) & 0x8000){
+        if(GetKeyState(VK_SPACE) & 0x8000){
 
         }
 
@@ -83,11 +83,15 @@ void Spawner::Awake()
 
 glm::vec3 Spawner::convertCords(CardDetector::Card card)
 {
-    glm::vec3 cvPos = {card.y, 1.0f, card.x};
-    glm::mat4 model = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f, 0.1f, 0.1f));
+    glm::mat4 model = glm::lookAt(glm::vec3(0, 15.0f, 5.0f), glm::vec3(0, 0, 0), glm::vec3(0,1,0)); //viewmatrix
     glm::mat4 projection = glm::perspective(glm::radians(90.0f), (float) 1440 /
                                                                  (float) 1080, 0.1f, 200.0f);
-    glm::vec4 viewport(0.0f, 1.0f, 1.0f, 1.0f);
+    glm::ivec4 viewport;
+    glGetIntegerv(GL_VIEWPORT, glm::value_ptr(viewport));
+    glm::vec3 cvPos = {card.x * viewport[2], viewport[3] - card.y * viewport[3], 0.991f};
+
+    glReadPixels(cvPos.x, cvPos.y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &cvPos.z);
+
     glm::vec3 glPos = glm::unProject(cvPos, model, projection, viewport);
 
     glPos = {glPos.x*1.0f, glPos.y*1.0f, glPos.z*1.0f};

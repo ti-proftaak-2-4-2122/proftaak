@@ -78,7 +78,8 @@ cv::Mat CardDetector::FilterTheBlob(const cv::Mat *img, const ColorFilter &color
         cv::circle(img_with_keypoints, cv::Point((int) key_point.pt.x, (int) key_point.pt.y),
                    (int) key_point.size, cv::Scalar(255, 255, 255), 5);
 
-        Card *card = new Card{color.color, key_point.pt.x, key_point.pt.y};
+        Card *card = new Card{color.color, key_point.pt.x / img_with_keypoints.cols, key_point
+                              .pt.y / img_with_keypoints.rows};
         cards.push_back(*card);
     }
     return img_with_keypoints;
