@@ -14,11 +14,11 @@ std::vector<Collider *> SceneManager::GetAllComponents(Scene& scene)
     std::vector<Collider*> result;
 
     for(auto gameobject : scene.gameobjects) {
-        Collider* component = gameobject->FindComponent<Collider>();
+//        Collider* component = gameobject->FindComponent<Collider>();
 
-        if(component) {
-            result.push_back(component);
-        }
+//        if(component) {
+//            result.push_back(component);
+//        }
     }
 
     return result;
@@ -27,8 +27,8 @@ std::vector<Collider *> SceneManager::GetAllComponents(Scene& scene)
 void SceneManager::LoadScene(Scene &scene)
 {
 
-    for (const auto &gameObject : scene.gameobjects)
-        gameObject->Awake();
+    for (GameObject& gameObject : scene.gameobjects)
+        gameObject.Awake();
 
     std::vector<Collider*> colliders = GetAllComponents(scene);
     for(Collider* collider : colliders) {
@@ -46,9 +46,9 @@ void SceneManager::LoadScene(Scene &scene)
 
 void SceneManager::UpdatePoll(Scene &scene)
 {
-    for (const auto &gameObject : scene.gameobjects)
-        gameObject->Update();
+    for (GameObject& gameObject : scene.gameobjects)
+        gameObject.Update();
 
-    for (const auto &gameObject : scene.gameobjects)
-        gameObject->Draw();
+    for (GameObject& gameObject : scene.gameobjects)
+        gameObject.Draw();
 }

@@ -20,7 +20,8 @@ private:
     uint captureTextureId;
 
 public:
-    explicit OpenCVVideoCapture(std::shared_ptr<cv::VideoCapture> capture);
+    explicit OpenCVVideoCapture(GameObject &gameObject,
+                                std::shared_ptr<cv::VideoCapture> capture);
 
     void Awake() override;
 

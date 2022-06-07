@@ -28,8 +28,8 @@ void GameObject::Draw()
 
 GameObject::~GameObject()
 {
-//    for(Component& component : this->components)
-//        delete component;
+    for(Component& component : this->components)
+        delete component;
 }
 
 const std::vector<std::reference_wrapper<Component>>&GameObject::getComponents() const
@@ -40,4 +40,9 @@ const std::vector<std::reference_wrapper<Component>>&GameObject::getComponents()
 GameObject::GameObject(Transform &transform1) : transform(transform1)
 {
 
+}
+
+Component &GameObject::AddComponent(Component& component)
+{
+    components.emplace_back(component);
 }

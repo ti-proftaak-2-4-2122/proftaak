@@ -4,23 +4,25 @@
 #include "AIPrefab.h"
 #include "Transform.h"
 #include "ModelManager.h"
-
+#include "Mesh.h"
+#include "glm/glm.hpp"
 #include <iostream>
 
-AIPrefab::AIPrefab(Transform& transform, CharacterStats* characterStats) : GameObject(transform)
+AIPrefab::AIPrefab(Transform& transform) : GameObject(transform)
 {
     this->lerpController = new LerpController(*this);
-    AddComponent(lerpController);
+    AddComponent(*lerpController);
 
-    Mesh* renderMesh = new Mesh(*this,
-                                ModelManager::getModel("../resource/models/box.obj"));
-    AddComponent(renderMesh);
+    CharacterStats* characterStats = new CharacterStats{*this, 4.0f, 100.0f, 5.0f, 2.0f,2.0f, LAND};
+    AddComponent(*characterStats);
+    Mesh* renderMesh = new Mesh(*this,ModelManager::getModel("../resource/models/box.obj"));
+    AddComponent(*renderMesh);
 
     this->characterStats = characterStats;
-    AddComponent(this->characterStats);
+    AddComponent(*this->characterStats);
 
     this->collider = new Collider(*this, characterStats->range);
-    AddComponent(collider);
+    AddComponent(*collider);
 
     lerpController->Move(this->transform.getPosition(), glm::vec3(25.0f, 0.0f, -12.0f),
                          characterStats->moveSpeed);
@@ -32,13 +34,13 @@ void AIPrefab::onTriggerEnter(Collider *other)
 
     lerpController->Move(this->transform.getPosition(), glm::vec3(50.0f, 0.0f, 0.0f),
                          characterStats->moveSpeed);
-    CharacterStats& otherStats = other->getGameObject().FindComponent<CharacterStats>();
-
-    this->combatController = new CombatController(*this, this->characterStats, otherStats);
-    AddComponent(combatController);
-    if(otherStats){
-        combatController->StartCombat(this->characterStats, otherStats);
-    }
+//    CharacterStats& otherStats = other->getGameObject().FindComponent<CharacterStats>();
+//
+//    this->combatController = new CombatController(*this, this->characterStats, otherStats);
+//    AddComponent(combatController);
+//    if(otherStats){
+//        combatController->StartCombat(this->characterStats, otherStats);
+//    }
 
 }
 

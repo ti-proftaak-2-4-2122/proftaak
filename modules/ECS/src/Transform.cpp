@@ -11,9 +11,9 @@ Transform::Transform(GameObject &gameObject) : Component(gameObject)
     scale = glm::vec3(1, 1, 1);
 }
 
-Transform::Transform(GameObject &gameObject, const glm::vec3 &position,
-                     const glm::vec3 &rotation, const glm::vec3 &scale)
-        : Component(gameObject), position(position), rotation(rotation), scale(scale) {}
+Transform::Transform(GameObject &gameObject, glm::vec3 position,
+                     glm::vec3 rotation, glm::vec3 scale) : Component(gameObject),
+                     position(position), rotation(rotation), scale(scale) {}
 
 const glm::vec3 &Transform::getPosition() const
 {

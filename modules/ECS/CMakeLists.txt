@@ -6,6 +6,7 @@ file(GLOB_RECURSE MODULE_SRC CONFIGURE_DEPENDS
 
 add_library(${MODULE} ${MODULE_SRC})
 
+target_link_libraries(${MODULE} objLoader)
 # Use this method to add library dependencies to another library
 # Replace [Dependency] with the required module/libary name
 #target_link_libraries(${MODULE} [Dependency])

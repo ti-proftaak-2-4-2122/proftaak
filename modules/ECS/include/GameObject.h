@@ -25,7 +25,7 @@ public:
 
     TagEnum tagEnum;
 
-    Component &AddComponent(Component *component);
+    Component &AddComponent(Component &component);
 
     template<class T>
     T& FindComponent()

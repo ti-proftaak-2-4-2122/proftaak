@@ -18,7 +18,7 @@ private:
     CombatController* combatController;
     CharacterStats* characterStats;
 public:
-    TowerPrefab(Transform *transform, CharacterStats *characterStats);
+    TowerPrefab(Transform& transform);
 
     void onTriggerEnter(Collider* other) override;
 

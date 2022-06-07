@@ -10,7 +10,7 @@
 void CombatController::Damage()
 {
     if(otherStats.health-yourStats.damage < 0) {
-        Scene::getSingleton().RemoveGameObject(otherStats.getGameObject());
+//        Scene::getSingleton().RemoveGameObject(otherStats.getGameObject());
         StopCombat();
         std::cout << "Stopping combat" << std::endl;
         return;

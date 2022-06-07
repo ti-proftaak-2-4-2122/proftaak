@@ -16,7 +16,9 @@
 
 using tigl::Vertex;
 
-OpenCVVideoCapture::OpenCVVideoCapture(std::shared_ptr<cv::VideoCapture> capture)
+OpenCVVideoCapture::OpenCVVideoCapture(GameObject &gameObject,
+                                       std::shared_ptr<cv::VideoCapture> capture)
+        : Component(gameObject)
 {
     this->capture = std::move(capture);
     this->captureTextureId = -1;
