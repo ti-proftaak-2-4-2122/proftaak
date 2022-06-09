@@ -6,14 +6,29 @@
 
 #include <string>
 
-const char* const CEL_SHADER_FRAG_SRC = R"ESC(varying vec3 normal;
-varying vec3 position;
+const char* const CEL_SHADER_FRAG_SRC = R"ESC(#version 330
+
+in vec3 position;
+in vec4 color;
+in vec3 normal;
+
+uniform vec3 lightPosition = vec3(1.0);
+
+uniform bool useColor = false;
+uniform bool useColorMult = false;
+uniform vec4 colorMult = vec4(1.0);
 
 void main()
 {
+    vec4 color_out = vec4(1.0);
+
+    if(useColor)
+		color_out *= color;
+    if(useColorMult)
+        color_out *= colorMult;
+
     vec3 nn = normalize(normal);
-    vec3 light_pos = gl_LightSource[0].position;
-    vec3 light_dir = normalize(position - light_pos);
+    vec3 light_dir = normalize(position - lightPosition);
     vec3 eye_dir = normalize(-position);
     vec3 reflect_dir = normalize(reflect(light_dir, nn));
 
@@ -32,6 +47,6 @@ void main()
         intensity = 0.5;
     }
 
-    gl_FragColor = gl_Color * intensity;
+    gl_FragColor = color_out * intensity;
 }
 )ESC";
