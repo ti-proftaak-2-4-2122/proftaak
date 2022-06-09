@@ -41,10 +41,7 @@ void AIPrefab::onTriggerEnter(Collider *other)
     if (otherStats)
     {
         //Start combat
-        std::cout << "Starting combat" << std::endl;
         StartCombat(otherStats);
-    } else {
-        std::cout << "Other Stats are null" << std::endl;
     }
 
 }
@@ -117,6 +114,12 @@ void AIPrefab::InitStats(UnitTypeEnum type)
             this->characterStats = new CharacterStats {4.0f, 100.0f, 5.0f, 3.0f, 3.0f, LAND};
             break;
         case SLOW:
+            this->characterStats = new CharacterStats {4.0f, 100.0f, 10.0f, 1.0f, 1.0f, LAND};
+            break;
+        case LAND:
+            this->characterStats = new CharacterStats {4.0f, 100.0f, 10.0f, 1.0f, 1.0f, LAND};
+            break;
+        default:
             this->characterStats = new CharacterStats {4.0f, 100.0f, 10.0f, 1.0f, 1.0f, LAND};
             break;
     }
