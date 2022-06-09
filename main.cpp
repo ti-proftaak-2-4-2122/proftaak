@@ -127,26 +127,45 @@ void init()
 
 void worldInit()
 {
-    auto* characterStats = new CharacterStats{1.0f, 100.0f, 10.0f, 1.0f, 2.0f, LAND};
-    auto* aiPrefab = new AIPrefab(Transform(glm::vec3(0.0f, 9.0f,1.0f), glm::vec3(0,0,0),
-                                                    glm::vec3(0.25f,0.25f,0.25f)),characterStats);
+    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(-7.0f, 0.0f, -12.0f), glm::vec3(0, 0, 0),
+                                         glm::vec3(1.0f,1.0f,1.0f)));
 
-    auto* towerstats = new CharacterStats{2.0f, 100.0f, 0.0f, 0.0f, 1.0f, TOWER};
-    auto* towerPrefab = new TowerPrefab(Transform(
-            glm::vec3(7.0f, 9.0f, 1.0f), glm::vec3(0,0,0),
-            glm::vec3(0.25f, 0.25f, 0.25f)),
-            towerstats);
+    TowerPrefab* towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+
+
+
+    GameObject* field = new GameObject(new Transform(glm::vec3(0, 0, 0),
+                                                          glm::vec3(0,0,0),
+                                                          glm::vec3(1, 1, 1)));
+
+    Mesh* fieldMesh = new Mesh(ModelManager::getModel("../resource/models/map_ground.obj"));
+    field->AddComponent(fieldMesh);
+
+    GameObject* bridge = new GameObject(new Transform(glm::vec3(0, 0, 0),
+                                                     glm::vec3(0,0,0),
+                                                     glm::vec3(1, 1, 1)));
+
+    Mesh* bridgeRender = new Mesh(ModelManager::getModel("../resource/models/map_bridges.obj"));
+    bridge->AddComponent(bridgeRender);
+
+//    //Setting colour
+    fieldMesh->SetDiffuseColor({0.474, 0.643, 0.376});
+    bridgeRender->SetDiffuseColor({1.0f, 0.392f, 0.3137f});
+//    //building map
+//    createMapObject("../resource/models/map_ground.obj", {0.0f, 0, 0});
+//    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1});
+//    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f});
+//    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f});
 //
-    //building map
-    createMapObject("../resource/models/map_ground.obj", {0.0f, 1, 0});
-    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1});
-    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f});
-    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f});
+    Scene::getSingleton().AddGameObject(aiPrefab);
+    Scene::getSingleton().AddGameObject(towerPrefab);
+    Scene::getSingleton().AddGameObject(field);
+    Scene::getSingleton().AddGameObject(bridge);
+//    Scene::getSingleton().AddGameObject(towerPrefab1);
+//    Scene::getSingleton().AddGameObject(field);
+//    Scene::getSingleton().AddGameObject(bridge);
 
-//    Scene::getSingleton().AddGameObject(towerPrefab);
-//    Scene::getSingleton().AddGameObject(aiPrefab);
-
-    auto *spawnManager = new GameObject();
+    auto *spawnManager = new GameObject(new Transform());
     auto *spawner = new Spawner();
     spawnManager->AddComponent(spawner);
     Scene::getSingleton().AddGameObject(spawnManager);
@@ -183,6 +202,7 @@ void draw()
         glDisable(GL_DEPTH_TEST);
 
         tigl::shader->enableLighting(false);
+        tigl::shader->enableTexture(true);
 
         // Draw Background
         imageProvider->Draw();
@@ -191,13 +211,14 @@ void draw()
     // Prepare for 3D Scene
     glEnable(GL_DEPTH_TEST);
     tigl::shader->enableLighting(true);
+    tigl::shader->enableTexture(CONFIG_LIGHT_ENABLE_RTX);
 
     tigl::shader->setProjectionMatrix(
             glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH,
                              0.1f, 200.0f));
 
     tigl::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0, 15.0f, 5.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+            glm::lookAt(glm::vec3(0, 60, 0.01f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     glad_glEnable(GL_DEPTH_TEST);
 
@@ -206,14 +227,12 @@ void draw()
     SceneManager::UpdatePoll(Scene::getSingleton());
 }
 
+
 void createMapObject(const std::string &filePath, glm::vec3 diffuseColor)
 {
-    auto* map_object = new GameObject();
+    auto* map_object = new GameObject(new Transform(CONFIG_PLAYFIELD_POSITION, CONFIG_PLAYFIELD_ROTATION, CONFIG_PLAYFIELD_SCALE));
 
     map_object->AddComponent(new Mesh(ModelManager::getModel(filePath)));
-    map_object->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
-    map_object->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
-    map_object->transform.setScale(CONFIG_PLAYFIELD_SCALE);
     auto mesh_map_object = map_object->FindComponent<Mesh>();
     if (mesh_map_object)
     {

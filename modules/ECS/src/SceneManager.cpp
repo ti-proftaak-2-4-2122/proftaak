@@ -36,7 +36,7 @@ void SceneManager::LoadScene(Scene &scene)
             if(collider == collider1) {
                 continue;
             }
-            collider->otherColliders.push_back(collider1);
+            Collider::addCollider(collider1);
         }
     }
 

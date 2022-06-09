@@ -5,12 +5,14 @@
 #include "CombatController.h"
 #include "GameTimer.h"
 #include "Scene.h"
+#include <iostream>
 
 void CombatController::Damage()
 {
     if(otherStats->health-yourStats->damage < 0) {
         Scene::getSingleton().RemoveGameObject(otherStats->getGameObject());
         StopCombat();
+        std::cout << "Stopping combat" << std::endl;
         return;
     }
     otherStats->health -= yourStats->damage;
@@ -18,33 +20,42 @@ void CombatController::Damage()
     (otherStats->type) << " new amount: " << otherStats->health << std::endl;
 }
 
-void CombatController::StartCombat(CharacterStats* yourStats, CharacterStats* otherStats)
+void CombatController::StartCombat(CharacterStats* yourStats, CharacterStats* otherStats,
+                                   LerpController* lerpController)
 {
     this->yourStats = yourStats;
     this->otherStats = otherStats;
     this->maxTime = yourStats->attackSpeed;
     IsAttacking = true;
+    this->lerpController = lerpController;
 }
 
 
 void CombatController::Update()
 {
-    Component::Update();
-
-    currentTime += GameTimer::deltatime;
+    currentTime += GameTimer::getDeltaTime();
     if(IsAttacking && currentTime >= maxTime) {
         Damage();
         currentTime = 0;
     }
 }
 
-void CombatController::StopCombat()
-{
-    IsAttacking = false;
-}
 
 CombatController::CombatController()
 {
+}
+
+void CombatController::StopCombat()
+{
+    IsAttacking = false;
+    hasFought = true;
+
+    //Checkpoint naar volgende punt
+//    if(isTowerDestroyed){
+//        this->lerpController->Move();
+//    }
+//    this->lerpController->Move();
+
 }
 
 

@@ -24,12 +24,9 @@ void Spawner::UpdateAfterDraw()
         {
            // std::cout << "Drawing new card" << std::endl;
             //add new card to spawnedcards
-            auto *charGameObject = new GameObject();
-            charGameObject->AddComponent(new Mesh(ModelManager::getModel("../resource/models/tower.obj")));
-
             glm::vec3 glPos = ConvertCords(card);
-
-            charGameObject->transform.setPosition(glPos);
+            auto *charGameObject = new GameObject(new Transform(glPos));
+            charGameObject->AddComponent(new Mesh(ModelManager::getModel("../resource/models/tower.obj")));
 
             Scene::getSingleton().AddGameObject(charGameObject);
             //std::cout << "Trying to spawn on color: "<< card.color << " on X:" << glPos.x
@@ -59,8 +56,8 @@ void Spawner::UpdateAfterDraw()
             std::cout << "YO IMMA SPAWN EM";
             glm::vec3 glPos = ConvertCords(card);
             std::cout << "Pos: " << glPos.x << "," << glPos.y << "," << glPos.z << ".\n";
-            auto *transform = new Transform(glPos);
-            auto *AIcharacter = new AIPrefab(*transform, new CharacterStats{5.0f, 100.0f, 10.0f, 2.0f, 3.0f, GROUND});
+
+            auto *AIcharacter = new AIPrefab(new Transform(glPos));
 
             Scene::getSingleton().AddGameObject(AIcharacter);
         }

@@ -14,11 +14,20 @@ class GameObject;
 class TowerPrefab : public GameObject
 {
 private:
+
+    bool IsAttacking = false;
+    float currentTime;
+
     Collider* collider;
-    CombatController* combatController;
     CharacterStats* characterStats;
+    CharacterStats* otherStats;
+
+    void StartCombat(CharacterStats* otherStats);
+    void StopCombat();
+    void DoDamage();
+
 public:
-    TowerPrefab(const Transform &towerTransform, CharacterStats *characterStats);
+    TowerPrefab(Transform *transform);
 
     void onTriggerEnter(Collider* other) override;
 

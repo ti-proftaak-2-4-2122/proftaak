@@ -27,9 +27,9 @@ Component &GameObject::AddComponent(Component *component)
     return *component;
 }
 
-GameObject::GameObject() : transform(this->AddComponent<Transform>())
+GameObject::GameObject(Transform* _transform) : transform(*_transform)
 {
-
+    this->AddComponent(&transform);
 }
 
 void GameObject::AddChild(GameObject* child)
@@ -121,5 +121,7 @@ GameObject::~GameObject()
         delete component;
 }
 
-
-
+const std::vector<Component *> &GameObject::getComponents() const
+{
+    return components;
+}

@@ -19,12 +19,12 @@ struct CharacterStats : public Component
     CharacterStats(float range, float health, float damage, float moveSpeed, float attackSpeed,
                    UnitTypeEnum typeEnum)
     : range(range),
-                                                                               health(health),
-                                                                               damage(damage),
-                                                                               moveSpeed
-                                                                               (moveSpeed),
-                                                                               attackSpeed
-                                                                               (attackSpeed),
-                                                                               type(typeEnum) {}
+    health(health),
+    damage(damage),
+    moveSpeed
+    (moveSpeed),
+    attackSpeed
+    (attackSpeed),
+    type(typeEnum) {}
 };
 #endif //PROFTAAK24_CHARACTERSTATS_H

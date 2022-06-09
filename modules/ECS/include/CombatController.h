@@ -3,6 +3,7 @@
 //
 #pragma once
 #include "Component.h"
+#include "LerpController.h"
 #include "CharacterStats.h"
 
 class Component;
@@ -10,16 +11,23 @@ class Component;
 class CombatController : public Component
 {
 private:
+    void StopCombat();
     void Damage();
-    bool IsAttacking = false;
 
     float currentTime;
     float maxTime;
+    bool isTowerDestroyed = false;
     CharacterStats* yourStats;
     CharacterStats* otherStats;
+    LerpController* lerpController;
+
+
+
 public:
-    void StartCombat(CharacterStats* yourStats, CharacterStats* otherStats);
-    void StopCombat();
+    bool IsAttacking = false;
+    bool hasFought = false;
+
+    void StartCombat(CharacterStats* yourStats, CharacterStats* otherStats, LerpController* lerpController);
     void Update() override;
 
     CombatController();
