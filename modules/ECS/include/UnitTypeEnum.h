@@ -5,8 +5,8 @@
 #ifndef PROFTAAK24_UNITTYPEENUM_H
 #define PROFTAAK24_UNITTYPEENUM_H
 enum UnitTypeEnum {
-    AIR,
-    GROUND,
+    FAST,
+    SLOW,
     LAND,
     TOWER,
 };
@@ -15,8 +15,6 @@ inline const char* ToString(UnitTypeEnum v)
 {
     switch (v)
     {
-        case AIR:   return "Air";
-        case GROUND:   return "Ground";
         case LAND: return "Land";
         case TOWER: return "Tower";
         default:   return "[Unknown Unit Type]";

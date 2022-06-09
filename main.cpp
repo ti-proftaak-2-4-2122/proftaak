@@ -127,10 +127,12 @@ void init()
 
 void worldInit()
 {
-    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(-7.0f, 0.0f, -12.0f), glm::vec3(0, 0, 0),
-                                         glm::vec3(1.0f,1.0f,1.0f)));
+    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(-15.0f, 0.0f, -8.0f), glm::vec3(0, 0, 0),
+                                         glm::vec3(1.0f,1.0f,1.0f)), FAST);
 
     TowerPrefab* towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+    TowerPrefab* towerPrefab1 = new TowerPrefab(new Transform(glm::vec3(50.0f, 0.0f, 0.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+
 
 
 
@@ -159,6 +161,7 @@ void worldInit()
 //
     Scene::getSingleton().AddGameObject(aiPrefab);
     Scene::getSingleton().AddGameObject(towerPrefab);
+    Scene::getSingleton().AddGameObject(towerPrefab1);
     Scene::getSingleton().AddGameObject(field);
     Scene::getSingleton().AddGameObject(bridge);
 //    Scene::getSingleton().AddGameObject(towerPrefab1);

@@ -20,8 +20,8 @@ public:
 
     LerpController();
 
-private:
     bool CheckPos(glm::vec3 currentPos, glm::vec3 resultPos) const;
+private:
     glm::vec3 slope{};
     glm::vec3 endPos;
     const float roundValue = 1.0f;
