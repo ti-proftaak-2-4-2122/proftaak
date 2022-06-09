@@ -15,7 +15,7 @@ class Transform : public Component
     glm::vec3 rotation{};
     glm::vec3 scale{};
 public:
-    Transform(const glm::vec3 &position, const glm::vec3 &rotation, const glm::vec3 &scale);
+    Transform(const glm::vec3 &position, const glm::vec3 &rotation = {0.0f, 0.0f, 0.0f}, const glm::vec3 &scale = {1.0f, 1.0f, 1.0f});
 
     Transform();
 
