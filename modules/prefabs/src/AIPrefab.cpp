@@ -30,7 +30,7 @@ void AIPrefab::onTriggerEnter(Collider *other)
 {
     GameObject::onTriggerEnter(other);
 
-    lerpController->Move(this->transform.getPosition(), glm::vec3(0.0f, 0.0f, 0.0f),
+    lerpController->Move(this->transform.getPosition(), this->transform.getPosition(),
                          characterStats->moveSpeed);
     CharacterStats *otherStats = other->getGameObject()->FindComponent<CharacterStats>();
 
@@ -71,6 +71,7 @@ void AIPrefab::DoDamage()
     if (IsAttacking && currentTime >= this->characterStats->attackSpeed)
     {
         otherStats->health -= this->characterStats->damage;
+        std::cout << "New Health: " << otherStats->health << std::endl;
         currentTime = 0;
     }
     if (otherStats->health <= 0)

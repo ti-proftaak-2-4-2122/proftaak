@@ -19,15 +19,15 @@ TowerPrefab::TowerPrefab(Transform *transform) : GameObject
 
 void TowerPrefab::onTriggerEnter(Collider *other)
 {
-    std::cout << "On Trigger Enter for tower" << std::endl;
-    GameObject::onTriggerEnter(other);
-    CharacterStats* otherStats = other->getGameObject()->FindComponent<CharacterStats>();
-
-    if(otherStats) {
-        StartCombat(otherStats);
-        std::cout << "The character got damaged, his health is: " << otherStats->health <<
-        std::endl;
-    }
+//    std::cout << "On Trigger Enter for tower" << std::endl;
+//    GameObject::onTriggerEnter(other);
+//    CharacterStats* otherStats = other->getGameObject()->FindComponent<CharacterStats>();
+//
+//    if(otherStats) {
+//        StartCombat(otherStats);
+//        std::cout << "The character got damaged, his health is: " << otherStats->health <<
+//        std::endl;
+//    }
 }
 
 void TowerPrefab::Update()
