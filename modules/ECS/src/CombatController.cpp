@@ -20,19 +20,19 @@ void CombatController::Damage()
     (otherStats->type) << " new amount: " << otherStats->health << std::endl;
 }
 
-void CombatController::StartCombat(CharacterStats* yourStats, CharacterStats* otherStats)
+void CombatController::StartCombat(CharacterStats* yourStats, CharacterStats* otherStats,
+                                   LerpController* lerpController)
 {
     this->yourStats = yourStats;
     this->otherStats = otherStats;
     this->maxTime = yourStats->attackSpeed;
     IsAttacking = true;
+    this->lerpController = lerpController;
 }
 
 
 void CombatController::Update()
 {
-    Component::Update();
-
     currentTime += GameTimer::getDeltaTime();
     if(IsAttacking && currentTime >= maxTime) {
         Damage();
@@ -49,6 +49,13 @@ void CombatController::StopCombat()
 {
     IsAttacking = false;
     hasFought = true;
+
+    //Checkpoint naar volgende punt
+//    if(isTowerDestroyed){
+//        this->lerpController->Move();
+//    }
+//    this->lerpController->Move();
+
 }
 
 

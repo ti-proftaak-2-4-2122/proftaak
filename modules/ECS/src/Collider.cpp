@@ -20,6 +20,7 @@ void Collider::CheckCollision(Collider* other)
                     (otherPos.y+other->radius)-(pos.y+this->radius))));
 
     if(distance <= this->radius + other->radius) {
+//        std::cout << "Testing" << std::endl;
         if(!hasEntered) {
             gameObject->onTriggerEnter(other);
             hasEntered = true;

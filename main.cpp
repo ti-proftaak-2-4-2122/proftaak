@@ -126,14 +126,10 @@ void init()
 
 void worldInit()
 {
-    CharacterStats* characterStats = new CharacterStats{4.0f, 100.0f, 5.0f, 2.0f, 2.0f, LAND};
-    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(7.0f, 0.0f, -12.0f), glm::vec3(0,0,
-                                                                                             0),glm::vec3(1.0f,1.0f,1.0f)),characterStats);
+    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(-7.0f, 0.0f, -12.0f), glm::vec3(0, 0, 0),
+                                         glm::vec3(1.0f,1.0f,1.0f)));
 
-    CharacterStats* towerstats = new CharacterStats{8.0f, 5.0f, 5.0f, 0.0f, 1.0f, TOWER};
-    TowerPrefab* towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f), glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)),towerstats);
-//    TowerPrefab* towerPrefab1 = new TowerPrefab(new Transform(glm::vec3(50.0f, 0.0f, 0), glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)),
-//                                               towerstats);
+    TowerPrefab* towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
 
 
 
@@ -151,20 +147,22 @@ void worldInit()
     Mesh* bridgeRender = new Mesh(ModelManager::getModel("../resource/models/map_bridges.obj"));
     bridge->AddComponent(bridgeRender);
 
-    //Setting colour
+//    //Setting colour
     fieldMesh->SetDiffuseColor({0.474, 0.643, 0.376});
     bridgeRender->SetDiffuseColor({1.0f, 0.392f, 0.3137f});
 //    //building map
 //    createMapObject("../resource/models/map_ground.obj", {0.0f, 0, 0});
-////    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1});
-////    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f});
+//    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1});
+//    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f});
 //    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f});
-
+//
+    Scene::getSingleton().AddGameObject(aiPrefab);
     Scene::getSingleton().AddGameObject(towerPrefab);
-//    Scene::getSingleton().AddGameObject(towerPrefab1);
     Scene::getSingleton().AddGameObject(field);
     Scene::getSingleton().AddGameObject(bridge);
-    Scene::getSingleton().AddGameObject(aiPrefab);
+//    Scene::getSingleton().AddGameObject(towerPrefab1);
+//    Scene::getSingleton().AddGameObject(field);
+//    Scene::getSingleton().AddGameObject(bridge);
 
     SceneManager::LoadScene(Scene::getSingleton());
 }

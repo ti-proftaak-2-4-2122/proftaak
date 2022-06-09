@@ -6,7 +6,7 @@
       <option name="BLOCK_BRACE_PLACEMENT" value="5" />
     </Objective-C>
     <codeStyleSettings language="ObjectiveC">
-      <option name="RIGHT_MARGIN" value="100" />
+      <option name="RIGHT_MARGIN" value="150" />
       <option name="BRACE_STYLE" value="5" />
       <option name="CLASS_BRACE_STYLE" value="5" />
       <option name="WRAP_ON_TYPING" value="1" />
