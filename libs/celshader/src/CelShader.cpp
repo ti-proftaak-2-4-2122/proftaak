@@ -29,7 +29,7 @@
 #include "celShaderFrag.h"
 #include "celShaderVS.h"
 
-#include "CelShader.h"
+#include "cs/CelShader.h"
 
 namespace cs {
     namespace internal {
@@ -40,6 +40,42 @@ namespace cs {
 
         void CelShader::use() {
             glUseProgram(this->celShaderProgram);
+        }
+
+        void CelShader::setProjectionMatrix(const glm::mat4& matrix)
+        {
+            this->setUniform(Uniform::projectionMatrix, matrix);
+        }
+
+        void CelShader::setViewMatrix(const glm::mat4& matrix)
+        {
+            this->setUniform(Uniform::viewMatrix, matrix);
+        }
+
+        void CelShader::setModelMatrix(const glm::mat4& matrix)
+        {
+            this->setUniform(Uniform::modelMatrix, matrix);
+            this->setUniform(Uniform::normalMatrix, glm::mat3(glm::transpose(glm::inverse(matrix))));
+        }
+
+        void CelShader::setLightPosition(const glm::vec3& pos)
+        {
+            this->setUniform(Uniform::lightPosition, pos);
+        }
+
+        void CelShader::enableColor(bool enable)
+        {
+            this->setUniform(Uniform::useColor, enable);
+        }
+
+        void CelShader::enableColorMult(bool enable)
+        {
+            this->setUniform(Uniform::useColorMult, enable);
+        }
+
+        void CelShader::setColorMult(const glm::vec4& color)
+        {
+            this->setUniform(Uniform::colorMult, color);
         }
 
         void CelShader::loadShader() {
@@ -90,6 +126,70 @@ namespace cs {
             }
 
             use();
+            this->initShaderVars();
+        }
+
+        void CelShader::initShaderVars()
+        {
+            this->uniforms[Uniform::modelMatrix] = glGetUniformLocation(
+                    this->celShaderProgram,
+                   "modelMatrix"
+            );
+
+            this->uniforms[Uniform::viewMatrix] = glGetUniformLocation(
+                    this->celShaderProgram,
+                    "viewMatrix"
+            );
+
+            this->uniforms[Uniform::projectionMatrix] = glGetUniformLocation(
+                    this->celShaderProgram,
+                    "projectionMatrix"
+            );
+
+            this->uniforms[Uniform::normalMatrix] = glGetUniformLocation(
+                    this->celShaderProgram,
+                    "normalMatrix"
+            );
+
+            this->uniforms[Uniform::lightPosition] = glGetUniformLocation(
+                    this->celShaderProgram,
+                    "lightPosition"
+            );
+
+            this->uniforms[Uniform::useColor] = glGetUniformLocation(
+                    this->celShaderProgram,
+                    "useColor"
+            );
+
+            this->uniforms[Uniform::useColorMult] = glGetUniformLocation(
+                    this->celShaderProgram,
+                    "useColorMult"
+            );
+
+            this->uniforms[Uniform::colorMult] = glGetUniformLocation(
+                    this->celShaderProgram,
+                    "colorMult"
+            );
+        }
+
+        void CelShader::setUniform(Uniform uniform, const glm::mat4& value)
+        {
+            glUniformMatrix4fv(this->uniforms[uniform], 1, false, glm::value_ptr(value));
+        }
+
+        void CelShader::setUniform(Uniform uniform, const glm::vec4& value)
+        {
+            glUniform4fv(this->uniforms[uniform], 1, glm::value_ptr(value));
+        }
+
+        void CelShader::setUniform(Uniform uniform, const glm::vec3& value)
+        {
+            glUniform3fv(this->uniforms[uniform], 1, glm::value_ptr(value));
+        }
+
+        void CelShader::setUniform(Uniform uniform, bool value)
+        {
+            glUniform1i(this->uniforms[uniform], value ? GL_TRUE : GL_FALSE);
         }
 
         void CelShader::printShaderCompileError(const GLuint shaderId) {
@@ -124,15 +224,6 @@ namespace cs {
 
     std::unique_ptr<internal::CelShader> shader;
 
-    void init()
-    {
-        shader.reset(new internal::CelShader());
-
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-        glEnableVertexAttribArray(2);
-        glEnableVertexAttribArray(3);
-    }
 }
 
 // Copyright (c) 2012, ME Chamberlain

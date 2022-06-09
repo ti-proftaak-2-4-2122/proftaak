@@ -27,6 +27,8 @@
 
 #include "tigl.h"
 
+#include "func.h"
+
 using tigl::Vertex;
 
 /**
@@ -42,13 +44,48 @@ namespace cs {
         private:
             GLuint celShaderProgram = 0;
 
+            enum Uniform
+            {
+                //matrices
+                projectionMatrix,
+                viewMatrix,
+                modelMatrix,
+                normalMatrix,
+
+                // params
+                lightPosition,
+                useColor,
+                useColorMult,
+                colorMult,
+
+                UniformMax
+            };
+
+            int uniforms[UniformMax];
+
         public:
             CelShader();
 
             void use();
 
+            void setProjectionMatrix(const glm::mat4& matrix);
+            void setViewMatrix(const glm::mat4& matrix);
+            void setModelMatrix(const glm::mat4& matrix);
+
+            void setLightPosition(const glm::vec3& pos);
+
+            void enableColor(bool enable);
+            void enableColorMult(bool enable);
+            void setColorMult(const glm::vec4& color);
+
         private:
             void loadShader();
+            void initShaderVars();
+
+            void setUniform(Uniform uniform, const glm::mat4& value);
+            void setUniform(Uniform uniform, const glm::vec4& value);
+            void setUniform(Uniform uniform, const glm::vec3& value);
+            void setUniform(Uniform uniform, bool value);
 
             void printShaderCompileError(GLuint shaderId);
             void printProgramCompileError();
@@ -58,15 +95,6 @@ namespace cs {
 
     extern std::unique_ptr<internal::CelShader> shader;
 
-    void init();
-
-    void begin(GLenum shape);
-
-    void addVertex(const Vertex& vertex);
-
-    void end();
-
-    void drawVertices(GLenum shape, const std::vector<Vertex> &vertices);
 }
 
 // Copyright (c) 2012, ME Chamberlain
