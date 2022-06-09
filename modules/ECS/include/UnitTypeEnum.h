@@ -15,6 +15,8 @@ inline const char* ToString(UnitTypeEnum v)
 {
     switch (v)
     {
+        case FAST: return "Fast";
+        case SLOW: return "Slow";
         case LAND: return "Land";
         case TOWER: return "Tower";
         default:   return "[Unknown Unit Type]";

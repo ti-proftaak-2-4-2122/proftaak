@@ -109,6 +109,8 @@ void AIPrefab::StopCombat()
 
 void AIPrefab::InitStats(UnitTypeEnum type)
 {
+
+    std::cout << "Init stats: " << ToString(type) << std::endl;
     switch (type)
     {
         case FAST:
