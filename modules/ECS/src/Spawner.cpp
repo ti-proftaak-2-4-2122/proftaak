@@ -57,6 +57,11 @@ void Spawner::UpdateAfterDraw()
             glm::vec3 glPos = ConvertCords(card);
             std::cout << "Pos: " << glPos.x << "," << glPos.y << "," << glPos.z << ".\n";
 
+            UnitTypeEnum type;
+            if(card.color == 0) type = AIR;
+            if(card.color == 1) type = GROUND;
+            if(card.color == 2) type = LAND;
+
             auto *AIcharacter = new AIPrefab(new Transform(glPos));
 
             Scene::getSingleton().AddGameObject(AIcharacter);
@@ -73,7 +78,6 @@ void Spawner::UpdateAfterDraw()
             //std::cout << "Size after deletion: "<< spawnedObjects.size() << std::endl;
         }
     }
-
 }
 
 void Spawner::Awake()
