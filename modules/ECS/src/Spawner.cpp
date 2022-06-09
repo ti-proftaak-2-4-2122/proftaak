@@ -58,11 +58,11 @@ void Spawner::UpdateAfterDraw()
             std::cout << "Pos: " << glPos.x << "," << glPos.y << "," << glPos.z << ".\n";
 
             UnitTypeEnum type;
-            if(card.color == 0) type = AIR;
-            if(card.color == 1) type = GROUND;
+            if(card.color == 0) type = FAST;
+            if(card.color == 1) type = SLOW;
             if(card.color == 2) type = LAND;
 
-            auto *AIcharacter = new AIPrefab(new Transform(glPos));
+            auto *AIcharacter = new AIPrefab(new Transform(glPos), type);
 
             Scene::getSingleton().AddGameObject(AIcharacter);
         }

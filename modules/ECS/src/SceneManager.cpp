@@ -28,7 +28,9 @@ void SceneManager::LoadScene(Scene &scene)
 {
 
     for (const auto &gameObject : scene.gameobjects)
-        gameObject->Awake();
+    {
+        //gameObject->Awake();
+    }
 
     std::vector<Collider*> colliders = GetAllComponents(scene);
     for(Collider* collider : colliders) {
