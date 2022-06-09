@@ -28,6 +28,7 @@ private:
     void StartCombat(CharacterStats* otherStats);
     void DoDamage();
     void StopCombat();
+    void InitStats(UnitTypeEnum type);
 
 public:
 
@@ -35,7 +36,7 @@ public:
     bool IsAttacking = false;
     bool hasFought = false;
 
-    AIPrefab(Transform* transform);
+    AIPrefab(Transform* transform, UnitTypeEnum type);
 
     void onTriggerEnter(Collider* other) override;
     void onTriggerExit(Collider* other) override;
