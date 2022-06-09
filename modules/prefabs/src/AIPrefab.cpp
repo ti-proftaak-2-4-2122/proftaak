@@ -23,7 +23,7 @@ AIPrefab::AIPrefab(Transform *transform, UnitTypeEnum type) : GameObject(transfo
     this->collider = new Collider(this->characterStats->range);
     AddComponent(collider);
 
-    lerpController->Move(this->transform.getPosition(), checkPoints[1],
+    lerpController->Move(this->transform.getPosition(), checkPoints[0],
                          characterStats->moveSpeed);
 }
 
@@ -57,7 +57,10 @@ void AIPrefab::onTriggerExit(Collider *other)
 void AIPrefab::Update()
 {
     GameObject::Update();
-
+    if(lerpController->CheckPos(this->transform.getPosition(), checkPoints[0])) {
+        lerpController->Move(this->transform.getPosition(), checkPoints[1],
+                             characterStats->moveSpeed);
+    }
     if (!IsAttacking) return;
     else DoDamage();
 
