@@ -10,7 +10,8 @@ const char* const CEL_SHADER_VERTEX_SRC = R"ESC(#version 330
 
 layout (location = 0) in vec3 a_position;
 layout (location = 1) in vec4 a_color;
-layout (location = 2) in vec3 a_normal;
+layout (location = 2) in vec2 a_texcoord;
+layout (location = 3) in vec3 a_normal;
 
 uniform mat4 modelMatrix = mat4(1.0);
 uniform mat4 viewMatrix = mat4(1.0);
