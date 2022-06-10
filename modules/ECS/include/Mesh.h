@@ -24,14 +24,13 @@ class Mesh : public Component
 {
 private:
     ObjModel *objModel;
-    glm::vec3 diffuseColor = {0.8f, 0.8f, 0.8f};
     glm::vec4 color = {1.0f, 1.0f, 1.0f, 1.0f};
-    ParentTransform* parentTransform;
+    ParentTransform* parentTransform = nullptr;
 public:
 
     explicit Mesh(ObjModel *_objmodel);
+
     void SetColor(const glm::vec4& color);
-    void SetDiffuseColor(const glm::vec3& color);
     void SetAlpha(float alpha);
 
     void Awake() override;

@@ -37,7 +37,7 @@ void draw();
 
 void worldInit();
 
-void createMapObject(const std::string &filePath, glm::vec3 diffuseColor, float alpha);
+void createMapObject(const std::string &filePath, glm::vec4 color);
 
 Scene *scene;
 
@@ -106,7 +106,7 @@ void init()
     glfwSetTime(0);
 
 
-    //setting up lights and render stuff
+    // Init tigl shader
     tigl::shader->use();
 
     tigl::shader->enableColor(false);
@@ -153,10 +153,10 @@ void worldInit()
     float mapAlpha = CONFIG_PLAYFIELD_ALPHA;
 
     //building map
-    createMapObject("../resource/models/map_ground.obj", {0.0f, 1, 0}, mapAlpha);
-    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1}, mapAlpha);
-    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f}, mapAlpha);
-    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f}, 1.0f);
+    createMapObject("../resource/models/map_ground.obj", {0.0f, 1, 0, mapAlpha});
+    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1, mapAlpha});
+    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f, mapAlpha});
+    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f, 1.0f});
 
     SceneManager::LoadScene(*scene);
 }
@@ -219,19 +219,21 @@ void draw()
     SceneManager::UpdatePoll(*scene);
 }
 
-void createMapObject(const std::string &filePath, glm::vec3 diffuseColor, float alpha)
+void createMapObject(const std::string &filePath, glm::vec4 color)
 {
     auto *map_object = new GameObject();
+
     map_object->AddComponent(new Mesh(ModelManager::getModel(filePath)));
+
     map_object->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
     map_object->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
     map_object->transform.setScale(CONFIG_PLAYFIELD_SCALE);
+
     auto mesh_map_object = map_object->FindComponent<Mesh>();
     if (mesh_map_object)
     {
-        //mesh_map_ground->SetColor({200,200,200,255});
-        mesh_map_object->SetDiffuseColor(diffuseColor);
-        mesh_map_object->SetAlpha(alpha);
+        mesh_map_object->SetColor(color);
     }
+
     scene->AddGameObject(map_object);
 }
