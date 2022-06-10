@@ -35,6 +35,8 @@ void Mesh::Draw()
     modelMatrix = glm::rotate(modelMatrix, rotation.y, glm::vec3(0, 1, 0));
     modelMatrix = glm::rotate(modelMatrix, rotation.z, glm::vec3(0, 0, 1));
 
+    cs::shader->use();
+
     cs::shader->setModelMatrix(modelMatrix);
     cs::shader->setColorMult(this->color);
 
