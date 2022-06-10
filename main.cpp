@@ -133,7 +133,7 @@ void init()
     cs::shader->enableColor(false);
     cs::shader->enableColorMult(true);
 
-    cs::shader->setLightPosition(glm::vec3(0.0f, 20.0f, 5.0f));
+    cs::shader->setLightPosition(CONFIG_LIGHT_POSITION);
 }
 
 void worldInit()
