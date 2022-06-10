@@ -21,7 +21,7 @@ private:
     Collider* collider;
     CharacterStats* characterStats;
     CharacterStats* otherStats;
-    const std::vector<glm::vec3> checkPoints {glm::vec3(-9.0f, 0.0f, -12.0f), glm::vec3(25.0f, 0.0f, -12.0f)
+    std::vector<glm::vec3> checkPoints {glm::vec3(-9.0f, 0.0f, -12.0f), glm::vec3(25.0f, 0.0f, -12.0f)
                                               , glm::vec3(50.0f, 0.0f, 0)};
 
     void StartCombat(CharacterStats* otherStats);
@@ -29,13 +29,16 @@ private:
     void StopCombat();
     void InitStats(UnitTypeEnum type);
 
+    void InitCheckpoints();
+
 public:
 
     //Combat logic
     bool IsAttacking = false;
     bool hasFought = false;
+    bool hasSpawnedTop = true;
 
-    AIPrefab(Transform* transform, UnitTypeEnum type);
+    AIPrefab(Transform* transform, UnitTypeEnum type, bool hasSpawnedTop);
 
     void onTriggerEnter(Collider* other) override;
     void onTriggerExit(Collider* other) override;

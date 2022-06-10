@@ -9,7 +9,8 @@
 
 #include <iostream>
 
-AIPrefab::AIPrefab(Transform *transform, UnitTypeEnum type) : GameObject(transform)
+AIPrefab::AIPrefab(Transform *transform, UnitTypeEnum type, bool hasSpawnedTop) : GameObject(transform),
+hasSpawnedTop(hasSpawnedTop)
 {
     this->lerpController = new LerpController();
     AddComponent(lerpController);
@@ -22,6 +23,8 @@ AIPrefab::AIPrefab(Transform *transform, UnitTypeEnum type) : GameObject(transfo
 
     this->collider = new Collider(this->characterStats->range);
     AddComponent(collider);
+
+    InitCheckpoints();
 
     lerpController->Move(this->transform.getPosition(), checkPoints[0],
                          characterStats->moveSpeed);
@@ -122,6 +125,29 @@ void AIPrefab::InitStats(UnitTypeEnum type)
         default:
             this->characterStats = new CharacterStats {4.0f, 100.0f, 10.0f, 1.0f, 1.0f, LAND};
             break;
+    }
+}
+
+void AIPrefab::InitCheckpoints()
+{
+    if(this->transform.getPosition().x < 0 && this->transform.getPosition().z < 0)
+    {
+        for(int i = 0; i < this->checkPoints.size(); i++)
+        {
+            this->checkPoints[i].z *= -1;
+        }
+    }
+    else if(this->transform.getPosition().x < 0 && this->transform.getPosition().z > 0)
+    {
+        // links onder spawnen
+    }
+    else if(this->transform.getPosition().x > 0 && this->transform.getPosition().z < 0)
+    {
+        //Rechts boven
+    }
+    else if(this->transform.getPosition().x > 0 && this->transform.getPosition().z > 0)
+    {
+        //Rechts boven
     }
 }
 

@@ -127,14 +127,11 @@ void init()
 
 void worldInit()
 {
-    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(-15.0f, 0.0f, -8.0f), glm::vec3(0, 0, 0),
-                                         glm::vec3(1.0f,1.0f,1.0f)), FAST);
+    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(-15.0f, 0.0f, -12.0f), glm::vec3(0, 0, 0),
+                                         glm::vec3(1.0f,1.0f,1.0f)), FAST, false);
 
     TowerPrefab* towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
     TowerPrefab* towerPrefab1 = new TowerPrefab(new Transform(glm::vec3(50.0f, 0.0f, 0.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
-
-
-
 
     GameObject* field = new GameObject(new Transform(glm::vec3(0, 0, 0),
                                                           glm::vec3(0,0,0),
@@ -158,8 +155,8 @@ void worldInit()
 //    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1});
 //    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f});
 //    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f});
-//
-    Scene::getSingleton().AddGameObject(aiPrefab);
+
+//    Scene::getSingleton().AddGameObject(aiPrefab);
     Scene::getSingleton().AddGameObject(towerPrefab);
     Scene::getSingleton().AddGameObject(towerPrefab1);
     Scene::getSingleton().AddGameObject(field);
