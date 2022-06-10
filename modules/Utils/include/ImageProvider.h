@@ -12,22 +12,22 @@
 #include "Component.h"
 #include "CardDetector.h"
 
-class OpenCVVideoCapture : public Component
+class ImageProvider
 {
 private:
     std::shared_ptr<cv::VideoCapture> capture;
-    CardDetector *detector = new CardDetector();
+    CardDetector *detector = CardDetector::GetInstance();
     uint captureTextureId;
 
 public:
-    explicit OpenCVVideoCapture(std::shared_ptr<cv::VideoCapture> capture);
+    explicit ImageProvider(std::shared_ptr<cv::VideoCapture> capture);
 
-    void Awake() override;
+    void Awake();
 
-    void Update() override;
+    void Update();
 
-    void Draw() override;
+    void Draw();
 
-    ~OpenCVVideoCapture() override;
+    ~ImageProvider();
 
 };

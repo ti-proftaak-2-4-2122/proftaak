@@ -21,7 +21,7 @@ private:
 
 public:
     Transform &transform;
-    GameObject();
+    GameObject(Transform* transform);
 
     TagEnum tagEnum;
 
@@ -42,6 +42,8 @@ public:
         return nullptr;
     }
 
+    const std::vector<Component *> &getComponents() const;
+
     template<class T>
     T& AddComponent()
     {
@@ -53,20 +55,22 @@ public:
     void AddChild(GameObject* child);
     void RemoveChild(GameObject*& child);
 
-    void Awake();
+    virtual void Awake();
 
-    void Update();
+    virtual void Update();
 
     void Draw();
 
+    void UpdateAfterDraw();
 
     ~GameObject();
-    virtual void onTriggerEnter(Collider* collider) {
-        std::cout << "On Trigger Enter called" << std::endl;
+
+    virtual void onTriggerEnter(Collider* other) {
+//        std::cout << "On Trigger Enter called" << std::endl;
     };
 
-    virtual void onTriggerExit(Collider* collider) {
-        std::cout << "On Trigger Exit called" << std::endl;
+    virtual void onTriggerExit(Collider* other) {
+//        std::cout << "On Trigger Exit called" << std::endl;
     };
 
 };

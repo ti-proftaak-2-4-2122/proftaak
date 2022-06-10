@@ -9,14 +9,20 @@
 
 #include "Mesh.h"
 #include "ModelManager.h"
-#include "OpenCVVideoCapture.h"
+#include "ImageProvider.h"
 #include "Scene.h"
 #include "SceneManager.h"
 #include "Transform.h"
 #include "GameTimer.h"
 #include "Collider.h"
+#include "ImageProvider.h"
+#include "CharacterStats.h"
 
 #include "user-config.h"
+#include "Spawner.h"
+#include "AIPrefab.h"
+#include "TowerPrefab.h"
+#include "UnitTypeEnum.h"
 
 //aspect ratio should always be 4:3 when using realsense camera
 #define WINDOW_WIDTH 1440
@@ -27,7 +33,7 @@ using tigl::Vertex;
 GLFWwindow *window;
 
 std::shared_ptr<cv::VideoCapture> capture;
-OpenCVVideoCapture *openCvComponent;
+ImageProvider *imageProvider;
 
 void init();
 
@@ -38,8 +44,6 @@ void draw();
 void worldInit();
 
 void createMapObject(const std::string &filePath, glm::vec4 color);
-
-Scene *scene;
 
 int currentWidth;
 int currentHeight;
@@ -99,8 +103,8 @@ void init()
 
     if (capture->isOpened())
     {
-        openCvComponent = new OpenCVVideoCapture(capture);
-        openCvComponent->Awake();
+        imageProvider = new ImageProvider(capture);
+        imageProvider->Awake();
     }
 
     glfwSetTime(0);
@@ -139,35 +143,58 @@ void init()
 
 void worldInit()
 {
-    scene = new Scene();
+    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(-15.0f, 0.0f, -12.0f), glm::vec3(0, 0, 0),
+                                         glm::vec3(1.0f,1.0f,1.0f)), FAST, false);
 
-    auto *collisionTest = new GameObject();
-    auto *collider = new Collider(1.0f, glm::vec3(0, 0, 0));
-    collisionTest->AddComponent(collider);
-    auto *collisionTest1 = new GameObject();
-    auto *collider1 = new Collider(1.0f, glm::vec3(1.0f, 0, 0));
-    collisionTest1->AddComponent(collider1);
+    TowerPrefab* towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+    TowerPrefab* towerPrefab1 = new TowerPrefab(new Transform(glm::vec3(50.0f, 0.0f, 0.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
 
-    scene->AddGameObject(collisionTest);
-    scene->AddGameObject(collisionTest1);
+    GameObject* field = new GameObject(new Transform(glm::vec3(0, 0, 0),
+                                                          glm::vec3(0,0,0),
+                                                          glm::vec3(1, 1, 1)));
 
-    float mapAlpha = CONFIG_PLAYFIELD_ALPHA;
+    Mesh* fieldMesh = new Mesh(ModelManager::getModel("../resource/models/map_ground.obj"));
+    field->AddComponent(fieldMesh);
 
-    //building map
-    createMapObject("../resource/models/map_ground.obj", {0.0f, 1, 0, mapAlpha});
-    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1, mapAlpha});
-    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f, mapAlpha});
-    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f, 1.0f});
+    GameObject* bridge = new GameObject(new Transform(glm::vec3(0, 0, 0),
+                                                     glm::vec3(0,0,0),
+                                                     glm::vec3(1, 1, 1)));
 
-    SceneManager::LoadScene(*scene);
+    Mesh* bridgeRender = new Mesh(ModelManager::getModel("../resource/models/map_bridges.obj"));
+    bridge->AddComponent(bridgeRender);
+
+//    //Setting colour
+    fieldMesh->SetColor({0.474, 0.643, 0.376, 1.0f});
+    bridgeRender->SetColor({1.0f, 0.392f, 0.3137f, 1.0f});
+//    //building map
+//    createMapObject("../resource/models/map_ground.obj", {0.0f, 0, 0});
+//    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1});
+//    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f});
+//    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f});
+
+//    Scene::getSingleton().AddGameObject(aiPrefab);
+    Scene::getSingleton().AddGameObject(towerPrefab);
+    Scene::getSingleton().AddGameObject(towerPrefab1);
+    Scene::getSingleton().AddGameObject(field);
+    Scene::getSingleton().AddGameObject(bridge);
+//    Scene::getSingleton().AddGameObject(towerPrefab1);
+//    Scene::getSingleton().AddGameObject(field);
+//    Scene::getSingleton().AddGameObject(bridge);
+
+    auto *spawnManager = new GameObject(new Transform());
+    auto *spawner = new Spawner();
+    spawnManager->AddComponent(spawner);
+    Scene::getSingleton().AddGameObject(spawnManager);
+
+    SceneManager::LoadScene(Scene::getSingleton());
 }
 
 void update()
 {
     if (capture->isOpened())
-        openCvComponent->Update();
+        imageProvider->Update();
 
-    scene->update();
+    Scene::getSingleton().update();
     GameTimer::update(glfwGetTime());
 
     std::cout << "Frametime: " << GameTimer::getDeltaTime() * 1000 << "ms;"
@@ -202,7 +229,7 @@ void draw()
         tigl::shader->enableColorMult(false);
 
         // Draw Background
-        openCvComponent->Draw();
+        imageProvider->Draw();
     }
 
     // Prepare for 3D Scene
@@ -217,27 +244,22 @@ void draw()
             glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH,
                              0.1f, 200.0f));
     cs::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0, 0.5f, 2.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+            glm::lookAt(glm::vec3(0, 60, 0.01f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     // Draw 3D Scene
-    SceneManager::UpdatePoll(*scene);
+    SceneManager::UpdatePoll(Scene::getSingleton());
 }
 
 void createMapObject(const std::string &filePath, glm::vec4 color)
 {
-    auto *map_object = new GameObject();
+    auto* map_object = new GameObject(new Transform(CONFIG_PLAYFIELD_POSITION, CONFIG_PLAYFIELD_ROTATION, CONFIG_PLAYFIELD_SCALE));
 
     map_object->AddComponent(new Mesh(ModelManager::getModel(filePath)));
-
-    map_object->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
-    map_object->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
-    map_object->transform.setScale(CONFIG_PLAYFIELD_SCALE);
-
     auto mesh_map_object = map_object->FindComponent<Mesh>();
     if (mesh_map_object)
     {
         mesh_map_object->SetColor(color);
     }
 
-    scene->AddGameObject(map_object);
+    Scene::getSingleton().AddGameObject(map_object);
 }

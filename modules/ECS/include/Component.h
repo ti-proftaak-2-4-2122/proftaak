@@ -13,11 +13,15 @@ class Component
 protected:
     GameObject *gameObject = nullptr;
 public:
+
+    GameObject* getGameObject();
     virtual void Awake() {};
 
     virtual void Update() {};
 
     virtual void Draw() {};
+
+    virtual void UpdateAfterDraw() {};
 
     Component();
 
