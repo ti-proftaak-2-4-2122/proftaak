@@ -3,6 +3,8 @@
 //
 #pragma once
 
+//SOURCE: https://flatuicolors.com/palette/nl 
+
 #define YELLOW_SUNFLOWER glm::vec3(1, 0.764f, 0.070f);
 #define YELLOW_RADAINT glm::vec3(0.968f, 0.623f, 0.121f);
 #define ORANGE_PUFFINS glm::vec3(0.933f, 0.352f, 0.141f);
