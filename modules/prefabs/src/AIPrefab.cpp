@@ -130,24 +130,35 @@ void AIPrefab::InitStats(UnitTypeEnum type)
 
 void AIPrefab::InitCheckpoints()
 {
-    if(this->transform.getPosition().x < 0 && this->transform.getPosition().z < 0)
+    glm::vec3 pos = this->transform.getPosition();
+
+    if(pos.x < 0 && pos.z < 0)
     {
-        for(int i = 0; i < this->checkPoints.size(); i++)
-        {
-            this->checkPoints[i].z *= -1;
-        }
+        //links boven
+        this->checkPoints.push_back(this->predefinedPositions[TOP_LEFT_BRIDGE]);
+        this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_RIGHT]);
+        this->checkPoints.push_back(this->predefinedPositions[TOWER_BOTTOM_RIGHT]);
     }
-    else if(this->transform.getPosition().x < 0 && this->transform.getPosition().z > 0)
+    else if(pos.x < 0 && pos.z > 0)
     {
         // links onder spawnen
+        this->checkPoints.push_back(this->predefinedPositions[BOTTOM_LEFT_BRIDGE]);
+        this->checkPoints.push_back(this->predefinedPositions[TOWER_BOTTOM_RIGHT]);
+        this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_RIGHT]);
     }
-    else if(this->transform.getPosition().x > 0 && this->transform.getPosition().z < 0)
+    else if(pos.x > 0 && pos.z < 0)
     {
         //Rechts boven
+        this->checkPoints.push_back(this->predefinedPositions[TOP_RIGHT_BRIDGE]);
+        this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_LEFT]);
+        this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_LEFT]);
     }
-    else if(this->transform.getPosition().x > 0 && this->transform.getPosition().z > 0)
+    else if(pos.x > 0 && pos.z > 0)
     {
-        //Rechts boven
+        //Rechts onder
+        this->checkPoints.push_back(this->predefinedPositions[BOTTOM_RIGHT_BRIDGE]);
+        this->checkPoints.push_back(this->predefinedPositions[TOWER_BOTTOM_LEFT]);
+        this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_RIGHT]);
     }
 }
 
