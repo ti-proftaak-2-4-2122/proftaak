@@ -12,9 +12,8 @@
 #define ATLAS_WIDTH 10
 #define ATLAS_HEIGHT 10
 
-StrGuiComponent::StrGuiComponent(
-        const glm::vec3 &position, const glm::vec3 &scale,
-        const std::string &textString) : GuiComponent(position,
+StrGuiComponent::StrGuiComponent(const std::string &textString,
+        const glm::vec3 &position, const glm::vec3 &scale) : GuiComponent(position,
                                                       scale)
 {
     text = textString;

@@ -138,14 +138,12 @@ void worldInit()
     collisionTest1->AddComponent(collider1);
 
     GUIgameobject = new GameObject;
-    auto& gui = GUIgameobject->AddComponent<Gui>();
-    auto guiComponent = new StrGuiComponent(glm::vec3(0.0f, 0.0f, 0.0f),
-                                            glm::vec3(1.0f, 1.0f, 1.0f),
-                                            "bada bing badaboem");
+    auto &gui = GUIgameobject->AddComponent<Gui>();
+    auto guiComponent = new StrGuiComponent("bada bing badaboem", glm::vec3(0.0f, 0.0f, 0.0f),
+                                            glm::vec3(1.0f, 1.0f, 1.0f));
 
-    auto guiComponent2 = new StrGuiComponent(glm::vec3(-0.5f, 0.5f, 0.0f),
-                                            glm::vec3(2.0f, 2.0f, 2.0f),
-                                            "jaja het werkt");
+    auto guiComponent2 = new StrGuiComponent("jaja het werkt", glm::vec3(-0.5f, 0.5f, 0.0f),
+                                             glm::vec3(2.0f, 2.0f, 2.0f));
 
 
     gui.AddGuiComponent(guiComponent);
