@@ -168,6 +168,9 @@ void update()
 
     scene->update();
     GameTimer::update(glfwGetTime());
+
+    std::cout << "Frametime: " << GameTimer::getDeltaTime() * 1000 << "ms;"
+          "\tFPS: " << 1 / GameTimer::getDeltaTime() << std::endl;
 }
 
 void draw()
