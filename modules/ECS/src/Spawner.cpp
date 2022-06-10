@@ -80,7 +80,7 @@ void Spawner::UpdateAfterDraw()
             glm::ivec4 viewport;
             glGetIntegerv(GL_VIEWPORT, glm::value_ptr(viewport));
             glm::vec3 Projected = glm::project(glPos, model, projection,viewport);
-            auto *AIcharacter = new AIPrefab(new Transform(glPos), type, false);
+            auto *AIcharacter = new AIPrefab(new Transform(glPos), type);
 
             Scene::getSingleton().AddGameObject(AIcharacter);
         }

@@ -9,8 +9,7 @@
 
 #include <iostream>
 
-AIPrefab::AIPrefab(Transform *transform, UnitTypeEnum type, bool hasSpawnedTop) : GameObject(transform),
-hasSpawnedTop(hasSpawnedTop)
+AIPrefab::AIPrefab(Transform *transform, UnitTypeEnum type) : GameObject(transform)
 {
     this->lerpController = new LerpController();
     AddComponent(lerpController);
@@ -57,13 +56,19 @@ void AIPrefab::onTriggerExit(Collider *other)
 void AIPrefab::Update()
 {
     GameObject::Update();
-    if(lerpController->CheckPos(this->transform.getPosition(), checkPoints[0])) {
-        lerpController->Move(this->transform.getPosition(), checkPoints[1],
-                             characterStats->moveSpeed);
+    if(IsAttacking) DoDamage();
+    if(wayPointIndex >= checkPoints.size()) {
+        lerpController->Move(this->transform.getPosition(), this->transform.getPosition(), characterStats->moveSpeed);
+        return;
     }
-    if (!IsAttacking) return;
-    else DoDamage();
+    //std::cout << "waypoint " << wayPointIndex << '\n';
+    if(lerpController->CheckPos(this->transform.getPosition(), checkPoints[wayPointIndex])) {
 
+        wayPointIndex++;
+        std::cout << "waypointindex: " << wayPointIndex << " to point: " << checkPoints[wayPointIndex].x << "," << checkPoints[wayPointIndex].z <<
+        std::endl;
+        lerpController->Move(this->transform.getPosition(), checkPoints[wayPointIndex], characterStats->moveSpeed);
+    }
 }
 
 void AIPrefab::StartCombat(CharacterStats *otherStats)
@@ -114,16 +119,16 @@ void AIPrefab::InitStats(UnitTypeEnum type)
     switch (type)
     {
         case FAST:
-            this->characterStats = new CharacterStats {4.0f, 100.0f, 5.0f, 3.0f, 3.0f, LAND};
+            this->characterStats = new CharacterStats {2.0f, 100.0f, 5.0f, 3.0f, 3.0f, LAND};
             break;
         case SLOW:
-            this->characterStats = new CharacterStats {4.0f, 100.0f, 10.0f, 1.0f, 1.0f, LAND};
+            this->characterStats = new CharacterStats {2.0f, 100.0f, 10.0f, 1.0f, 1.0f, LAND};
             break;
         case LAND:
-            this->characterStats = new CharacterStats {4.0f, 100.0f, 10.0f, 1.0f, 1.0f, LAND};
+            this->characterStats = new CharacterStats {2.0f, 100.0f, 10.0f, 1.0f, 1.0f, LAND};
             break;
         default:
-            this->characterStats = new CharacterStats {4.0f, 100.0f, 10.0f, 1.0f, 1.0f, LAND};
+            this->characterStats = new CharacterStats {2.0f, 100.0f, 10.0f, 1.0f, 1.0f, LAND};
             break;
     }
 }
@@ -151,14 +156,14 @@ void AIPrefab::InitCheckpoints()
         //Rechts boven
         this->checkPoints.push_back(this->predefinedPositions[TOP_RIGHT_BRIDGE]);
         this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_LEFT]);
-        this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_LEFT]);
+        this->checkPoints.push_back(this->predefinedPositions[TOWER_BOTTOM_LEFT]);
     }
     else if(pos.x > 0 && pos.z > 0)
     {
         //Rechts onder
         this->checkPoints.push_back(this->predefinedPositions[BOTTOM_RIGHT_BRIDGE]);
         this->checkPoints.push_back(this->predefinedPositions[TOWER_BOTTOM_LEFT]);
-        this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_RIGHT]);
+        this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_LEFT]);
     }
 }
 

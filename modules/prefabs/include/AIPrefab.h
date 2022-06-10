@@ -30,19 +30,20 @@ private:
 
     bool IsTowerDestroyed = false;
     float currentTime;
+    int wayPointIndex = 0;
     LerpController* lerpController;
     Collider* collider;
     CharacterStats* characterStats;
     CharacterStats* otherStats;
     std::vector<glm::vec3> checkPoints {};
 
-    std::map<AI_POSITION, glm::vec3> predefinedPositions {{TOP_LEFT_BRIDGE,     glm::vec3(9.0f, 0.0f, -12.0f)},
-                                                  {        BOTTOM_LEFT_BRIDGE,  glm::vec3(9.0f, 0.0f, 12.0f)},
-                                                  {        TOP_RIGHT_BRIDGE,    glm::vec3(-9.0f, 0.0f, -12.0f)},
-                                                  {        BOTTOM_RIGHT_BRIDGE, glm::vec3(-9.0f, 0.0f, 12.0f)},
+    std::map<AI_POSITION, glm::vec3> predefinedPositions {{TOP_LEFT_BRIDGE,     glm::vec3(-9.0f, 0.0f, -12.0f)},
+                                                  {        BOTTOM_LEFT_BRIDGE,  glm::vec3(-9.0f, 0.0f, 12.0f)},
+                                                  {        TOP_RIGHT_BRIDGE,    glm::vec3(9.0f, 0.0f, -12.0f)},
+                                                  {        BOTTOM_RIGHT_BRIDGE, glm::vec3(9.0f, 0.0f, 12.0f)},
                                                   {        TOWER_TOP_LEFT,      glm::vec3(-25.0f, 0.0f, -12.0f)},
-                                                  {        TOWER_BOTTOM_LEFT,   glm::vec3(-25.0f, 0.0f, -12.0f)},
-                                                  {        TOWER_TOP_RIGHT,     glm::vec3(25.0f, 0.0f, 12.0f)},
+                                                  {        TOWER_BOTTOM_LEFT,   glm::vec3(-25.0f, 0.0f, 12.0f)},
+                                                  {        TOWER_TOP_RIGHT,     glm::vec3(25.0f, 0.0f, -12.0f)},
                                                   {        TOWER_BOTTOM_RIGHT,  glm::vec3(25.0f, 0.0f, 12.0f)}};
 
     void StartCombat(CharacterStats* otherStats);
@@ -57,9 +58,8 @@ public:
     //Combat logic
     bool IsAttacking = false;
     bool hasFought = false;
-    bool hasSpawnedTop = true;
 
-    AIPrefab(Transform* transform, UnitTypeEnum type, bool hasSpawnedTop);
+    AIPrefab(Transform* transform, UnitTypeEnum type);
 
     void onTriggerEnter(Collider* other) override;
     void onTriggerExit(Collider* other) override;
