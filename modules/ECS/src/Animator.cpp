@@ -11,7 +11,9 @@
 #include "ModelManager.h"
 
 namespace fs = std::filesystem;
-Animator::Animator(std::string folderName, Mesh& mesh) : mesh(mesh) {
+Animator::Animator(std::string folderName, Mesh& mesh, int fps) : mesh(mesh) {
+    speedBetweenFrames = 1.0f/fps;
+
     for (const auto & entry : fs::directory_iterator(folderName))
         frames.push_back(ModelManager::getModel(entry.path().string()));
 }
@@ -30,8 +32,14 @@ void Animator::StopAnimation()
 void Animator::Update()
 {
     Component::Update();
-    NextFrame();
-    mesh.SetMesh(frames[index]);
+
+    currentTime += GameTimer::getDeltaTime();
+
+    if(currentTime >= speedBetweenFrames) {
+        currentTime = 0;
+        NextFrame();
+        mesh.SetMesh(frames[index]);
+    }
 }
 
 void Animator::NextFrame() {

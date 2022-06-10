@@ -131,7 +131,7 @@ void worldInit()
 {
     Mesh* mesh = new Mesh(ModelManager::getModel("../resource/models/animation/animation_000001.obj"));
 
-    Animator* animator = new Animator("../resource/models/animation/",*mesh);
+    Animator* animator = new Animator("../resource/models/animation/",*mesh, 24);
 
     GameObject* test = new GameObject(new Transform());
     test->AddComponent(mesh);
