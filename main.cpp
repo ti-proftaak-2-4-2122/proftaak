@@ -65,7 +65,7 @@ int main()
         return -1;
     }
 
-//    tigl::init();
+    tigl::init();
     cs::init();
 
     init();
@@ -107,23 +107,28 @@ void init()
 
 
     //setting up lights and render stuff
-//    tigl::shader->enableColor(false);
-//    tigl::shader->enableTexture(true);
-//    tigl::shader->enableLighting(true);
-//
-//    tigl::shader->setLightCount(2);
-//    tigl::shader->setShinyness(32.0f);
-//
-//    tigl::shader->setLightDirectional(0, false);
-//    tigl::shader->setLightAmbient(0, glm::vec3(0.5f, 0.5f, 0.5f));
-//    tigl::shader->setLightPosition(0, glm::vec3(10, 10, 10));
-//    tigl::shader->setLightDiffuse(0, glm::vec3(0.8f, 0.8f, 0.8f));
-//    tigl::shader->setLightSpecular(0, glm::vec3(0, 0, 0));
-//
-//    tigl::shader->setLightDirectional(1, false);
-//    tigl::shader->setLightAmbient(1, glm::vec3(0.1f, 0.1f, 0.15f));
-//    tigl::shader->setLightDiffuse(1, glm::vec3(0.8f, 0.8f, 0.8f));
-//    tigl::shader->setLightPosition(1, glm::vec3(2.0f, 0.0f, 2.0f));
+    tigl::shader->use();
+
+    tigl::shader->enableColor(false);
+    tigl::shader->enableTexture(true);
+    tigl::shader->enableLighting(true);
+
+    tigl::shader->setLightCount(2);
+    tigl::shader->setShinyness(32.0f);
+
+    tigl::shader->setLightDirectional(0, false);
+    tigl::shader->setLightAmbient(0, glm::vec3(0.5f, 0.5f, 0.5f));
+    tigl::shader->setLightPosition(0, glm::vec3(10, 10, 10));
+    tigl::shader->setLightDiffuse(0, glm::vec3(0.8f, 0.8f, 0.8f));
+    tigl::shader->setLightSpecular(0, glm::vec3(0, 0, 0));
+
+    tigl::shader->setLightDirectional(1, false);
+    tigl::shader->setLightAmbient(1, glm::vec3(0.1f, 0.1f, 0.15f));
+    tigl::shader->setLightDiffuse(1, glm::vec3(0.8f, 0.8f, 0.8f));
+    tigl::shader->setLightPosition(1, glm::vec3(2.0f, 0.0f, 2.0f));
+
+    // Init Cel Shader
+    cs::shader->use();
 
     cs::shader->enableColor(false);
     cs::shader->enableColorMult(true);
@@ -179,47 +184,36 @@ void draw()
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-//    if (capture->isOpened())
-//    {
-//        // Prepare for background
-//        glDisable(GL_DEPTH_TEST);
-//        glDisable(GL_BLEND);
-//
-//        tigl::shader->use();
-//
-//        tigl::shader->enableLighting(false);
-//        tigl::shader->enableTexture(true);
-//        tigl::shader->enableColor(false);
-//        tigl::shader->enableColorMult(false);
-//
-//        // Draw Background
-//        openCvComponent->Draw();
-//    }
+    if (capture->isOpened())
+    {
+        // Prepare for background
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_BLEND);
+
+        tigl::shader->use();
+
+        tigl::shader->enableLighting(false);
+        tigl::shader->enableTexture(true);
+        tigl::shader->enableColor(false);
+        tigl::shader->enableColorMult(false);
+
+        // Draw Background
+        openCvComponent->Draw();
+    }
 
     // Prepare for 3D Scene
     glEnable(GL_DEPTH_TEST);
-//    glEnable(GL_BLEND);
-//
-//    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
 
-//    tigl::shader->enableLighting(true);
-//    tigl::shader->enableTexture(CONFIG_LIGHT_ENABLE_RTX);
-//
-//    tigl::shader->setProjectionMatrix(
-//            glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH,
-//                             0.1f, 200.0f));
-//    tigl::shader->setViewMatrix(
-//            glm::lookAt(glm::vec3(0, 0.5f, 2.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
+    cs::shader->use();
 
     cs::shader->setProjectionMatrix(
             glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH,
                              0.1f, 200.0f));
     cs::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 0.5f, 2.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
-
-    glad_glEnable(GL_DEPTH_TEST);
-
-    cs::shader->use();
 
     // Draw 3D Scene
     SceneManager::UpdatePoll(*scene);
