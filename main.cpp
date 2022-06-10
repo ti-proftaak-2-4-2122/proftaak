@@ -239,6 +239,8 @@ void draw()
     // Draw 3D Scene
     SceneManager::UpdatePoll(*scene);
 
+    tigl::shader->use();
+
     GUIgameobject->Draw();
 }
 
