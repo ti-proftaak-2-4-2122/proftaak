@@ -18,6 +18,8 @@ uniform bool useColor = false;
 uniform bool useColorMult = false;
 uniform vec4 colorMult = vec4(1.0);
 
+uniform bool useAlphaTest = false;
+
 void main()
 {
     vec4 color_out = vec4(1.0);
@@ -46,6 +48,9 @@ void main()
     else {
         intensity = 0.5;
     }
+
+    if(useAlphaTest && color_out.a < 0.01)
+        discard;
 
     gl_FragColor = color_out * intensity;
 }

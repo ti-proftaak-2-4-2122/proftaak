@@ -57,6 +57,7 @@ namespace cs {
                 useColor,
                 useColorMult,
                 colorMult,
+                useAlphaTest,
 
                 UniformMax
             };
@@ -77,6 +78,8 @@ namespace cs {
             void enableColor(bool enable);
             void enableColorMult(bool enable);
             void setColorMult(const glm::vec4& color);
+
+            void enableAlphaTest(bool enable);
 
         private:
             void loadShader();

@@ -132,6 +132,7 @@ void init()
 
     cs::shader->enableColor(false);
     cs::shader->enableColorMult(true);
+    cs::shader->enableAlphaTest(true);
 
     cs::shader->setLightPosition(CONFIG_LIGHT_POSITION);
 }

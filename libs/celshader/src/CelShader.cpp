@@ -78,6 +78,11 @@ namespace cs {
             this->setUniform(Uniform::colorMult, color);
         }
 
+        void CelShader::enableAlphaTest(bool enable)
+        {
+            this->setUniform(Uniform::useAlphaTest, enable);
+        }
+
         void CelShader::loadShader() {
             GLuint vertexShaderId;
             GLuint fragmentShaderId;
@@ -169,6 +174,11 @@ namespace cs {
             this->uniforms[Uniform::colorMult] = glGetUniformLocation(
                     this->celShaderProgram,
                     "colorMult"
+            );
+
+            this->uniforms[Uniform::useAlphaTest] = glGetUniformLocation(
+                    this->celShaderProgram,
+                    "useAlphaTest"
             );
         }
 
