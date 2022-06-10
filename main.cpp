@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include <tigl.h>
+#include <cs/CelShader.h>
 #include <opencv2/highgui.hpp>
 #include <memory>
 
@@ -36,7 +37,7 @@ void draw();
 
 void worldInit();
 
-void createMapObject(const std::string &filePath, glm::vec3 diffuseColor, float alpha);
+void createMapObject(const std::string &filePath, glm::vec4 color);
 
 Scene *scene;
 
@@ -65,6 +66,8 @@ int main()
     }
 
     tigl::init();
+    cs::init();
+
     init();
     worldInit();
 
@@ -103,7 +106,9 @@ void init()
     glfwSetTime(0);
 
 
-    //setting up lights and render stuff
+    // Init tigl shader
+    tigl::shader->use();
+
     tigl::shader->enableColor(false);
     tigl::shader->enableTexture(true);
     tigl::shader->enableLighting(true);
@@ -121,6 +126,15 @@ void init()
     tigl::shader->setLightAmbient(1, glm::vec3(0.1f, 0.1f, 0.15f));
     tigl::shader->setLightDiffuse(1, glm::vec3(0.8f, 0.8f, 0.8f));
     tigl::shader->setLightPosition(1, glm::vec3(2.0f, 0.0f, 2.0f));
+
+    // Init Cel Shader
+    cs::shader->use();
+
+    cs::shader->enableColor(false);
+    cs::shader->enableColorMult(true);
+    cs::shader->enableAlphaTest(true);
+
+    cs::shader->setLightPosition(CONFIG_LIGHT_POSITION);
 }
 
 void worldInit()
@@ -140,10 +154,10 @@ void worldInit()
     float mapAlpha = CONFIG_PLAYFIELD_ALPHA;
 
     //building map
-    createMapObject("../resource/models/map_ground.obj", {0.0f, 1, 0}, mapAlpha);
-    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1}, mapAlpha);
-    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f}, mapAlpha);
-    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f}, 1.0f);
+    createMapObject("../resource/models/map_ground.obj", {0.0f, 1, 0, mapAlpha});
+    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1, mapAlpha});
+    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f, mapAlpha});
+    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f, 1.0f});
 
     SceneManager::LoadScene(*scene);
 }
@@ -155,6 +169,9 @@ void update()
 
     scene->update();
     GameTimer::update(glfwGetTime());
+
+    std::cout << "Frametime: " << GameTimer::getDeltaTime() * 1000 << "ms;"
+          "\tFPS: " << 1 / GameTimer::getDeltaTime() << std::endl;
 }
 
 void draw()
@@ -177,6 +194,8 @@ void draw()
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_BLEND);
 
+        tigl::shader->use();
+
         tigl::shader->enableLighting(false);
         tigl::shader->enableTexture(true);
         tigl::shader->enableColor(false);
@@ -192,34 +211,33 @@ void draw()
 
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
-    tigl::shader->enableLighting(true);
-    tigl::shader->enableTexture(CONFIG_LIGHT_ENABLE_RTX);
+    cs::shader->use();
 
-    tigl::shader->setProjectionMatrix(
+    cs::shader->setProjectionMatrix(
             glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH,
                              0.1f, 200.0f));
-    tigl::shader->setViewMatrix(
+    cs::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 0.5f, 2.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
-
-    glad_glEnable(GL_DEPTH_TEST);
 
     // Draw 3D Scene
     SceneManager::UpdatePoll(*scene);
 }
 
-void createMapObject(const std::string &filePath, glm::vec3 diffuseColor, float alpha)
+void createMapObject(const std::string &filePath, glm::vec4 color)
 {
     auto *map_object = new GameObject();
+
     map_object->AddComponent(new Mesh(ModelManager::getModel(filePath)));
+
     map_object->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
     map_object->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
     map_object->transform.setScale(CONFIG_PLAYFIELD_SCALE);
+
     auto mesh_map_object = map_object->FindComponent<Mesh>();
     if (mesh_map_object)
     {
-        //mesh_map_ground->SetColor({200,200,200,255});
-        mesh_map_object->SetDiffuseColor(diffuseColor);
-        mesh_map_object->SetAlpha(alpha);
+        mesh_map_object->SetColor(color);
     }
+
     scene->AddGameObject(map_object);
 }

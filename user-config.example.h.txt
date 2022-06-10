@@ -14,6 +14,8 @@
 
 #define CONFIG_PLAYFIELD_ALPHA 0.7f
 
+#define CONFIG_LIGHT_POSITION glm::vec3(0.0f, 20.0f, 5.0f)
+
 // Turns lightning based on camera brightness.
 // If the scene flickers, turn this option off
 #define CONFIG_LIGHT_ENABLE_RTX false
