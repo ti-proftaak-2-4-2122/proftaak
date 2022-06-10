@@ -140,10 +140,13 @@ void worldInit()
 
     GUIgameobject = new Gui();
 
-    auto guiComponent = new StrGuiComponent("bada bing badaboem", glm::vec3(0.0f, 0.5f, 0));
+    auto guiComponent0 = new StrGuiComponent("bada bing badaboem", glm::vec3(0.0f, 0.5f, 0));
+    auto guiComponent1 = new StrGuiComponent("wat zie ik daar", glm::vec3(0.0f, -0.5f, 0),
+                                             glm::vec3(2.0,2.0f,2.0f));
     auto guiComponent2 = new StrGuiComponent("jaja het werkt");
 
-    GUIgameobject->AddComponent(guiComponent);
+    GUIgameobject->AddComponent(guiComponent0);
+    GUIgameobject->AddComponent(guiComponent1);
     GUIgameobject->AddComponent(guiComponent2);
 
     scene->AddGameObject(collisionTest);
