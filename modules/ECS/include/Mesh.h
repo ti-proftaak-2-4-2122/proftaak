@@ -31,6 +31,7 @@ public:
     explicit Mesh(ObjModel *_objmodel);
     void SetColor(const glm::vec4& color);
     void SetDiffuseColor(const glm::vec3& color);
+    void SetMesh(ObjModel* model);
 
     void Awake() override;
     void Draw() override;

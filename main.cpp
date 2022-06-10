@@ -5,6 +5,7 @@
 #include <tigl.h>
 #include <opencv2/highgui.hpp>
 #include <memory>
+#include <vector>
 
 #include "Mesh.h"
 #include "ModelManager.h"
@@ -22,6 +23,7 @@
 #include "AIPrefab.h"
 #include "TowerPrefab.h"
 #include "UnitTypeEnum.h"
+#include "Animator.h"
 
 //aspect ratio should always be 4:3 when using realsense camera
 #define WINDOW_WIDTH 1440
@@ -127,29 +129,39 @@ void init()
 
 void worldInit()
 {
-    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(-15.0f, 0.0f, -12.0f), glm::vec3(0, 0, 0),
-                                         glm::vec3(1.0f,1.0f,1.0f)), FAST, false);
+    Mesh* mesh = new Mesh(ModelManager::getModel("../resource/models/animation/animation_000001.obj"));
 
-    TowerPrefab* towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
-    TowerPrefab* towerPrefab1 = new TowerPrefab(new Transform(glm::vec3(50.0f, 0.0f, 0.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+    Animator* animator = new Animator("../resource/models/animation/",*mesh);
 
-    GameObject* field = new GameObject(new Transform(glm::vec3(0, 0, 0),
-                                                          glm::vec3(0,0,0),
-                                                          glm::vec3(1, 1, 1)));
+    GameObject* test = new GameObject(new Transform());
+    test->AddComponent(mesh);
+    test->AddComponent(animator);
+    Scene::getSingleton().AddGameObject(test);
 
-    Mesh* fieldMesh = new Mesh(ModelManager::getModel("../resource/models/map_ground.obj"));
-    field->AddComponent(fieldMesh);
-
-    GameObject* bridge = new GameObject(new Transform(glm::vec3(0, 0, 0),
-                                                     glm::vec3(0,0,0),
-                                                     glm::vec3(1, 1, 1)));
-
-    Mesh* bridgeRender = new Mesh(ModelManager::getModel("../resource/models/map_bridges.obj"));
-    bridge->AddComponent(bridgeRender);
-
-//    //Setting colour
-    fieldMesh->SetDiffuseColor({0.474, 0.643, 0.376});
-    bridgeRender->SetDiffuseColor({1.0f, 0.392f, 0.3137f});
+    animator->StartAnimation();
+//    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(-15.0f, 0.0f, -12.0f), glm::vec3(0, 0, 0),
+//                                         glm::vec3(1.0f,1.0f,1.0f)), FAST, false);
+//
+//    TowerPrefab* towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+//    TowerPrefab* towerPrefab1 = new TowerPrefab(new Transform(glm::vec3(50.0f, 0.0f, 0.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+//
+//    GameObject* field = new GameObject(new Transform(glm::vec3(0, 0, 0),
+//                                                          glm::vec3(0,0,0),
+//                                                          glm::vec3(1, 1, 1)));
+//
+//    Mesh* fieldMesh = new Mesh(ModelManager::getModel("../resource/models/map_ground.obj"));
+//    field->AddComponent(fieldMesh);
+//
+//    GameObject* bridge = new GameObject(new Transform(glm::vec3(0, 0, 0),
+//                                                     glm::vec3(0,0,0),
+//                                                     glm::vec3(1, 1, 1)));
+//
+//    Mesh* bridgeRender = new Mesh(ModelManager::getModel("../resource/models/map_bridges.obj"));
+//    bridge->AddComponent(bridgeRender);
+//
+////    //Setting colour
+//    fieldMesh->SetDiffuseColor({0.474, 0.643, 0.376});
+//    bridgeRender->SetDiffuseColor({1.0f, 0.392f, 0.3137f});
 //    //building map
 //    createMapObject("../resource/models/map_ground.obj", {0.0f, 0, 0});
 //    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1});
@@ -157,10 +169,10 @@ void worldInit()
 //    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f});
 
 //    Scene::getSingleton().AddGameObject(aiPrefab);
-    Scene::getSingleton().AddGameObject(towerPrefab);
-    Scene::getSingleton().AddGameObject(towerPrefab1);
-    Scene::getSingleton().AddGameObject(field);
-    Scene::getSingleton().AddGameObject(bridge);
+//    Scene::getSingleton().AddGameObject(towerPrefab);
+//    Scene::getSingleton().AddGameObject(towerPrefab1);
+//    Scene::getSingleton().AddGameObject(field);
+//    Scene::getSingleton().AddGameObject(bridge);
 //    Scene::getSingleton().AddGameObject(towerPrefab1);
 //    Scene::getSingleton().AddGameObject(field);
 //    Scene::getSingleton().AddGameObject(bridge);
@@ -196,17 +208,17 @@ void draw()
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if (capture->isOpened())
-    {
-        // Prepare for background
-        glDisable(GL_DEPTH_TEST);
-
-        tigl::shader->enableLighting(false);
-        tigl::shader->enableTexture(true);
-
-        // Draw Background
-        imageProvider->Draw();
-    }
+//    if (capture->isOpened())
+//    {
+//        // Prepare for background
+//        glDisable(GL_DEPTH_TEST);
+//
+//        tigl::shader->enableLighting(false);
+//        tigl::shader->enableTexture(true);
+//
+//        // Draw Background
+//        imageProvider->Draw();
+//    }
 
     // Prepare for 3D Scene
     glEnable(GL_DEPTH_TEST);
@@ -218,7 +230,7 @@ void draw()
                              0.1f, 200.0f));
 
     tigl::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0, 60, 0.01f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+            glm::lookAt(glm::vec3(0.0f, 1, 2.5f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     glad_glEnable(GL_DEPTH_TEST);
 
