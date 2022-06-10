@@ -55,6 +55,7 @@ void Spawner::UpdateAfterDraw()
         if(GetKeyState(VK_SPACE) & 0x8000){
             std::cout << "YO IMMA SPAWN EM";
             glm::vec3 glPos = ConvertCords(card);
+
             std::cout << "Pos: " << glPos.x << "," << glPos.y << "," << glPos.z << ".\n";
 
             UnitTypeEnum type;
@@ -73,6 +74,12 @@ void Spawner::UpdateAfterDraw()
             }
 
             std::cout << ToString(type) << std::endl;
+            glm::mat4 model = glm::lookAt(glm::vec3(0, 15.0f, 5.0f), glm::vec3(0, 0, 0), glm::vec3(0,1,0)); //viewmatrix
+            glm::mat4 projection = glm::perspective(glm::radians(90.0f), (float) 1440 /
+                                                                         (float) 1080, 0.1f, 200.0f);
+            glm::ivec4 viewport;
+            glGetIntegerv(GL_VIEWPORT, glm::value_ptr(viewport));
+            glm::vec3 Projected = glm::project(glPos, model, projection,viewport);
             auto *AIcharacter = new AIPrefab(new Transform(glPos), type);
 
             Scene::getSingleton().AddGameObject(AIcharacter);
@@ -110,7 +117,7 @@ glm::vec3 Spawner::ConvertCords(CardDetector::Card card)
 
     glm::vec3 glPos = glm::unProject(cvPos, model, projection, viewport);
 
-    glPos = {glPos.x*1.0f, glPos.y*0.0f + 1.0f, glPos.z*1.0f};
+    glPos = {glPos.x*1.0f, glPos.y*0.0f, glPos.z*1.0f};
 
     return glPos;
 }
