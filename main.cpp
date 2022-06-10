@@ -17,6 +17,7 @@
 
 #include "user-config.h"
 #include "gui/Gui.h"
+#include "gui/StrGuiComponent.h"
 
 //aspect ratio should always be 4:3 when using realsense camera
 #define WINDOW_WIDTH 1440
@@ -43,6 +44,8 @@ Scene *scene;
 
 int currentWidth;
 int currentHeight;
+
+GameObject *GUIgameobject;
 
 //VirtualCamera* virtualCamera;
 int main()
@@ -134,10 +137,20 @@ void worldInit()
     auto *collider1 = new Collider(1.0f, glm::vec3(1.0f, 0, 0));
     collisionTest1->AddComponent(collider1);
 
-    auto guiWorld = new GameObject;
-    guiWorld->AddComponent<Gui>();
+    GUIgameobject = new GameObject;
+    auto& gui = GUIgameobject->AddComponent<Gui>();
+    auto guiComponent = new StrGuiComponent(glm::vec3(0.0f, 0.0f, 0.0f),
+                                            glm::vec3(1.0f, 1.0f, 1.0f),
+                                            "bada bing badaboem");
 
-    scene->AddGameObject(guiWorld);
+    auto guiComponent2 = new StrGuiComponent(glm::vec3(-0.5f, 0.5f, 0.0f),
+                                            glm::vec3(2.0f, 2.0f, 2.0f),
+                                            "jaja het werkt");
+
+
+    gui.AddGuiComponent(guiComponent);
+    gui.AddGuiComponent(guiComponent2);
+
     scene->AddGameObject(collisionTest);
     scene->AddGameObject(collisionTest1);
 
@@ -199,6 +212,9 @@ void draw()
 
     // Draw 3D Scene
     SceneManager::UpdatePoll(*scene);
+
+    GUIgameobject->Draw();
+
 }
 
 void createMapObject(const std::string &filePath, glm::vec3 diffuseColor)
