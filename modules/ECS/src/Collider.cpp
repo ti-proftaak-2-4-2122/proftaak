@@ -1,6 +1,9 @@
-//
-// Created by Daan van Donk on 24/05/2022.
-//
+/**
+ * @file
+ * @brief Source file for the Collider class
+ * @author Daan van Donk
+ * @date 24-05-2022
+ */
 
 #include "Collider.h"
 Collider::Collider(float radius, glm::vec3 position) : radius(radius), position(position) {

@@ -1,6 +1,9 @@
-//
-// Created by Daan van Donk on 18/05/2022.
-//
+/**
+ * @file
+ * @brief Header file for the VCamRenderSettings struct and VirtualCamera class
+ * @author Daan van Donk
+ * @date 18-05-2022
+ */
 
 #pragma once
 

@@ -1,6 +1,9 @@
-//
-// Created by doguk on 5/20/2022.
-//
+/**
+ * @file
+ * @brief Source file for the AIContext class
+ * @author doguk
+ * @date 05-05-2022
+ */
 
 #include "statemachine/AIContext.h"
 #include "statemachine/WalkState.h"
