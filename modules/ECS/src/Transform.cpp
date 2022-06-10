@@ -1,6 +1,9 @@
-//
-// Created by Ewout on 13-5-2022.
-//
+/**
+ * @file
+ * @brief Source file for the Transform class
+ * @author Ewout
+ * @date 13-05-2022
+ */
 
 #include "Transform.h"
 

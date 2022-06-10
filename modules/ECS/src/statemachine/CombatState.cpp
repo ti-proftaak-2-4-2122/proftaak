@@ -1,6 +1,12 @@
 //
 // Created by doguk on 5/24/2022.
 //
+/**
+ * @file
+ * @brief Source file for the CombatState class
+ * @author doguk
+ * @date 24-05-2022
+ */
 
 #include <iostream>
 #include "statemachine/CombatState.h"

@@ -1,6 +1,9 @@
-//
-// Created by doguk on 5/20/2022.
-//
+/**
+ * @file
+ * @brief Header file for the AIContext class
+ * @author doguk
+ * @date 20-05-2022
+ */
 #pragma once
 
 #include "Component.h"

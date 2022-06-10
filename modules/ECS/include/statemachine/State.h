@@ -1,6 +1,9 @@
-//
-// Created by doguk on 5/24/2022.
-//
+/**
+ * @file
+ * @brief Header file for the State class
+ * @author doguk
+ * @date 24-05-2022
+ */
 
 #ifndef PROFTAAK24_STATE_H
 #define PROFTAAK24_STATE_H
