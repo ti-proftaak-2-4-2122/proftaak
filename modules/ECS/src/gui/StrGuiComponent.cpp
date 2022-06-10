@@ -3,22 +3,21 @@
 //
 
 #include <string>
-#include "gui/StrGuiComponent.h"
+#include <utility>
+#include "tigl.h"
+
+
 #include "glm/vec3.hpp"
 #include "glm/ext/matrix_float4x4.hpp"
 #include "glm/ext/matrix_transform.hpp"
-#include "tigl.h"
+#include "glm/ext/matrix_clip_space.hpp"
+#include "gui/StrGuiComponent.h"
+
+#include "Transform.h"
+#include "gui/Gui.h"
 
 #define ATLAS_WIDTH 10
 #define ATLAS_HEIGHT 10
-
-StrGuiComponent::StrGuiComponent(const std::string &textString,
-        const glm::vec3 &position, const glm::vec3 &scale) : GuiComponent(position,
-                                                      scale)
-{
-    text = textString;
-}
-
 
 void StrGuiComponent::DrawChar(glm::mat4 &modelMatrix, char characteristic)
 {
@@ -43,8 +42,23 @@ void StrGuiComponent::DrawChar(glm::mat4 &modelMatrix, char characteristic)
     tigl::end();
 }
 
-void StrGuiComponent::draw()
+void StrGuiComponent::Draw()
 {
+    auto* gui = dynamic_cast<Gui*>(gameObject);
+    glDisable(GL_CULL_FACE);
+    tigl::shader->setProjectionMatrix(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 200.0f));
+    tigl::shader->setViewMatrix(glm::lookAt(
+            glm::vec3(0.0f, 0, 5),
+            glm::vec3(0.0f, 0, 0),
+            glm::vec3(0.0f, 1, 0)
+    ));
+
+
+    glBindTexture(GL_TEXTURE_2D, gui->fontTxId);
+
+    tigl::shader->enableAlphaTest(true);
+    tigl::shader->enableTexture(true);
+
     auto modelMatrix = glm::mat4(1.0f);
     modelMatrix = glm::translate(modelMatrix, position);
     modelMatrix = glm::scale(modelMatrix, glm::vec3(0.075f, 0.075f, 0.075f)*scale);
@@ -54,5 +68,16 @@ void StrGuiComponent::draw()
         DrawChar(modelMatrix, c);
     }
 
+    tigl::shader->enableAlphaTest(false);
+    tigl::shader->enableTexture(false);
 
+    glDisable(GL_BLEND);
+    glEnable(GL_CULL_FACE);
 }
+
+
+
+StrGuiComponent::StrGuiComponent(std::string text, const glm::vec3 &position, const
+glm::vec3 &scale) : text(std::move(text)),position(position), scale(scale) {}
+
+

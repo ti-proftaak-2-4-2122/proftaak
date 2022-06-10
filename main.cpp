@@ -137,17 +137,14 @@ void worldInit()
     auto *collider1 = new Collider(1.0f, glm::vec3(1.0f, 0, 0));
     collisionTest1->AddComponent(collider1);
 
-    GUIgameobject = new GameObject;
-    auto &gui = GUIgameobject->AddComponent<Gui>();
-    auto guiComponent = new StrGuiComponent("bada bing badaboem", glm::vec3(0.0f, 0.0f, 0.0f),
-                                            glm::vec3(1.0f, 1.0f, 1.0f));
 
-    auto guiComponent2 = new StrGuiComponent("jaja het werkt", glm::vec3(-0.5f, 0.5f, 0.0f),
-                                             glm::vec3(2.0f, 2.0f, 2.0f));
+    GUIgameobject = new Gui();
 
+    auto guiComponent = new StrGuiComponent("bada bing badaboem", glm::vec3(0.0f, 0.5f, 0));
+    auto guiComponent2 = new StrGuiComponent("jaja het werkt");
 
-    gui.AddGuiComponent(guiComponent);
-    gui.AddGuiComponent(guiComponent2);
+    GUIgameobject->AddComponent(guiComponent);
+    GUIgameobject->AddComponent(guiComponent2);
 
     scene->AddGameObject(collisionTest);
     scene->AddGameObject(collisionTest1);
@@ -207,12 +204,10 @@ void draw()
 
     glad_glEnable(GL_DEPTH_TEST);
 
-
     // Draw 3D Scene
     SceneManager::UpdatePoll(*scene);
 
     GUIgameobject->Draw();
-
 }
 
 void createMapObject(const std::string &filePath, glm::vec3 diffuseColor)
@@ -229,4 +224,21 @@ void createMapObject(const std::string &filePath, glm::vec3 diffuseColor)
         mesh_map_object->SetDiffuseColor(diffuseColor);
     }
     scene->AddGameObject(map_object);
+}
+
+
+void mouseButtonCallback(GLFWwindow *_window, int button, int action, int mods)
+{
+    switch (button)
+    {
+        case GLFW_MOUSE_BUTTON_LEFT:
+            if (action == GLFW_PRESS)
+            {
+                double xposition, yposition;
+                glfwGetCursorPos(window, &xposition, &yposition);
+                std::cout << xposition << "," << yposition << std::endl;
+                std::cout << "Mouse left input working" << std::endl; //testing
+                //GUIgameobject->MouseButtonPress(xposition, yposition);
+            }
+    }
 }

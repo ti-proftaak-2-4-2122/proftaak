@@ -5,25 +5,17 @@
 #pragma once
 
 #include "Component.h"
-#include "GuiComponent.h"
 #include "glad/glad.h"
 #include "glm/ext/matrix_transform.hpp"
-#include "GuiComponent.h"
+
 
 class GameObject;
 
-class Gui : public Component
+class Gui : public GameObject
 {
-private:
-    GLuint fontTxId;
-    std::vector<GuiComponent *> guiComponents;
 
 public:
-    void Draw() override;
-
-    void AddGuiComponent(GuiComponent *);
-
-    void RemoveGuiComponent(GuiComponent *);
-
     Gui();
+
+    GLuint fontTxId;
 };
