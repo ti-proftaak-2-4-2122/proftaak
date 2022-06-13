@@ -22,6 +22,7 @@
 #include "AIPrefab.h"
 #include "TowerPrefab.h"
 #include "UnitTypeEnum.h"
+#include "InputHandler.h"
 
 //aspect ratio should always be 4:3 when using realsense camera
 #define WINDOW_WIDTH 1440
@@ -85,15 +86,16 @@ int main()
 
     return 0;
 }
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    InputHandler::getSingleton().check_keys(key, action);
+}
 
 
 void init()
 {
-    glfwSetKeyCallback(window, [](GLFWwindow *window, int key, int scancode, int action, int mods)
-    {
-        if (key == GLFW_KEY_ESCAPE)
-            glfwSetWindowShouldClose(window, true);
-    });
+
+    glfwSetKeyCallback(window, key_callback);
 
     // Init OpenCV
     capture = std::make_shared<cv::VideoCapture>(CONFIG_OPENCV_CAMERA_INDEX);
@@ -125,14 +127,21 @@ void init()
     tigl::shader->setLightPosition(1, glm::vec3(2.0f, 0.0f, 2.0f));
 }
 
+void closeWindow()
+{
+    std::cout << "Closing window" << std::endl;
+    glfwSetWindowShouldClose(window, true);
+}
+
 void worldInit()
 {
-    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(-15.0f, 0.0f, -12.0f), glm::vec3(0, 0, 0),
-                                         glm::vec3(1.0f,1.0f,1.0f)), FAST);
-
+    InputHandler::getSingleton().AddCallback(GLFW_KEY_ESCAPE, GLFW_PRESS, closeWindow);
+//    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(-15.0f, 0.0f, -12.0f), glm::vec3(0, 0, 0),
+//                                         glm::vec3(1.0f,1.0f,1.0f)), FAST);
+//
     TowerPrefab* towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
-    TowerPrefab* towerPrefab1 = new TowerPrefab(new Transform(glm::vec3(50.0f, 0.0f, 0.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
-
+//    TowerPrefab* towerPrefab1 = new TowerPrefab(new Transform(glm::vec3(50.0f, 0.0f, 0.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+//
     GameObject* field = new GameObject(new Transform(glm::vec3(0, 0, 0),
                                                           glm::vec3(0,0,0),
                                                           glm::vec3(1, 1, 1)));
@@ -157,8 +166,8 @@ void worldInit()
 //    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f});
 
 //    Scene::getSingleton().AddGameObject(aiPrefab);
-    Scene::getSingleton().AddGameObject(towerPrefab);
-    Scene::getSingleton().AddGameObject(towerPrefab1);
+//    Scene::getSingleton().AddGameObject(towerPrefab);
+//    Scene::getSingleton().AddGameObject(towerPrefab1);
     Scene::getSingleton().AddGameObject(field);
     Scene::getSingleton().AddGameObject(bridge);
 //    Scene::getSingleton().AddGameObject(towerPrefab1);
@@ -167,6 +176,7 @@ void worldInit()
 
     auto *spawnManager = new GameObject(new Transform());
     auto *spawner = new Spawner();
+
     spawnManager->AddComponent(spawner);
     Scene::getSingleton().AddGameObject(spawnManager);
 
