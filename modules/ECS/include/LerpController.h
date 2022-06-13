@@ -1,6 +1,9 @@
-//
-// Created by Daan van Donk on 11/05/2022.
-//
+/**
+ * @file
+ * @brief Header file for the LerpController class
+ * @author Daan van Donk
+ * @date 11-05-2022
+ */
 
 #pragma once
 
@@ -22,8 +25,8 @@ public:
 
     bool CheckPos(glm::vec3 currentPos, glm::vec3 resultPos) const;
 private:
-    glm::vec3 slope{};
     glm::vec3 endPos;
+    glm::vec3 startPos;
+    float fraction = 0.0f;
     const float roundValue = 1.0f;
-    const float speedMult = 10.0f;
 };

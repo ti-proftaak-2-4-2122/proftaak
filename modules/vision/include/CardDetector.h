@@ -1,6 +1,9 @@
-//
-// Created by tjtle on 13/05/2022.
-//
+/**
+ * @file
+ * @brief Header file for the CardDetector class
+ * @author tjtle
+ * @date 13-05-2022
+ */
 #pragma once
 
 #include <opencv2/core.hpp>
@@ -45,7 +48,7 @@ private:
 
     const std::vector<ColorFilter> colours = {yellow, red, green};
 
-    std::vector<Card> cards;
+    std::vector<Card*> cards;
 
     void Initialize();
 
@@ -78,7 +81,7 @@ public:
 
     cv::Mat UpdateCards(const cv::Mat &input_image);
 
-    std::vector<Card> GetDetectedCards();
+    std::vector<Card*> GetDetectedCards();
 
     void PrintCards();
 };

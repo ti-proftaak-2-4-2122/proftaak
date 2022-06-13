@@ -1,9 +1,15 @@
-//
-// Created by Ewout on 24-5-2022.
-//
+/**
+ * @file
+ * @brief Header file for the GameTimer class
+ * @author Ewout
+ * @date 24-05-2022
+ */
 
 #pragma once
 
+/**
+ * @brief Class for keeping track of the time between 2 frames
+ */
 class GameTimer
 {
 private:

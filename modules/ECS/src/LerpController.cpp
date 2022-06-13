@@ -1,23 +1,25 @@
-//
-// Created by Daan van Donk on 11/05/2022.
-//
+/**
+ * @file
+ * @brief Source file for the LerpController class
+ * @author Daan van Donk
+ * @date 11-05-2022
+ */
 
 #include <iostream>
 #include "LerpController.h"
 #include "Transform.h"
 #include "glm/vec3.hpp"
 #include "GameTimer.h"
+#include "glm/gtx/string_cast.hpp"
+#include "glm/gtx/compatibility.hpp"
 
 void LerpController::Move(glm::vec3 startPos, glm::vec3 endPos, float speed)
 {
     this->endPos = endPos;
+    this->startPos = startPos;
 
-    float deltaZ = endPos.z-startPos.z;
-    float deltaX = endPos.x-startPos.x;
-
-    slope = glm::vec3(1,0, deltaZ/ deltaX);
+    fraction = 0.0f;
 }
-
 
 void LerpController::Update()
 {
@@ -25,14 +27,14 @@ void LerpController::Update()
 
     if (CheckPos(gameObject->transform.getPosition(), endPos)) return;
 
-    gameObject->transform.setPosition((gameObject->transform.getPosition() + (this->slope *
-    GameTimer::getDeltaTime() * speedMult)));
+    auto targetPos = glm::lerp(startPos, endPos, fraction);
+    gameObject->transform.setPosition((targetPos));
 
+    fraction += GameTimer::getDeltaTime() * 0.5f;
 }
 
 LerpController::LerpController()
 {
-    slope = glm::vec3(0, 0, 0);
 }
 
 bool LerpController::CheckPos(glm::vec3 currentPos, glm::vec3 resultPos) const
