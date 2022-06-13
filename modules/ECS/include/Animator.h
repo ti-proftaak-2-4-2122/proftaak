@@ -26,7 +26,7 @@ private:
 
     void NextFrame();
 public:
-    Animator(std::string folderName, Mesh& mesh, int fps);
+    Animator(const std::string& folderName, Mesh& mesh, int fps);
 
     void StartAnimation();
     void StopAnimation();

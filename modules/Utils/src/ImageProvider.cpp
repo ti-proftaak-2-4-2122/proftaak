@@ -60,7 +60,7 @@ void ImageProvider::Update()
     );
 }
 
-void ImageProvider::Draw()
+void ImageProvider::Draw() const
 {
     tigl::shader->setProjectionMatrix(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(glm::lookAt(

@@ -47,7 +47,7 @@ public:
         return nullptr;
     }
 
-    const std::vector<Component *> &getComponents() const;
+    [[nodiscard]] const std::vector<Component *> &getComponents() const;
 
     template<class T>
     T& AddComponent()
@@ -78,7 +78,7 @@ public:
 //        std::cout << "On Trigger Exit called" << std::endl;
     };
 
-    TagEnum getTagEnum() const;
+    [[nodiscard]] TagEnum getTagEnum() const;
 
     void setTagEnum(TagEnum newTagEnum);
 

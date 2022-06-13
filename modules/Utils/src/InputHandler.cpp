@@ -13,10 +13,15 @@ void InputHandler::check_keys(int key, int action)
     }
 }
 
-void InputHandler::AddCallback(int keycode, int keyaction, std::function<void()> callback)
+void InputHandler::AddCallback(int keycode, int keyaction, const std::function<void()>& callback)
 {
-    InputState* inputState = new InputState{keycode, keyaction};
+    auto* inputState = new InputState{keycode, keyaction};
     inputCallbacks.insert({inputState, callback});
+}
+
+void InputHandler::Init()
+{
+
 }
 
 

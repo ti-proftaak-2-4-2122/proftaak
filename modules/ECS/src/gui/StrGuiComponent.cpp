@@ -26,14 +26,15 @@ void StrGuiComponent::DrawChar(glm::mat4 &modelMatrix, char characteristic)
     modelMatrix = glm::translate(modelMatrix, glm::vec3(0.5f, 0.0f, 0.0f));
     tigl::shader->setModelMatrix(modelMatrix);
 
-    auto textureIndex = characteristic - 32;
+    int textureIndex = characteristic - 32;
 
     const float textureWidth = 1.0f / ATLAS_WIDTH;
     const float textureHeigth = 1.0f / ATLAS_HEIGHT;
 
     const float tx0 = (float) (textureIndex % ATLAS_WIDTH) * textureWidth;
     const float tx1 = tx0 + textureWidth;
-    const float ty0 = (textureIndex / ATLAS_HEIGHT) * textureHeigth;
+    auto devision = textureIndex / ATLAS_HEIGHT;
+    const float ty0 = (float)devision * textureHeigth;
     const float ty1 = ty0 + textureHeigth;
 
     tigl::begin(GL_QUADS);
@@ -49,11 +50,7 @@ void StrGuiComponent::UpdateAfterDraw()
     tigl::shader->use();
     glDisable(GL_CULL_FACE);
     tigl::shader->setProjectionMatrix(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 200.0f));
-    tigl::shader->setViewMatrix(glm::lookAt(
-            glm::vec3(0.0f, 0, 5),
-            glm::vec3(0.0f, 0, 0),
-            glm::vec3(0.0f, 1, 0)
-    ));
+    tigl::shader->setViewMatrix(glm::lookAt(glm::vec3(0.0f, 0, 5), glm::vec3(0.0f, 0, 0), glm::vec3(0.0f, 1, 0)));
 
     glBindTexture(GL_TEXTURE_2D, fontTxId);
 
@@ -77,8 +74,8 @@ void StrGuiComponent::UpdateAfterDraw()
 }
 
 
-StrGuiComponent::StrGuiComponent(std::string text, const glm::vec3 &position, const
-glm::vec3 &scale) : text(std::move(text)), position(position), scale(scale)
+StrGuiComponent::StrGuiComponent(std::string text, const glm::vec3 &position, const glm::vec3 &scale) : text(std::move(text)), position(position),
+                                                                                                        scale(scale)
 {
     fontTxId = textureLoader::getTexture("../resource/textures/Courier.png");
 }
@@ -102,7 +99,7 @@ void StrGuiComponent::setPosition(const glm::vec3 &newPosition)
     StrGuiComponent::position = glm::vec3(xNormalized, yNormalized, 0);
 }
 
-void StrGuiComponent::setPosition(const glm::vec2 &newPosition)
+[[maybe_unused]] void StrGuiComponent::setPosition(const glm::vec2 &newPosition)
 {
     StrGuiComponent::position = glm::vec3(newPosition.x, newPosition.y, 0);
 }
@@ -112,7 +109,7 @@ const glm::vec3 &StrGuiComponent::getPosition() const
     return position;
 }
 
-void StrGuiComponent::setText(const std::string &text)
+void StrGuiComponent::setText(const std::string &nText)
 {
-    StrGuiComponent::text = text;
+    StrGuiComponent::text = nText;
 }

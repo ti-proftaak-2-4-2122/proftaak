@@ -31,12 +31,12 @@ void TowerPrefab::onTriggerEnter(Collider *other)
 {
     std::cout << "On Trigger Enter for tower" << std::endl;
     GameObject::onTriggerEnter(other);
-    CharacterStats *otherStats = other->getGameObject()->FindComponent<CharacterStats>();
+    auto *oCharacterStats = other->getGameObject()->FindComponent<CharacterStats>();
 
-    if(otherStats) {
-        if( otherStats->type == TOWER) return;
-        StartCombat(otherStats);
-        std::cout << "The character got damaged, his health is: " << otherStats->health << std::endl;
+    if(oCharacterStats) {
+        if(oCharacterStats->type == TOWER) return;
+        StartCombat(oCharacterStats);
+        std::cout << "The character got damaged, his health is: " << oCharacterStats->health << std::endl;
     }
 }
 

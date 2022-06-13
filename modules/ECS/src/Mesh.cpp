@@ -49,9 +49,9 @@ void Mesh::Draw()
 
 Mesh::Mesh(ObjModel *_objmodel) : objModel(_objmodel) {}
 
-void Mesh::SetColor(const glm::vec4& color)
+void Mesh::SetColor(const glm::vec4& nColor)
 {
-    this->color = color;
+    this->color = nColor;
 }
 
 void Mesh::SetAlpha(float alpha) {
@@ -63,7 +63,7 @@ void Mesh::SetMesh(ObjModel *model)
     objModel = model;
 }
 
-void Mesh::SetDiffuseColor(const glm::vec3 &color)
+void Mesh::SetDiffuseColor(const glm::vec3 &nColor)
 {
-    this->diffuseColor = color;
+    this->diffuseColor = nColor;
 }

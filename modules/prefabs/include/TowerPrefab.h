@@ -29,7 +29,7 @@ private:
     void DoDamage();
 
 public:
-    TowerPrefab(Transform *transform);
+    explicit TowerPrefab(Transform *transform);
 
     void onTriggerEnter(Collider* other) override;
 

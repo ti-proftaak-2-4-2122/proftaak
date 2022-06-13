@@ -27,11 +27,11 @@ public:
 //        const glm::vec3 &position = glm::vec3(0.0f, 0.0f, 0.0f),
 //        const glm::vec3 &scale = glm::vec3(0.0f, 0.0f, 0.0f));
     explicit StrGuiComponent(std::string text, const glm::vec3 &position = glm::vec3(0.0f, 0.0f, 0.0f),
-                    const glm::vec3 &scale = glm::vec3(1.0f, 1.0f, 1.0f));
+                             const glm::vec3 &scale = glm::vec3(1.0f, 1.0f, 1.0f));
 
-    void setPosition(const glm::vec2 &newPosition);
+    [[maybe_unused]] void setPosition(const glm::vec2 &newPosition);
 
-    const glm::vec3 &getPosition() const;
+    [[nodiscard]] const glm::vec3 &getPosition() const;
 
     void setText(const std::string &text);
 };
