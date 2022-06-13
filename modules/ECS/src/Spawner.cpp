@@ -83,7 +83,7 @@ void Spawner::UpdateAfterDraw()
             }
 
             int currentPlayer = 0; // TODO: Replace with real player
-            if(currencyManager.getPlayerCurrency(currentPlayer) >= requiredMoney) {
+            if(currencyManager.requirePlayerCurrency(currentPlayer, requiredMoney)) {
                 currencyManager.updatePlayerCurrency(currentPlayer, -requiredMoney);
 
                 std::cout << "Update currency to " << currencyManager.getPlayerCurrency(currentPlayer) << std::endl;

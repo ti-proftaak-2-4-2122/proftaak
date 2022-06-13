@@ -64,6 +64,11 @@ void CurrencyManager::updatePlayerCurrency(int player, float delta)
     this->setPlayerCurrency(player, this->getPlayerCurrency(player) + delta);
 }
 
+bool CurrencyManager::requirePlayerCurrency(int player, float amount)
+{
+    return this->getPlayerCurrency(player) >= amount;
+}
+
 float CurrencyManager::getCurrencyRate() const
 {
     return this->currencyRate;
