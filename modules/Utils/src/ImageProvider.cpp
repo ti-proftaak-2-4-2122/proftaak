@@ -6,6 +6,7 @@
  */
 
 #include <memory>
+#include <thread>
 
 #include "glad/glad.h"
 #include "opencv2/imgcodecs.hpp"
@@ -13,6 +14,8 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include <utility>
 #include "tigl.h"
+
+#include "../../../user-config.h"
 
 #include "ImageProvider.h"
 #include "CardDetector.h"
@@ -32,32 +35,50 @@ void ImageProvider::Awake()
 
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // First time: Update camera blocking!
+    this->ReadImage();
+    this->useImageBuffer2 = this->imageHasUpdated = true;
+
+    // Create and start update thread
+    if(CONFIG_FPS_GO_BRRR)
+        this->imageUpdateThread = std::thread(&ImageProvider::ImageUpdateTask, this);
 }
 
 void ImageProvider::Update()
 {
-    cv::Mat captureImage, cvImage;
+    if(!CONFIG_FPS_GO_BRRR)
+    {
+        this->ReadImage();
 
-    // Todo: Replace with image provider
-    this->capture->read(captureImage);
+        this->useImageBuffer2 = !this->useImageBuffer2;
+        this->imageHasUpdated = true;
+    }
 
-    // Provide image to vision
-    cvImage = detector->UpdateCards(captureImage);
+    // Lock, because we don't want the buffers to swap when updating
+    this->imageUpdateLock.lock();
+    if(this->imageHasUpdated) {
 
-    // Provide image to graphics
-    glBindTexture(GL_TEXTURE_2D, this->captureTextureId);
+        // Provide image to graphics
+        glBindTexture(GL_TEXTURE_2D, this->captureTextureId);
 
-    glTexImage2D(
-            GL_TEXTURE_2D,
-            0,
-            GL_RGB,
-            cvImage.cols,
-            cvImage.rows,
-            0,
-            GL_BGR,
-            GL_UNSIGNED_BYTE,
-            cvImage.data
-    );
+        cv::Mat currentImage = this->useImageBuffer2 ? this->imageBuffer2 : this->imageBuffer1;
+
+        glTexImage2D(
+                GL_TEXTURE_2D,
+                0,
+                GL_RGB,
+                currentImage.cols,
+                currentImage.rows,
+                0,
+                GL_BGR,
+                GL_UNSIGNED_BYTE,
+                currentImage.data
+        );
+
+        this->imageHasUpdated = false;
+    }
+    this->imageUpdateLock.unlock();
 }
 
 void ImageProvider::Draw()
@@ -85,8 +106,53 @@ void ImageProvider::Draw()
     tigl::end();
 }
 
+void ImageProvider::ImageUpdateTask()
+{
+    // Loop while instance is not destructing
+    this->imageUpdateLock.lock();
+    while(!this->isDestructing)
+    {
+        this->imageUpdateLock.unlock();
+
+        // Read the new image
+        this->ReadImage();
+
+        // Swap buffers and update hasUpdated flag
+        this->imageUpdateLock.lock();
+        this->useImageBuffer2 = !this->useImageBuffer2;
+        this->imageHasUpdated = true;
+        this->imageUpdateLock.unlock();
+
+        this->imageUpdateLock.lock();
+    }
+}
+
+void ImageProvider::ReadImage()
+{
+    static cv::Mat internalBuffer;
+
+    if(!this->capture->isOpened())
+        return;
+
+    // Read the new image (blocking)
+    this->capture->read(internalBuffer);
+
+    // Process the image to the image buffer that is not used at the moment
+    if(this->useImageBuffer2)
+        this->imageBuffer1 = detector->UpdateCards(internalBuffer);
+    else
+        this->imageBuffer2 = detector->UpdateCards(internalBuffer);
+}
+
 ImageProvider::~ImageProvider()
 {
+    this->imageUpdateLock.lock();
+    this->isDestructing = true;
+    this->imageUpdateLock.unlock();
+
+    if(this->imageUpdateThread.joinable())
+        this->imageUpdateThread.join();
+
     delete this->detector;
 }
 

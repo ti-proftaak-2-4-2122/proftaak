@@ -8,6 +8,8 @@
 #pragma once
 
 #include <memory>
+#include <thread>
+
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
@@ -22,6 +24,17 @@ private:
     CardDetector *detector = CardDetector::GetInstance();
     uint captureTextureId;
 
+    cv::Mat imageBuffer1;
+    cv::Mat imageBuffer2;
+
+    std::thread imageUpdateThread;
+    std::mutex imageUpdateLock;
+
+    bool useImageBuffer2 = false;
+    bool imageHasUpdated = false;
+
+    bool isDestructing = false;
+
 public:
     explicit ImageProvider(std::shared_ptr<cv::VideoCapture> capture);
 
@@ -32,5 +45,9 @@ public:
     void Draw();
 
     ~ImageProvider();
+
+private:
+    void ImageUpdateTask();
+    void ReadImage();
 
 };

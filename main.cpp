@@ -198,8 +198,7 @@ double lastFramePrint = -1;
 
 void update()
 {
-    if (capture->isOpened())
-        imageProvider->Update();
+    imageProvider->Update();
 
     Scene::getSingleton().update();
     GameTimer::update(glfwGetTime());

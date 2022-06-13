@@ -26,13 +26,14 @@ public:
     };
 
 private:
-    CardDetector()
-    = default;
+    CardDetector() = default;
 
     inline static CardDetector* singleton_;
 
     cv::Mat loaded_img;
     bool initialized = false;
+
+    std::mutex cardsUpdateLock;
 
     //colours
     struct ColorFilter
@@ -48,7 +49,7 @@ private:
 
     const std::vector<ColorFilter> colours = {yellow, red, green};
 
-    std::vector<Card*> cards;
+    std::vector<Card> cards;
 
     void Initialize();
 
@@ -56,9 +57,9 @@ private:
 
     static cv::Mat GetFilteredImage(const cv::Mat *img, const ColorFilter &color);
 
-    cv::Mat FilterTheBlob(const cv::Mat *img, const ColorFilter& color);
+    std::vector<CardDetector::Card> FilterTheBlob(const cv::Mat *img, const ColorFilter& color);
 
-    static void PrintCard(Card card);
+    static void PrintCard(Card& card);
 
     static cv::Scalar GetColor(unsigned int colorCode);
 
@@ -81,7 +82,7 @@ public:
 
     cv::Mat UpdateCards(const cv::Mat &input_image);
 
-    std::vector<Card*> GetDetectedCards();
+    std::vector<Card> GetDetectedCards();
 
     void PrintCards();
 };
