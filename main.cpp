@@ -194,8 +194,8 @@ void update()
     if (capture->isOpened())
         imageProvider->Update();
 
-    Scene::getSingleton().update();
     GameTimer::update(glfwGetTime());
+    Scene::getSingleton().update();
 
     std::cout << "Frametime: " << GameTimer::getDeltaTime() * 1000 << "ms;"
           "\tFPS: " << 1 / GameTimer::getDeltaTime() << std::endl;

@@ -22,7 +22,7 @@ public:
 
     void reset(float startCurrency = -1);
 
-    float getPlayerCurrency(int player);
+    [[nodiscard]] float getPlayerCurrency(int player);
     void setPlayerCurrency(int player, float currency);
 
     [[nodiscard]] float getCurrencyRate() const;

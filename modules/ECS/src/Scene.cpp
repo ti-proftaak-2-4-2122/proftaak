@@ -50,7 +50,7 @@ void Scene::RemoveGameObject(GameObject* gameObject)
 
 void Scene::update()
 {
-
+    this->currencyManager.update();
 }
 
 Scene::~Scene()

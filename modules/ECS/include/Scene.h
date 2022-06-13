@@ -5,6 +5,7 @@
 
 #include <vector>
 #include "GameObject.h"
+#include "CurrencyManager.h"
 
 class Scene
 {
@@ -12,7 +13,8 @@ class Scene
 private:
     inline static Scene* singleton = nullptr;
 
-    Scene() {
+    Scene() : currencyManager(CurrencyManager(2, 1.0f, 0.8f, 10.0f))
+    {
         gameobjects = std::vector<GameObject *>();
     }
     ~Scene();
@@ -30,6 +32,8 @@ public:
 
 
     std::vector<GameObject *> gameobjects;
+
+    CurrencyManager currencyManager;
 
     void AddGameObject(GameObject *gameObject);
     void RemoveGameObject(GameObject* gameObject);
