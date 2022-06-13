@@ -1,7 +1,10 @@
-//
-// Created by Daan van Donk on 18/05/2022.
-//
-//
+/**
+ * @file
+ * @brief Source file for the VirtualCamera class
+ * @author Daan van Donk
+ * @date 18-05-2022
+ */
+ 
 #include "VirtualCamera.h"
 #include "Transform.h"
 #include "tigl.h"

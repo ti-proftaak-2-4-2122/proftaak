@@ -1,6 +1,9 @@
-//
-// Created by Daan van Donk on 12/05/2022.
-//
+/**
+ * @file
+ * @brief Header file for the Mesh class
+ * @author Daan van Donk
+ * @date 12-05-2022
+ */
 
 #pragma once
 
@@ -29,9 +32,15 @@ private:
 public:
 
     explicit Mesh(ObjModel *_objmodel);
+
     void SetColor(const glm::vec4& color);
     void SetDiffuseColor(const glm::vec3& color);
     void SetMesh(ObjModel* model);
+    /**
+     * Sets the alpha channel for the mesh during drawing
+     * @param alpha Alpha value. 0.0f is completely transparent, 1.0f is completely visible
+     */
+    void SetAlpha(float alpha);
 
     void Awake() override;
     void Draw() override;

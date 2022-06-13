@@ -1,6 +1,9 @@
-//
-// Created by tjtle on 13/05/2022.
-//
+/**
+ * @file
+ * @brief Header file for the CardDetector class
+ * @author tjtle
+ * @date 13-05-2022
+ */
 #pragma once
 
 #include <opencv2/core.hpp>

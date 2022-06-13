@@ -1,6 +1,9 @@
-//
-// Created by Daan van Donk on 10/05/2022.
-//
+/**
+ * @file
+ * @brief Header file for the SceneManager class
+ * @author Daan van Donk
+ * @date 10-05-2022
+ */
 
 #pragma once
 

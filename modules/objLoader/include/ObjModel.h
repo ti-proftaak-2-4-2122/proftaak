@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @brief Header file for the ObjModel class
+ * @author Ewout
+ */
+
 #pragma once
 
 #include <vector>

@@ -1,3 +1,9 @@
+/**
+ * @file
+ * @brief Source file for the ObjModel class
+ * @author Ewout
+ */
+
 #include "ObjModel.h"
 #include <fstream>
 #include <sstream>

@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 #include <tigl.h>
+#include <cs/CelShader.h>
 #include <opencv2/highgui.hpp>
 #include <memory>
 #include <vector>
@@ -44,7 +45,7 @@ void draw();
 
 void worldInit();
 
-void createMapObject(const std::string &filePath, glm::vec3 diffuseColor);
+void createMapObject(const std::string &filePath, glm::vec4 color);
 
 int currentWidth;
 int currentHeight;
@@ -71,6 +72,8 @@ int main()
     }
 
     tigl::init();
+    cs::init();
+
     init();
     worldInit();
 
@@ -108,23 +111,36 @@ void init()
 
     glfwSetTime(0);
 
-    //setting up lights and render stuff
+
+    // Init tigl shader
+    tigl::shader->use();
+
     tigl::shader->enableColor(false);
     tigl::shader->enableTexture(true);
     tigl::shader->enableLighting(true);
+
     tigl::shader->setLightCount(2);
+    tigl::shader->setShinyness(32.0f);
 
     tigl::shader->setLightDirectional(0, false);
+    tigl::shader->setLightAmbient(0, glm::vec3(0.5f, 0.5f, 0.5f));
     tigl::shader->setLightPosition(0, glm::vec3(10, 10, 10));
-
-    tigl::shader->setLightAmbient(1, glm::vec3(0.1f, 0.1f, 0.15f));
     tigl::shader->setLightDiffuse(0, glm::vec3(0.8f, 0.8f, 0.8f));
     tigl::shader->setLightSpecular(0, glm::vec3(0, 0, 0));
-    tigl::shader->setShinyness(32.0f);
-    tigl::shader->setLightAmbient(0, glm::vec3(0.5f, 0.5f, 0.5f));
-    tigl::shader->setLightDiffuse(1, glm::vec3(0.8f, 0.8f, 0.8f));
+
     tigl::shader->setLightDirectional(1, false);
+    tigl::shader->setLightAmbient(1, glm::vec3(0.1f, 0.1f, 0.15f));
+    tigl::shader->setLightDiffuse(1, glm::vec3(0.8f, 0.8f, 0.8f));
     tigl::shader->setLightPosition(1, glm::vec3(2.0f, 0.0f, 2.0f));
+
+    // Init Cel Shader
+    cs::shader->use();
+
+    cs::shader->enableColor(false);
+    cs::shader->enableColorMult(true);
+    cs::shader->enableAlphaTest(true);
+
+    cs::shader->setLightPosition(CONFIG_LIGHT_POSITION);
 }
 
 void worldInit()
@@ -138,35 +154,13 @@ void worldInit()
     test->AddComponent(animator);
     Scene::getSingleton().AddGameObject(test);
 
-    animator->StartAnimation();
-//    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(-15.0f, 0.0f, -12.0f), glm::vec3(0, 0, 0),
-//                                         glm::vec3(1.0f,1.0f,1.0f)), FAST, false);
-//
-//    TowerPrefab* towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
-//    TowerPrefab* towerPrefab1 = new TowerPrefab(new Transform(glm::vec3(50.0f, 0.0f, 0.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
-//
-//    GameObject* field = new GameObject(new Transform(glm::vec3(0, 0, 0),
-//                                                          glm::vec3(0,0,0),
-//                                                          glm::vec3(1, 1, 1)));
-//
-//    Mesh* fieldMesh = new Mesh(ModelManager::getModel("../resource/models/map_ground.obj"));
-//    field->AddComponent(fieldMesh);
-//
-//    GameObject* bridge = new GameObject(new Transform(glm::vec3(0, 0, 0),
-//                                                     glm::vec3(0,0,0),
-//                                                     glm::vec3(1, 1, 1)));
-//
-//    Mesh* bridgeRender = new Mesh(ModelManager::getModel("../resource/models/map_bridges.obj"));
-//    bridge->AddComponent(bridgeRender);
-//
-////    //Setting colour
-//    fieldMesh->SetDiffuseColor({0.474, 0.643, 0.376});
-//    bridgeRender->SetDiffuseColor({1.0f, 0.392f, 0.3137f});
-//    //building map
-//    createMapObject("../resource/models/map_ground.obj", {0.0f, 0, 0});
-//    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1});
-//    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f});
-//    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f});
+    float mapAlpha = CONFIG_PLAYFIELD_ALPHA;
+
+    //building map
+    createMapObject("../resource/models/map_ground.obj", {0.0f, 1, 0, mapAlpha});
+    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1, mapAlpha});
+    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f, mapAlpha});
+    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f, 1.0f});
 
 //    Scene::getSingleton().AddGameObject(aiPrefab);
 //    Scene::getSingleton().AddGameObject(towerPrefab);
@@ -192,6 +186,9 @@ void update()
 
     Scene::getSingleton().update();
     GameTimer::update(glfwGetTime());
+
+    std::cout << "Frametime: " << GameTimer::getDeltaTime() * 1000 << "ms;"
+          "\tFPS: " << 1 / GameTimer::getDeltaTime() << std::endl;
 }
 
 void draw()
@@ -208,48 +205,56 @@ void draw()
     glClearColor(0.3f, 0.4f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-//    if (capture->isOpened())
-//    {
-//        // Prepare for background
-//        glDisable(GL_DEPTH_TEST);
-//
-//        tigl::shader->enableLighting(false);
-//        tigl::shader->enableTexture(true);
-//
-//        // Draw Background
-//        imageProvider->Draw();
-//    }
+    if (capture->isOpened())
+    {
+        // Prepare for background
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_BLEND);
+
+        tigl::shader->use();
+
+        tigl::shader->enableLighting(false);
+        tigl::shader->enableTexture(true);
+        tigl::shader->enableColor(false);
+        tigl::shader->enableColorMult(false);
+
+        // Draw Background
+        openCvComponent->Draw();
+    }
 
     // Prepare for 3D Scene
     glEnable(GL_DEPTH_TEST);
-    tigl::shader->enableLighting(true);
-    tigl::shader->enableTexture(CONFIG_LIGHT_ENABLE_RTX);
+    glEnable(GL_BLEND);
 
-    tigl::shader->setProjectionMatrix(
+    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
+    cs::shader->use();
+
+    cs::shader->setProjectionMatrix(
             glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH,
                              0.1f, 200.0f));
-
-    tigl::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0.0f, 1, 2.5f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
-
-    glad_glEnable(GL_DEPTH_TEST);
-
+    cs::shader->setViewMatrix(
+            glm::lookAt(glm::vec3(0, 0.5f, 2.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     // Draw 3D Scene
     SceneManager::UpdatePoll(Scene::getSingleton());
 }
 
-
-void createMapObject(const std::string &filePath, glm::vec3 diffuseColor)
+void createMapObject(const std::string &filePath, glm::vec4 color)
 {
-    auto* map_object = new GameObject(new Transform(CONFIG_PLAYFIELD_POSITION, CONFIG_PLAYFIELD_ROTATION, CONFIG_PLAYFIELD_SCALE));
+    auto *map_object = new GameObject();
 
     map_object->AddComponent(new Mesh(ModelManager::getModel(filePath)));
+
+    map_object->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
+    map_object->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
+    map_object->transform.setScale(CONFIG_PLAYFIELD_SCALE);
+
     auto mesh_map_object = map_object->FindComponent<Mesh>();
     if (mesh_map_object)
     {
-        //mesh_map_ground->SetColor({200,200,200,255});
-        mesh_map_object->SetDiffuseColor(diffuseColor);
+        mesh_map_object->SetColor(color);
     }
-    Scene::getSingleton().AddGameObject(map_object);
+
+    scene->AddGameObject(map_object);
 }

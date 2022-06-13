@@ -1,6 +1,9 @@
-//
-// Created by twanh on 13-5-2022.
-//
+/**
+ * @file
+ * @brief Source file for the OpenCVVideoCapture class
+ * @author twanh
+ * @date 13-05-2022
+ */
 
 #include <memory>
 
