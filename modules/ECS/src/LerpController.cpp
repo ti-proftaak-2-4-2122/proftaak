@@ -1,6 +1,9 @@
-//
-// Created by Daan van Donk on 11/05/2022.
-//
+/**
+ * @file
+ * @brief Source file for the LerpController class
+ * @author Daan van Donk
+ * @date 11-05-2022
+ */
 
 #include <iostream>
 #include "LerpController.h"

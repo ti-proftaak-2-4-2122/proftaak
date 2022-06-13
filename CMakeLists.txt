@@ -44,6 +44,7 @@ include_directories("libs/tigl/include")
 include_directories("libs/opencv/include")
 include_directories("libs/glm")
 include_directories(${OpenCV_INCLUDE_DIRS})
+include_directories("libs/celshader/include")
 
 #include modules
 FOREACH(MODULE ${MODULE_LIST})
@@ -54,6 +55,7 @@ ENDFOREACH()
 add_subdirectory(libs/glm)
 add_subdirectory(libs/tigl)
 add_subdirectory(libs/glad)
+add_subdirectory(libs/celshader)
 
 #add modules
 message("-- Adding all modules in modules folder")
@@ -62,12 +64,13 @@ FOREACH(MODULE ${MODULE_LIST})
     add_subdirectory(${MODULES_DIR_PATH}/${MODULE})
 ENDFOREACH()
 
-add_executable(${CMAKE_PROJECT_NAME} main.cpp user-config.h )
+add_executable(${CMAKE_PROJECT_NAME} main.cpp user-config.h colours.h)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} libglfw3.a )
 target_link_libraries(${CMAKE_PROJECT_NAME} glm )
 target_link_libraries(${CMAKE_PROJECT_NAME} tigl )
 target_link_libraries(${CMAKE_PROJECT_NAME} glad )
+target_link_libraries(${CMAKE_PROJECT_NAME} CelShader)
 target_link_libraries(${CMAKE_PROJECT_NAME} ${MODULE_LIST} )
 target_link_libraries(${CMAKE_PROJECT_NAME} opencv_core opencv_imgproc opencv_highgui opencv_imgcodecs opencv_features2d)
 
@@ -91,3 +94,23 @@ FOREACH(TEST ${TEST_LIST})
     message("       Added ${TEST}")
     add_subdirectory(${TESTS_DIR_PATH}/${TEST})
 ENDFOREACH()
+
+# Add Doxygen
+find_package(Doxygen)
+IF(DOXYGEN_FOUND)
+
+    set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile)
+    set(DOXYGEN_OUT ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+
+    configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
+    message("-- Add doxygen step to build")
+
+    add_custom_target(Documentation ALL
+            COMMAND ${DOXYGEN_EXECUTABLE} ${DOXYGEN_OUT}
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            COMMENT "Generating API documentation with Doxygen"
+            VERBATIM )
+
+ELSE (DOXYGEN_FOUND)
+    message("-- Doxygen needs to be installed to generate the doxygen documentation")
+ENDIF (DOXYGEN_FOUND)

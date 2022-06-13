@@ -1,6 +1,9 @@
-//
-// Created by Daan van Donk on 24/05/2022.
-//
+/**
+ * @file
+ * @brief Header file for the Collider class
+ * @author Daan van Donk
+ * @date 24-05-2022
+ */
 
 #pragma once
 
