@@ -13,6 +13,8 @@ class Scene
 private:
     inline static Scene* singleton = nullptr;
 
+    CurrencyManager currencyManager;
+
     Scene() : currencyManager(CurrencyManager(2, 1.0f, 0.8f, 10.0f))
     {
         gameobjects = std::vector<GameObject *>();
@@ -33,11 +35,11 @@ public:
 
     std::vector<GameObject *> gameobjects;
 
-    CurrencyManager currencyManager;
-
     void AddGameObject(GameObject *gameObject);
     void RemoveGameObject(GameObject* gameObject);
 
     void update();
+
+    CurrencyManager& getCurrencyManager();
 };
 

@@ -58,3 +58,8 @@ Scene::~Scene()
     for(auto gameObject : this->gameobjects)
         delete gameObject;
 }
+
+CurrencyManager& Scene::getCurrencyManager()
+{
+    return this->currencyManager;
+}
