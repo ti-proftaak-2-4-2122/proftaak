@@ -8,14 +8,14 @@
 #include "glad/glad.h"
 #include "glm/ext/matrix_transform.hpp"
 
-
 class GameObject;
 
 class Gui : public GameObject
 {
-
 public:
     Gui();
 
     GLuint fontTxId;
+
+    void MouseButtonPress(double xPosition,double yPosition);
 };

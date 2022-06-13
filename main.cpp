@@ -41,12 +41,14 @@ void worldInit();
 
 void createMapObject(const std::string &filePath, glm::vec4 color);
 
+void mouseButtonCallback(GLFWwindow *_window, int button, int action, int mods);
+
 Scene *scene;
 
 int currentWidth;
 int currentHeight;
 
-GameObject *GUIgameobject;
+Gui *GUIgameobject;
 
 //VirtualCamera* virtualCamera;
 int main()
@@ -97,6 +99,9 @@ void init()
         if (key == GLFW_KEY_ESCAPE)
             glfwSetWindowShouldClose(window, true);
     });
+
+    glfwSetMouseButtonCallback(window, mouseButtonCallback);
+
 
     // Init OpenCV
     capture = std::make_shared<cv::VideoCapture>(CONFIG_OPENCV_CAMERA_INDEX);
@@ -157,7 +162,7 @@ void worldInit()
 
     auto guiComponent0 = new StrGuiComponent("bada bing badaboem", glm::vec3(0.0f, 0.5f, 0));
     auto guiComponent1 = new StrGuiComponent("wat zie ik daar", glm::vec3(0.0f, -0.5f, 0),
-                                             glm::vec3(2.0,2.0f,2.0f));
+                                             glm::vec3(2.0, 2.0f, 2.0f));
     auto guiComponent2 = new StrGuiComponent("jaja het werkt");
 
     GUIgameobject->AddComponent(guiComponent0);
@@ -186,8 +191,9 @@ void update()
     scene->update();
     GameTimer::update(glfwGetTime());
 
-    std::cout << "Frametime: " << GameTimer::getDeltaTime() * 1000 << "ms;"
-          "\tFPS: " << 1 / GameTimer::getDeltaTime() << std::endl;
+//    std::cout << "Frametime: " << GameTimer::getDeltaTime() * 1000 << "ms;"
+//                                                                      "\tFPS: "
+//              << 1 / GameTimer::getDeltaTime() << std::endl;
 }
 
 void draw()
@@ -266,16 +272,19 @@ void createMapObject(const std::string &filePath, glm::vec4 color)
 
 void mouseButtonCallback(GLFWwindow *_window, int button, int action, int mods)
 {
-    switch (button)
+    int width, height;
+    glfwGetWindowSize(_window, &width, &height);
+
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
     {
-        case GLFW_MOUSE_BUTTON_LEFT:
-            if (action == GLFW_PRESS)
-            {
-                double xposition, yposition;
-                glfwGetCursorPos(window, &xposition, &yposition);
-                std::cout << xposition << "," << yposition << std::endl;
-                std::cout << "Mouse left input working" << std::endl; //testing
-                //GUIgameobject->MouseButtonPress(xposition, yposition);
-            }
+        double xPosition, yPosition;
+        glfwGetCursorPos(window, &xPosition, &yPosition);
+        float xNormalized,yNormalized;
+        xNormalized = ((float)(xPosition / width) * 2.0f)-1.0f;
+        yNormalized = ((float)(yPosition / height) * -2.0f)+1.0f;
+
+        std::cout << xNormalized << "," << yNormalized << std::endl;
+        std::cout << "Mouse left input working" << std::endl; //testing
+        GUIgameobject->MouseButtonPress(xNormalized, yNormalized);
     }
 }

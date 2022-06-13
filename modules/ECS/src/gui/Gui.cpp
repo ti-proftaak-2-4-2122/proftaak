@@ -9,11 +9,21 @@
 #include "Transform.h"
 #include <TextureLoader.h>
 #include "TagEnum.h"
-
+#include "gui/StrGuiComponent.h"
 
 
 Gui::Gui()
 {
     fontTxId = textureLoader::getTexture("../resource/textures/Courier.png");
     tagEnum = TagEnum::GUI;
+}
+
+void Gui::MouseButtonPress(double xPosition,double yPosition)
+{
+    auto* component = FindComponent<StrGuiComponent>();
+   if (component == nullptr)
+       return;
+
+   auto testPosition = glm::vec3(xPosition,yPosition,0.0f);
+   component->setPosition(testPosition);
 }

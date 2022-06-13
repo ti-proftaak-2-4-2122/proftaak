@@ -44,7 +44,7 @@ void StrGuiComponent::DrawChar(glm::mat4 &modelMatrix, char characteristic)
 
 void StrGuiComponent::Draw()
 {
-    auto* gui = dynamic_cast<Gui*>(gameObject);
+    auto *gui = dynamic_cast<Gui *>(gameObject);
     glDisable(GL_CULL_FACE);
     tigl::shader->setProjectionMatrix(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(glm::lookAt(
@@ -61,7 +61,7 @@ void StrGuiComponent::Draw()
 
     auto modelMatrix = glm::mat4(1.0f);
     modelMatrix = glm::translate(modelMatrix, position);
-    modelMatrix = glm::scale(modelMatrix, glm::vec3(0.075f, 0.075f, 0.075f)*scale);
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(0.075f, 0.075f, 0.075f) * scale);
 
     for (char &c: text)
     {
@@ -76,8 +76,15 @@ void StrGuiComponent::Draw()
 }
 
 
-
 StrGuiComponent::StrGuiComponent(std::string text, const glm::vec3 &position, const
-glm::vec3 &scale) : text(std::move(text)),position(position), scale(scale) {}
+glm::vec3 &scale) : text(std::move(text)), position(position), scale(scale)
+{
+
+}
+
+void StrGuiComponent::setPosition(const glm::vec3 &newPosition)
+{
+    StrGuiComponent::position = newPosition;
+}
 
 
