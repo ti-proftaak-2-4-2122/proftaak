@@ -232,7 +232,6 @@ void draw()
 
     glad_glEnable(GL_DEPTH_TEST);
 
-
     // Draw 3D Scene
     SceneManager::UpdatePoll(Scene::getSingleton());
 }

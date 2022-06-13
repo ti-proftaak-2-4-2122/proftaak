@@ -103,7 +103,7 @@ cv::Mat CardDetector::UpdateCards(const cv::Mat &input_image)
 
     for (const auto &card: cards)
     {
-        cv::circle(input_image, cv::Point((int) card->x * input_image.rows, (int) card->y * input_image.cols),
+        cv::circle(input_image, cv::Point((int) (card->x * input_image.cols), (int) (card->y * input_image.rows)),
                    40, GetColor(card->color), 4);
     }
     return input_image;
