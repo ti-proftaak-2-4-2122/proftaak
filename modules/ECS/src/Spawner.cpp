@@ -93,7 +93,7 @@ void Spawner::Spawn()
         //std::cout << "type = land\n";
     }
     //std::cout << ToString(type) << std::endl;
-    glm::mat4 model = glm::lookAt(glm::vec3(0, 15.0f, 5.0f), glm::vec3(0, 0, 0), glm::vec3(0,1,0)); //viewmatrix
+    glm::mat4 model = glm::lookAt(glm::vec3(0, 60, 0.01f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)); //viewmatrix
     glm::mat4 projection = glm::perspective(glm::radians(90.0f), (float) 1440 /
     (float) 1080, 0.1f, 200.0f);
     glm::ivec4 viewport;
