@@ -6,6 +6,7 @@
 #include <cs/CelShader.h>
 #include <opencv2/highgui.hpp>
 #include <memory>
+#include <vector>
 
 #include "Mesh.h"
 #include "ModelManager.h"
@@ -23,10 +24,10 @@
 #include "AIPrefab.h"
 #include "TowerPrefab.h"
 #include "UnitTypeEnum.h"
+#include "InputHandler.h"
+#include "Animator.h"
 
-//aspect ratio should always be 4:3 when using realsense camera
-#define WINDOW_WIDTH 1440
-#define WINDOW_HEIGTH 1080
+
 
 using tigl::Vertex;
 
@@ -34,6 +35,7 @@ GLFWwindow *window;
 
 std::shared_ptr<cv::VideoCapture> capture;
 ImageProvider *imageProvider;
+Scene *scene;
 
 void init();
 
@@ -55,7 +57,8 @@ int main()
     if (!glfwInit())
         throw "Could not initialize glwf";
 
-    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGTH, "Hello World", nullptr, nullptr);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+    window = glfwCreateWindow(CONFIG_WINDOW_WIDTH, CONFIG_WINDOW_HEIGTH, "NOT CLASH ROYALE", nullptr, nullptr);
     if (!window)
     {
         glfwTerminate();
@@ -88,15 +91,16 @@ int main()
 
     return 0;
 }
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    InputHandler::getSingleton().check_keys(key, action);
+}
 
 
 void init()
 {
-    glfwSetKeyCallback(window, [](GLFWwindow *window, int key, int scancode, int action, int mods)
-    {
-        if (key == GLFW_KEY_ESCAPE)
-            glfwSetWindowShouldClose(window, true);
-    });
+
+    glfwSetKeyCallback(window, key_callback);
 
     // Init OpenCV
     capture = std::make_shared<cv::VideoCapture>(CONFIG_OPENCV_CAMERA_INDEX);
@@ -141,48 +145,39 @@ void init()
     cs::shader->setLightPosition(CONFIG_LIGHT_POSITION);
 }
 
+void closeWindow()
+{
+    std::cout << "Closing window" << std::endl;
+    glfwSetWindowShouldClose(window, true);
+}
+
 void worldInit()
 {
-    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(-15.0f, 0.0f, -12.0f), glm::vec3(0, 0, 0),
-                                         glm::vec3(1.0f,1.0f,1.0f)), FAST, false);
-
+    InputHandler::getSingleton().AddCallback(GLFW_KEY_ESCAPE, GLFW_PRESS, closeWindow);
+//    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(-15.0f, 0.0f, -12.0f), glm::vec3(0, 0, 0),
+//                                         glm::vec3(1.0f,1.0f,1.0f)), FAST);
+//
     TowerPrefab* towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
-    TowerPrefab* towerPrefab1 = new TowerPrefab(new Transform(glm::vec3(50.0f, 0.0f, 0.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
-
+//    TowerPrefab* towerPrefab1 = new TowerPrefab(new Transform(glm::vec3(50.0f, 0.0f, 0.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+//
     GameObject* field = new GameObject(new Transform(glm::vec3(0, 0, 0),
                                                           glm::vec3(0,0,0),
                                                           glm::vec3(1, 1, 1)));
 
-    Mesh* fieldMesh = new Mesh(ModelManager::getModel("../resource/models/map_ground.obj"));
-    field->AddComponent(fieldMesh);
+    field->AddComponent(new Mesh(ModelManager::getModel("../resource/models/map_ground.obj")));
 
-    GameObject* bridge = new GameObject(new Transform(glm::vec3(0, 0, 0),
-                                                     glm::vec3(0,0,0),
-                                                     glm::vec3(1, 1, 1)));
+    float mapAlpha = CONFIG_PLAYFIELD_ALPHA;
 
-    Mesh* bridgeRender = new Mesh(ModelManager::getModel("../resource/models/map_bridges.obj"));
-    bridge->AddComponent(bridgeRender);
-
-//    //Setting colour
-    fieldMesh->SetColor({0.474, 0.643, 0.376, 1.0f});
-    bridgeRender->SetColor({1.0f, 0.392f, 0.3137f, 1.0f});
-//    //building map
-//    createMapObject("../resource/models/map_ground.obj", {0.0f, 0, 0});
-//    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1});
-//    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f});
-//    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f});
-
-//    Scene::getSingleton().AddGameObject(aiPrefab);
     Scene::getSingleton().AddGameObject(towerPrefab);
-    Scene::getSingleton().AddGameObject(towerPrefab1);
-    Scene::getSingleton().AddGameObject(field);
-    Scene::getSingleton().AddGameObject(bridge);
 //    Scene::getSingleton().AddGameObject(towerPrefab1);
-//    Scene::getSingleton().AddGameObject(field);
+    Scene::getSingleton().AddGameObject(field);
+//    Scene::getSingleton().AddGameObject(bridge);
+//    Scene::getSingleton().AddGameObject(towerPrefab1);
 //    Scene::getSingleton().AddGameObject(bridge);
 
     auto *spawnManager = new GameObject(new Transform());
     auto *spawner = new Spawner();
+
     spawnManager->AddComponent(spawner);
     Scene::getSingleton().AddGameObject(spawnManager);
 
@@ -197,8 +192,8 @@ void update()
     GameTimer::update(glfwGetTime());
     Scene::getSingleton().update();
 
-    /*std::cout << "Frametime: " << GameTimer::getDeltaTime() * 1000 << "ms;"
-          "\tFPS: " << 1 / GameTimer::getDeltaTime() << std::endl;*/
+//    std::cout << "Frametime: " << GameTimer::getDeltaTime() * 1000 << "ms;"
+//          "\tFPS: " << 1 / GameTimer::getDeltaTime() << std::endl;
 }
 
 void draw()
@@ -240,11 +235,9 @@ void draw()
 
     cs::shader->use();
 
-    cs::shader->setProjectionMatrix(
-            glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH,
-                             0.1f, 200.0f));
-    cs::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0, 60, 0.01f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+    cs::shader->setProjectionMatrix(CONFIG_MATRIX_PROJECTION);
+
+    cs::shader->setViewMatrix(CONFIG_MATRIX_VIEW);
 
     // Draw 3D Scene
     SceneManager::UpdatePoll(Scene::getSingleton());
@@ -252,14 +245,19 @@ void draw()
 
 void createMapObject(const std::string &filePath, glm::vec4 color)
 {
-    auto* map_object = new GameObject(new Transform(CONFIG_PLAYFIELD_POSITION, CONFIG_PLAYFIELD_ROTATION, CONFIG_PLAYFIELD_SCALE));
+    auto *map_object = new GameObject(new Transform);
 
     map_object->AddComponent(new Mesh(ModelManager::getModel(filePath)));
+
+    map_object->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
+    map_object->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
+    map_object->transform.setScale(CONFIG_PLAYFIELD_SCALE);
+
     auto mesh_map_object = map_object->FindComponent<Mesh>();
     if (mesh_map_object)
     {
         mesh_map_object->SetColor(color);
     }
 
-    Scene::getSingleton().AddGameObject(map_object);
+    scene->AddGameObject(map_object);
 }

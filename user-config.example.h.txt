@@ -1,21 +1,16 @@
-//
-// This file contains all user/computer specific config values
-// All defines/variables defined in this files are for the current user only
-// This file should be ignored by git
-//
-
 #pragma once
 
 #define CONFIG_OPENCV_CAMERA_INDEX 0
 
 #define CONFIG_PLAYFIELD_POSITION glm::vec3(0, 0, 0)
 #define CONFIG_PLAYFIELD_ROTATION glm::vec3(0, 0, 0)
-#define CONFIG_PLAYFIELD_SCALE glm::vec3(0.1f, 0.1f, 0.1f)
+#define CONFIG_PLAYFIELD_SCALE glm::vec3(1.0f, 1.0f, 1.0f)
 
 #define CONFIG_PLAYFIELD_ALPHA 0.7f
 
 #define CONFIG_LIGHT_POSITION glm::vec3(0.0f, 20.0f, 5.0f)
 
-// Turns lightning based on camera brightness.
-// If the scene flickers, turn this option off
-#define CONFIG_LIGHT_ENABLE_RTX false
+#define CONFIG_WINDOW_WIDTH 1440
+#define CONFIG_WINDOW_HEIGTH 1080
+#define CONFIG_MATRIX_PROJECTION glm::perspective(glm::radians(90.0f), (float) CONFIG_WINDOW_WIDTH / (float) CONFIG_WINDOW_HEIGTH,0.1f, 200.0f)
+#define CONFIG_MATRIX_VIEW glm::lookAt(glm::vec3(0, 60, 0.01f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0))

@@ -1,6 +1,9 @@
-//
-// Created by doguk on 5/24/2022.
-//
+/**
+ * @file
+ * @brief Source file for the AIPrefab class
+ * @author doguk
+ * @date 24-05-2022
+ */
 #include "AIPrefab.h"
 #include "Transform.h"
 #include "ModelManager.h"
@@ -9,8 +12,7 @@
 
 #include <iostream>
 
-AIPrefab::AIPrefab(Transform *transform, UnitTypeEnum type, bool hasSpawnedTop) : GameObject(transform),
-hasSpawnedTop(hasSpawnedTop)
+AIPrefab::AIPrefab(Transform *transform, UnitTypeEnum type) : GameObject(transform)
 {
     this->lerpController = new LerpController();
     AddComponent(lerpController);
@@ -38,7 +40,7 @@ void AIPrefab::onTriggerEnter(Collider *other)
 
     Transform transform1 = this->transform;
     transform1.setPosition(glm::vec3(pos.x + 1, pos.y, pos.z));
-    lerpController->Move(this->transform.getPosition(), transform1.getPosition() ,characterStats->moveSpeed);
+    //lerpController->Move(this->transform.getPosition(), transform1.getPosition() ,characterStats->moveSpeed);
     CharacterStats *otherStats = other->getGameObject()->FindComponent<CharacterStats>();
 
     if (otherStats)
@@ -57,13 +59,18 @@ void AIPrefab::onTriggerExit(Collider *other)
 void AIPrefab::Update()
 {
     GameObject::Update();
-    if(lerpController->CheckPos(this->transform.getPosition(), checkPoints[0])) {
-        lerpController->Move(this->transform.getPosition(), checkPoints[1],
-                             characterStats->moveSpeed);
+    if(IsAttacking) DoDamage();
+    if(wayPointIndex >= checkPoints.size()) {
+        lerpController->Move(this->transform.getPosition(), this->transform.getPosition(), characterStats->moveSpeed);
+        return;
     }
-    if (!IsAttacking) return;
-    else DoDamage();
+    if(lerpController->CheckPos(this->transform.getPosition(), checkPoints[wayPointIndex])) {
 
+        wayPointIndex++;
+        std::cout << "waypointindex: " << wayPointIndex << " to point: " << checkPoints[wayPointIndex].x << "," << checkPoints[wayPointIndex].z <<
+        std::endl;
+        lerpController->Move(this->transform.getPosition(), checkPoints[wayPointIndex], characterStats->moveSpeed);
+    }
 }
 
 void AIPrefab::StartCombat(CharacterStats *otherStats)
@@ -78,7 +85,7 @@ void AIPrefab::DoDamage()
     if (IsAttacking && currentTime >= this->characterStats->attackSpeed)
     {
         otherStats->health -= this->characterStats->damage;
-        std::cout << "New Health: " << otherStats->health << std::endl;
+        //std::cout << "New Health: " << otherStats->health << std::endl;
         currentTime = 0;
     }
     if (otherStats->health <= 0)
@@ -110,20 +117,20 @@ void AIPrefab::StopCombat()
 void AIPrefab::InitStats(UnitTypeEnum type)
 {
 
-    std::cout << "Init stats: " << ToString(type) << std::endl;
+    //std::cout << "Init stats: " << ToString(type) << std::endl;
     switch (type)
     {
         case FAST:
-            this->characterStats = new CharacterStats {4.0f, 100.0f, 5.0f, 3.0f, 3.0f, LAND};
+            this->characterStats = new CharacterStats {2.0f, 100.0f, 5.0f, 0.5f, 3.0f, LAND};
             break;
         case SLOW:
-            this->characterStats = new CharacterStats {4.0f, 100.0f, 10.0f, 1.0f, 1.0f, LAND};
+            this->characterStats = new CharacterStats {2.0f, 100.0f, 10.0f, 0.5f, 1.0f, LAND};
             break;
         case LAND:
-            this->characterStats = new CharacterStats {4.0f, 100.0f, 10.0f, 1.0f, 1.0f, LAND};
+            this->characterStats = new CharacterStats {2.0f, 100.0f, 10.0f, 0.5f, 1.0f, LAND};
             break;
         default:
-            this->characterStats = new CharacterStats {4.0f, 100.0f, 10.0f, 1.0f, 1.0f, LAND};
+            this->characterStats = new CharacterStats {2.0f, 100.0f, 10.0f, 0.5f, 1.0f, LAND};
             break;
     }
 }
@@ -132,33 +139,37 @@ void AIPrefab::InitCheckpoints()
 {
     glm::vec3 pos = this->transform.getPosition();
 
-    if(pos.x < 0 && pos.z < 0)
+    if(pos.x <= 0 && pos.z <= 0)
     {
         //links boven
+        std::cout << "linksboven\n";
         this->checkPoints.push_back(this->predefinedPositions[TOP_LEFT_BRIDGE]);
         this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_RIGHT]);
         this->checkPoints.push_back(this->predefinedPositions[TOWER_BOTTOM_RIGHT]);
     }
-    else if(pos.x < 0 && pos.z > 0)
+    else if(pos.x <= 0 && pos.z > 0)
     {
         // links onder spawnen
+        std::cout << "linksonder\n";
         this->checkPoints.push_back(this->predefinedPositions[BOTTOM_LEFT_BRIDGE]);
         this->checkPoints.push_back(this->predefinedPositions[TOWER_BOTTOM_RIGHT]);
         this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_RIGHT]);
     }
-    else if(pos.x > 0 && pos.z < 0)
+    else if(pos.x > 0 && pos.z <= 0)
     {
         //Rechts boven
+        std::cout << "rechtsboven\n";
         this->checkPoints.push_back(this->predefinedPositions[TOP_RIGHT_BRIDGE]);
         this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_LEFT]);
-        this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_LEFT]);
+        this->checkPoints.push_back(this->predefinedPositions[TOWER_BOTTOM_LEFT]);
     }
     else if(pos.x > 0 && pos.z > 0)
     {
         //Rechts onder
+        std::cout << "rechtsonder\n";
         this->checkPoints.push_back(this->predefinedPositions[BOTTOM_RIGHT_BRIDGE]);
         this->checkPoints.push_back(this->predefinedPositions[TOWER_BOTTOM_LEFT]);
-        this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_RIGHT]);
+        this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_LEFT]);
     }
 }
 
