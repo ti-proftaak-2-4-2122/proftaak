@@ -23,7 +23,7 @@ TowerPrefab::TowerPrefab(Transform *transform) : GameObject
 
 void TowerPrefab::onTriggerEnter(Collider *other)
 {
-    std::cout << "On Trigger Enter for tower" << std::endl;
+    //std::cout << "On Trigger Enter for tower" << std::endl;
     GameObject::onTriggerEnter(other);
     CharacterStats* otherStats = other->getGameObject()->FindComponent<CharacterStats>();
 
