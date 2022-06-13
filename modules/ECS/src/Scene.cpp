@@ -17,7 +17,7 @@ void Scene::AddGameObject(GameObject *gameObject)
             gameObject
     );
 
-    if(pos != this->gameobjects.end())
+    if (pos != this->gameobjects.end())
         throw std::invalid_argument("GameObject was already added to scene");
 
     gameobjects.push_back(gameObject);
@@ -29,16 +29,17 @@ void Scene::AddGameObject(GameObject *gameObject)
  * If the deletion was successful, gameObject will be nullptr.
  * Don't use the GameObject after calling this function!
  */
-void Scene::RemoveGameObject(GameObject*& gameObject)
+void Scene::RemoveGameObject(GameObject *&gameObject)
 {
     auto pos = std::find(
-        this->gameobjects.begin(),
-        this->gameobjects.end(),
-        gameObject
+            this->gameobjects.begin(),
+            this->gameobjects.end(),
+            gameObject
     );
 
     // If gameObject is in vector, remove
-    if(pos != this->gameobjects.end()) {
+    if (pos != this->gameobjects.end())
+    {
         this->gameobjects.erase(pos);
 
         delete gameObject;
@@ -58,6 +59,19 @@ void Scene::update()
 
 Scene::~Scene()
 {
-    for(auto gameObject : this->gameobjects)
+    for (auto gameObject: this->gameobjects)
         delete gameObject;
+}
+
+std::vector<GameObject *> Scene::findGameObjects(TagEnum tagEnum)
+{
+    auto foundObjects = std::vector<GameObject *>();
+
+    for (auto* gameObject: this->gameobjects)
+    {
+        if (gameObject->tagEnum == tagEnum)
+            foundObjects.push_back(gameObject);
+    }
+
+    return foundObjects;
 }

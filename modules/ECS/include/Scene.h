@@ -17,6 +17,9 @@ public:
     void AddGameObject(GameObject *gameObject);
     void RemoveGameObject(GameObject*& gameObject);
 
+
+    std::vector<GameObject *> findGameObjects(TagEnum tagEnum);
+
     void update();
 
     Scene();

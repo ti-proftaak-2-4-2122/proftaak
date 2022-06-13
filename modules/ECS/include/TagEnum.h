@@ -8,11 +8,10 @@
  * @date 27-05-2022
  */
 
-#ifndef PROFTAAK24_TAGENUM_H
-#define PROFTAAK24_TAGENUM_H
+#pragma once
 
 enum TagEnum {
     ENEMY,
     STATE,
+    GUI
 };
-#endif //PROFTAAK24_TAGENUM_H

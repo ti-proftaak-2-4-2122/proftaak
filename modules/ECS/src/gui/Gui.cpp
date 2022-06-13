@@ -8,10 +8,12 @@
 #include "glm/ext/matrix_transform.hpp"
 #include "Transform.h"
 #include <TextureLoader.h>
+#include "TagEnum.h"
 
 
 
 Gui::Gui()
 {
     fontTxId = textureLoader::getTexture("../resource/textures/Courier.png");
+    tagEnum = TagEnum::GUI;
 }
