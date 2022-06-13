@@ -58,31 +58,50 @@ void Spawner::UpdateAfterDraw()
 
             std::cout << "Pos: " << glPos.x << "," << glPos.y << "," << glPos.z << ".\n";
 
+            CurrencyManager& currencyManager = Scene::getSingleton().getCurrencyManager();
+            float requiredMoney = 0.0f;
+
             UnitTypeEnum type;
             std::cout << "color = " << card.color << std::endl;
             if(card.color == 0) {
                 type = FAST;
                 std::cout << "type = fast\n";
+
+                requiredMoney = 1.0f;
             }
             if(card.color == 1) {
                 type = SLOW;
                 std::cout << "type = slow\n";
+
+                requiredMoney = 2.0f;
             }
             if(card.color == 2) {
                 type = LAND;
                 std::cout << "type = land\n";
+
+                requiredMoney = 3.0f;
             }
 
-            std::cout << ToString(type) << std::endl;
-            glm::mat4 model = glm::lookAt(glm::vec3(0, 15.0f, 5.0f), glm::vec3(0, 0, 0), glm::vec3(0,1,0)); //viewmatrix
-            glm::mat4 projection = glm::perspective(glm::radians(90.0f), (float) 1440 /
-                                                                         (float) 1080, 0.1f, 200.0f);
-            glm::ivec4 viewport;
-            glGetIntegerv(GL_VIEWPORT, glm::value_ptr(viewport));
-            glm::vec3 Projected = glm::project(glPos, model, projection,viewport);
-            auto *AIcharacter = new AIPrefab(new Transform(glPos), type, false);
+            int currentPlayer = 0; // TODO: Replace with real player
+            if(currencyManager.getPlayerCurrency(currentPlayer) >= requiredMoney) {
+                currencyManager.updatePlayerCurrency(currentPlayer, -requiredMoney);
 
-            Scene::getSingleton().AddGameObject(AIcharacter);
+                std::cout << "Update currency to " << currencyManager.getPlayerCurrency(currentPlayer) << std::endl;
+
+                std::cout << ToString(type) << std::endl;
+                glm::mat4 model = glm::lookAt(glm::vec3(0, 15.0f, 5.0f), glm::vec3(0, 0, 0), glm::vec3(0,1,0)); //viewmatrix
+                glm::mat4 projection = glm::perspective(glm::radians(90.0f), (float) 1440 /
+                                                                             (float) 1080, 0.1f, 200.0f);
+                glm::ivec4 viewport;
+                glGetIntegerv(GL_VIEWPORT, glm::value_ptr(viewport));
+                glm::vec3 Projected = glm::project(glPos, model, projection,viewport);
+                auto *AIcharacter = new AIPrefab(new Transform(glPos), type, false);
+
+                Scene::getSingleton().AddGameObject(AIcharacter);
+            }
+            else {
+                std::cout << "Currency " << currencyManager.getPlayerCurrency(currentPlayer) << " is to low for spawning" << std::endl;
+            }
         }
     }
 
