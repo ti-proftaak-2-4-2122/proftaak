@@ -51,7 +51,6 @@ CombatController::CombatController()
 void CombatController::StopCombat()
 {
     IsAttacking = false;
-    hasFought = true;
 
     //Checkpoint naar volgende punt
 //    if(isTowerDestroyed){
