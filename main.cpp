@@ -155,40 +155,48 @@ void worldInit()
 {
     InputHandler::getSingleton().AddCallback(GLFW_KEY_ESCAPE, GLFW_PRESS, closeWindow);
 
-    TowerPrefab* towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
-    TowerPrefab* towerPrefab1 = new TowerPrefab(new Transform(glm::vec3(-30.0f, 0.0f, 12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
-    TowerPrefab* towerPrefab2 = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, 12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
-    TowerPrefab* towerPrefab3 = new TowerPrefab(new Transform(glm::vec3(-30.0f, 0.0f, -12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
-    TowerPrefab* towerPrefab4 = new TowerPrefab(new Transform(glm::vec3(50.0f, 0.0f, 0.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
-    TowerPrefab* towerPrefab5 = new TowerPrefab(new Transform(glm::vec3(-50.0f, 0.0f, 0.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+//    TowerPrefab* towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+//    TowerPrefab* towerPrefab1 = new TowerPrefab(new Transform(glm::vec3(-30.0f, 0.0f, 12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+//    TowerPrefab* towerPrefab2 = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, 12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+//    TowerPrefab* towerPrefab3 = new TowerPrefab(new Transform(glm::vec3(-30.0f, 0.0f, -12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+//    TowerPrefab* towerPrefab4 = new TowerPrefab(new Transform(glm::vec3(50.0f, 0.0f, 0.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+//    TowerPrefab* towerPrefab5 = new TowerPrefab(new Transform(glm::vec3(-50.0f, 0.0f, 0.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+////
+//    GameObject* field = new GameObject(new Transform(glm::vec3(0, 0, 0),glm::vec3(0,0,0),glm::vec3(1, 1, 1)));
+//    Mesh* mesh = new Mesh(ModelManager::getModel("../resource/models/map_ground.obj"));
+//    mesh->SetColor(GREEN_GRASS);
+//    field->AddComponent(mesh);
 //
-    GameObject* field = new GameObject(new Transform(glm::vec3(0, 0, 0),glm::vec3(0,0,0),glm::vec3(1, 1, 1)));
-    Mesh* mesh = new Mesh(ModelManager::getModel("../resource/models/map_ground.obj"));
-    mesh->SetColor(GREEN_GRASS);
-    field->AddComponent(mesh);
+//    GameObject* bridge = new GameObject(new Transform(glm::vec3(0, 0, 0),glm::vec3(0,0,0),glm::vec3(1, 1, 1)));
+//    Mesh* mesh1 = new Mesh(ModelManager::getModel("../resource/models/map_bridges.obj"));
+//    mesh1->SetColor(YELLOW_SUNFLOWER);
+//    bridge->AddComponent(mesh1);
+//
+//
+//    float mapAlpha = CONFIG_PLAYFIELD_ALPHA;
+//
+//    Scene::getSingleton().AddGameObject(towerPrefab);
+//    Scene::getSingleton().AddGameObject(towerPrefab1);
+//    Scene::getSingleton().AddGameObject(towerPrefab2);
+//    Scene::getSingleton().AddGameObject(towerPrefab3);
+////    Scene::getSingleton().AddGameObject(towerPrefab4);
+////    Scene::getSingleton().AddGameObject(towerPrefab5);
+//    Scene::getSingleton().AddGameObject(field);
+//    Scene::getSingleton().AddGameObject(bridge);
+//
+//    auto *spawnManager = new GameObject(new Transform());
+//    auto *spawner = new Spawner();
+//
+//    spawnManager->AddComponent(spawner);
+//    Scene::getSingleton().AddGameObject(spawnManager);
 
-    GameObject* bridge = new GameObject(new Transform(glm::vec3(0, 0, 0),glm::vec3(0,0,0),glm::vec3(1, 1, 1)));
-    Mesh* mesh1 = new Mesh(ModelManager::getModel("../resource/models/map_bridges.obj"));
-    mesh1->SetColor(YELLOW_SUNFLOWER);
-    bridge->AddComponent(mesh1);
-
-
-    float mapAlpha = CONFIG_PLAYFIELD_ALPHA;
-
-    Scene::getSingleton().AddGameObject(towerPrefab);
-    Scene::getSingleton().AddGameObject(towerPrefab1);
-    Scene::getSingleton().AddGameObject(towerPrefab2);
-    Scene::getSingleton().AddGameObject(towerPrefab3);
-//    Scene::getSingleton().AddGameObject(towerPrefab4);
-//    Scene::getSingleton().AddGameObject(towerPrefab5);
-    Scene::getSingleton().AddGameObject(field);
-    Scene::getSingleton().AddGameObject(bridge);
-
-    auto *spawnManager = new GameObject(new Transform());
-    auto *spawner = new Spawner();
-
-    spawnManager->AddComponent(spawner);
-    Scene::getSingleton().AddGameObject(spawnManager);
+    GameObject* gangGangStyleGang = new GameObject(new Transform());
+    Mesh* mesh = new Mesh(ModelManager::getModel("../resource/models/box.obj"));
+    Animator* animator = new Animator("../resource/models/animation", *mesh, 30);
+    gangGangStyleGang->AddComponent(mesh);
+    gangGangStyleGang->AddComponent(animator);
+    animator->StartAnimation();
+    Scene::getSingleton().AddGameObject(gangGangStyleGang);
 
     SceneManager::LoadScene(Scene::getSingleton());
 }
@@ -201,8 +209,8 @@ void update()
     Scene::getSingleton().update();
     GameTimer::update(glfwGetTime());
 
-//    std::cout << "Frametime: " << GameTimer::getDeltaTime() * 1000 << "ms;"
-//          "\tFPS: " << 1 / GameTimer::getDeltaTime() << std::endl;
+    std::cout << "Frametime: " << GameTimer::getDeltaTime() * 1000 << "ms;"
+          "\tFPS: " << 1 / GameTimer::getDeltaTime() << std::endl;
 }
 
 void draw()
