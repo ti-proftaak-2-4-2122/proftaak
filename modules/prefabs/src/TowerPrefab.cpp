@@ -6,23 +6,25 @@
 #include "Mesh.h"
 #include "gui/StrGuiComponent.h"
 
-TowerPrefab::TowerPrefab(Transform *transform) : GameObject
-                                                         (transform)
+#include "glm/glm.hpp"
+#include "../../../colours.h"
+
+TowerPrefab::TowerPrefab(Transform *transform) : GameObject(transform)
 {
     std::cout << "Constructor call for tower" << std::endl;
     this->characterStats = new CharacterStats{4.0f, 5.0f, 5.0f, 0.0f, 1.0f, TOWER};
     this->collider = new Collider(this->characterStats->range);
-    this->strGuiComponent = new StrGuiComponent("");
+     this->strGuiComponent = new StrGuiComponent("");
 
+     this->strGuiComponent->setPosition(transform->getPosition());
+    Mesh* mesh = new Mesh(ModelManager::getModel("../resource/models/tower.obj"));
+    mesh->SetColor(RED_BARRA);
 
-    Mesh *mesh = new Mesh(ModelManager::getModel("../resource/models/tower.obj"));
-    mesh->SetDiffuseColor({0.619, 0, 0.537});
     AddComponent(mesh);
     AddComponent(this->collider);
     AddComponent(this->characterStats);
     AddComponent(this->strGuiComponent);
 
-    strGuiComponent->setPosition(transform->getPosition());
 }
 
 void TowerPrefab::onTriggerEnter(Collider *other)
@@ -31,11 +33,10 @@ void TowerPrefab::onTriggerEnter(Collider *other)
     GameObject::onTriggerEnter(other);
     CharacterStats *otherStats = other->getGameObject()->FindComponent<CharacterStats>();
 
-    if (otherStats)
-    {
+    if(otherStats) {
+        if( otherStats->type == TOWER) return;
         StartCombat(otherStats);
-        std::cout << "The character got damaged, his health is: " << otherStats->health <<
-                  std::endl;
+        std::cout << "The character got damaged, his health is: " << otherStats->health << std::endl;
     }
 }
 

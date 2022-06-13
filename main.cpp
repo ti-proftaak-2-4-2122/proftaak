@@ -15,10 +15,19 @@
 #include "SceneManager.h"
 #include "Transform.h"
 #include "GameTimer.h"
+#include "Collider.h"
+#include "ImageProvider.h"
+#include "CharacterStats.h"
+
 #include "user-config.h"
 #include "Spawner.h"
+#include "AIPrefab.h"
 #include "TowerPrefab.h"
+#include "UnitTypeEnum.h"
 #include "InputHandler.h"
+#include "Animator.h"
+#include "colours.h"
+
 
 using tigl::Vertex;
 
@@ -26,6 +35,7 @@ GLFWwindow *window;
 
 std::shared_ptr<cv::VideoCapture> capture;
 ImageProvider *imageProvider;
+Scene *scene;
 
 void init();
 
@@ -144,27 +154,35 @@ void closeWindow()
 void worldInit()
 {
     InputHandler::getSingleton().AddCallback(GLFW_KEY_ESCAPE, GLFW_PRESS, closeWindow);
-//    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(-15.0f, 0.0f, -12.0f), glm::vec3(0, 0, 0),
-//                                         glm::vec3(1.0f,1.0f,1.0f)), FAST);
-//
-    TowerPrefab* towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
-//    TowerPrefab* towerPrefab1 = new TowerPrefab(new Transform(glm::vec3(50.0f, 0.0f, 0.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
-//
-    GameObject* field = new GameObject(new Transform(glm::vec3(0, 0, 0),
-                                                          glm::vec3(0,0,0),
-                                                          glm::vec3(1, 1, 1)));
 
-    field->AddComponent(new Mesh(ModelManager::getModel("../resource/models/map_ground.obj")));
+    TowerPrefab* towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+    TowerPrefab* towerPrefab1 = new TowerPrefab(new Transform(glm::vec3(-30.0f, 0.0f, 12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+    TowerPrefab* towerPrefab2 = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, 12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+    TowerPrefab* towerPrefab3 = new TowerPrefab(new Transform(glm::vec3(-30.0f, 0.0f, -12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+    TowerPrefab* towerPrefab4 = new TowerPrefab(new Transform(glm::vec3(50.0f, 0.0f, 0.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+    TowerPrefab* towerPrefab5 = new TowerPrefab(new Transform(glm::vec3(-50.0f, 0.0f, 0.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+//
+    GameObject* field = new GameObject(new Transform(glm::vec3(0, 0, 0),glm::vec3(0,0,0),glm::vec3(1, 1, 1)));
+    Mesh* mesh = new Mesh(ModelManager::getModel("../resource/models/map_ground.obj"));
+    mesh->SetColor(GREEN_GRASS);
+    field->AddComponent(mesh);
+
+    GameObject* bridge = new GameObject(new Transform(glm::vec3(0, 0, 0),glm::vec3(0,0,0),glm::vec3(1, 1, 1)));
+    Mesh* mesh1 = new Mesh(ModelManager::getModel("../resource/models/map_bridges.obj"));
+    mesh1->SetColor(YELLOW_SUNFLOWER);
+    bridge->AddComponent(mesh1);
 
 
     float mapAlpha = CONFIG_PLAYFIELD_ALPHA;
 
     Scene::getSingleton().AddGameObject(towerPrefab);
-//    Scene::getSingleton().AddGameObject(towerPrefab1);
+    Scene::getSingleton().AddGameObject(towerPrefab1);
+    Scene::getSingleton().AddGameObject(towerPrefab2);
+    Scene::getSingleton().AddGameObject(towerPrefab3);
+//    Scene::getSingleton().AddGameObject(towerPrefab4);
+//    Scene::getSingleton().AddGameObject(towerPrefab5);
     Scene::getSingleton().AddGameObject(field);
-//    Scene::getSingleton().AddGameObject(bridge);
-//    Scene::getSingleton().AddGameObject(towerPrefab1);
-//    Scene::getSingleton().AddGameObject(bridge);
+    Scene::getSingleton().AddGameObject(bridge);
 
     auto *spawnManager = new GameObject(new Transform());
     auto *spawner = new Spawner();
@@ -183,8 +201,10 @@ void update()
     Scene::getSingleton().update();
     GameTimer::update(glfwGetTime());
 
-//    std::cout << "Frametime: " << GameTimer::getDeltaTime() * 1000 << "ms;"
-//          "\tFPS: " << 1 / GameTimer::getDeltaTime() << std::endl;
+    if(CONFIG_FPS_COUNTER) {
+        std::cout << "Frametime: " << GameTimer::getDeltaTime() * 1000 << "ms;"
+            "\tFPS: " << 1 / GameTimer::getDeltaTime() << std::endl;
+    }
 }
 
 void draw()
@@ -220,7 +240,6 @@ void draw()
 
     // Prepare for 3D Scene
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
 
     glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -250,25 +269,5 @@ void createMapObject(const std::string &filePath, glm::vec4 color)
         mesh_map_object->SetColor(color);
     }
 
-    Scene::getSingleton().getSingleton().AddGameObject(map_object);
-}
-
-
-void mouseButtonCallback(GLFWwindow *_window, int button, int action, int mods)
-{
-    int width, height;
-    glfwGetWindowSize(_window, &width, &height);
-
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
-    {
-        double xPosition, yPosition;
-        glfwGetCursorPos(window, &xPosition, &yPosition);
-        float xNormalized, yNormalized;
-        xNormalized = ((float) (xPosition / width) * 2.0f) - 1.0f;
-        yNormalized = ((float) (yPosition / height) * -2.0f) + 1.0f;
-
-        std::cout << xNormalized << "," << yNormalized << std::endl;
-        std::cout << "Mouse left input working" << std::endl; //testing
-        //GUIgameobject->MouseButtonPress(xNormalized, yNormalized);
-    }
+    scene->getSingleton().AddGameObject(map_object);
 }
