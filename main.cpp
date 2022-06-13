@@ -201,8 +201,10 @@ void update()
     Scene::getSingleton().update();
     GameTimer::update(glfwGetTime());
 
-//    std::cout << "Frametime: " << GameTimer::getDeltaTime() * 1000 << "ms;"
-//          "\tFPS: " << 1 / GameTimer::getDeltaTime() << std::endl;
+    if(CONFIG_FPS_COUNTER) {
+        std::cout << "Frametime: " << GameTimer::getDeltaTime() * 1000 << "ms;"
+            "\tFPS: " << 1 / GameTimer::getDeltaTime() << std::endl;
+    }
 }
 
 void draw()
