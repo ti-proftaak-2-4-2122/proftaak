@@ -14,4 +14,4 @@ target_link_libraries(${TEST_TARGET_NAME} utest)
 # Replace [Dependency] with the required module/libary name
 #target_link_libraries(${TEST_TARGET_NAME} [Dependency])
 
-target_link_libraries(${TEST_TARGET_NAME} time)
+target_link_libraries(${TEST_TARGET_NAME} Utils)
