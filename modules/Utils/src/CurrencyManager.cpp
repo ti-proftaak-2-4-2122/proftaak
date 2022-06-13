@@ -59,6 +59,11 @@ void CurrencyManager::setPlayerCurrency(int player, float currency)
         this->playerWalletList[player] = std::min(std::max(0.0f, currency), this->maxCurrency);;
 }
 
+void CurrencyManager::updatePlayerCurrency(int player, float delta)
+{
+    this->setPlayerCurrency(player, this->getPlayerCurrency(player) + delta);
+}
+
 float CurrencyManager::getCurrencyRate() const
 {
     return this->currencyRate;

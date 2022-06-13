@@ -24,6 +24,7 @@ public:
 
     [[nodiscard]] float getPlayerCurrency(int player);
     void setPlayerCurrency(int player, float currency);
+    void updatePlayerCurrency(int player, float delta);
 
     [[nodiscard]] float getCurrencyRate() const;
     void setCurrencyRate(float currencyRate);
