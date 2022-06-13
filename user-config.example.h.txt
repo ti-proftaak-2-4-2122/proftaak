@@ -16,3 +16,4 @@
 #define CONFIG_MATRIX_VIEW glm::lookAt(glm::vec3(0, 60, 0.01f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0))
 
 #define CONFIG_FPS_COUNTER false
+#define CONFIG_FPS_COUNTER_ACCURACY 1.0

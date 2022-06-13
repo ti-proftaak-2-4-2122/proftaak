@@ -210,7 +210,7 @@ void update()
         if(lastFramePrint > 0)
         {
             double deltaTime = GameTimer::getCurrentTime() - lastFramePrint;
-            if(deltaTime >= 1.0) {
+            if(deltaTime >= CONFIG_FPS_COUNTER_ACCURACY) {
                 std::cout << "Avg Frametime: " << (deltaTime / (double)frameCount) * 1000.0 << "ms;"
                       "\tAvg FPS: " << frameCount / deltaTime << std::endl;
 
