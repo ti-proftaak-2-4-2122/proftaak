@@ -36,6 +36,7 @@ GLFWwindow *window;
 
 std::shared_ptr<cv::VideoCapture> capture;
 ImageProvider *imageProvider;
+Scene *scene;
 
 void init();
 
@@ -219,7 +220,7 @@ void draw()
         tigl::shader->enableColorMult(false);
 
         // Draw Background
-        openCvComponent->Draw();
+        imageProvider->Draw();
     }
 
     // Prepare for 3D Scene
@@ -242,7 +243,7 @@ void draw()
 
 void createMapObject(const std::string &filePath, glm::vec4 color)
 {
-    auto *map_object = new GameObject();
+    auto *map_object = new GameObject(new Transform);
 
     map_object->AddComponent(new Mesh(ModelManager::getModel(filePath)));
 
@@ -256,5 +257,5 @@ void createMapObject(const std::string &filePath, glm::vec4 color)
         mesh_map_object->SetColor(color);
     }
 
-    scene->AddGameObject(map_object);
+    scene->getSingleton().AddGameObject(map_object);
 }
