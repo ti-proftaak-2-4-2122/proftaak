@@ -6,17 +6,24 @@
 #include <cs/CelShader.h>
 #include <opencv2/highgui.hpp>
 #include <memory>
+#include <vector>
 
 #include "Mesh.h"
 #include "ModelManager.h"
-#include "OpenCVVideoCapture.h"
 #include "Scene.h"
 #include "SceneManager.h"
 #include "Transform.h"
 #include "GameTimer.h"
 #include "Collider.h"
+#include "ImageProvider.h"
+#include "CharacterStats.h"
 
 #include "user-config.h"
+#include "Spawner.h"
+#include "AIPrefab.h"
+#include "TowerPrefab.h"
+#include "UnitTypeEnum.h"
+#include "Animator.h"
 #include "gui/Gui.h"
 #include "gui/StrGuiComponent.h"
 
@@ -29,7 +36,7 @@ using tigl::Vertex;
 GLFWwindow *window;
 
 std::shared_ptr<cv::VideoCapture> capture;
-OpenCVVideoCapture *openCvComponent;
+ImageProvider *imageProvider;
 
 void init();
 
@@ -42,8 +49,6 @@ void worldInit();
 void createMapObject(const std::string &filePath, glm::vec4 color);
 
 void mouseButtonCallback(GLFWwindow *_window, int button, int action, int mods);
-
-Scene *scene;
 
 int currentWidth;
 int currentHeight;
@@ -108,8 +113,8 @@ void init()
 
     if (capture->isOpened())
     {
-        openCvComponent = new OpenCVVideoCapture(capture);
-        openCvComponent->Awake();
+        imageProvider = new ImageProvider(capture);
+        imageProvider->Awake();
     }
 
     glfwSetTime(0);
@@ -148,7 +153,6 @@ void init()
 
 void worldInit()
 {
-    scene = new Scene();
 
     auto *collisionTest = new GameObject();
     auto *collider = new Collider(1.0f, glm::vec3(0, 0, 0));
@@ -169,8 +173,8 @@ void worldInit()
     GUIgameobject->AddComponent(guiComponent1);
     GUIgameobject->AddComponent(guiComponent2);
 
-    scene->AddGameObject(collisionTest);
-    scene->AddGameObject(collisionTest1);
+    Scene::getSingleton().AddGameObject(collisionTest);
+    Scene::getSingleton().AddGameObject(collisionTest1);
 
     float mapAlpha = CONFIG_PLAYFIELD_ALPHA;
 
@@ -180,15 +184,29 @@ void worldInit()
     createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f, mapAlpha});
     createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f, 1.0f});
 
-    SceneManager::LoadScene(*scene);
+//    Scene::getSingleton().AddGameObject(aiPrefab);
+//    Scene::getSingleton().AddGameObject(towerPrefab);
+//    Scene::getSingleton().AddGameObject(towerPrefab1);
+//    Scene::getSingleton().AddGameObject(field);
+//    Scene::getSingleton().AddGameObject(bridge);
+//    Scene::getSingleton().AddGameObject(towerPrefab1);
+//    Scene::getSingleton().AddGameObject(field);
+//    Scene::getSingleton().AddGameObject(bridge);
+
+    auto *spawnManager = new GameObject(new Transform());
+    auto *spawner = new Spawner();
+    spawnManager->AddComponent(spawner);
+    Scene::getSingleton().AddGameObject(spawnManager);
+
+    SceneManager::LoadScene(Scene::getSingleton());
 }
 
 void update()
 {
     if (capture->isOpened())
-        openCvComponent->Update();
+        imageProvider->Update();
 
-    scene->update();
+    Scene::getSingleton().update();
     GameTimer::update(glfwGetTime());
 
 //    std::cout << "Frametime: " << GameTimer::getDeltaTime() * 1000 << "ms;"
@@ -224,7 +242,7 @@ void draw()
         tigl::shader->enableColorMult(false);
 
         // Draw Background
-        openCvComponent->Draw();
+        imageProvider->Draw();
     }
 
     // Prepare for 3D Scene
@@ -241,10 +259,8 @@ void draw()
     cs::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 0.5f, 2.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
-
     // Draw 3D Scene
-    SceneManager::UpdatePoll(*scene);
-
+    SceneManager::UpdatePoll(Scene::getSingleton());
     tigl::shader->use();
 
     GUIgameobject->Draw();
@@ -266,7 +282,7 @@ void createMapObject(const std::string &filePath, glm::vec4 color)
         mesh_map_object->SetColor(color);
     }
 
-    scene->AddGameObject(map_object);
+    Scene::getSingleton().AddGameObject(map_object);
 }
 
 

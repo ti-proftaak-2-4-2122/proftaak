@@ -57,3 +57,8 @@ void Mesh::SetColor(const glm::vec4& color)
 void Mesh::SetAlpha(float alpha) {
     this->color.a = alpha;
 }
+
+void Mesh::SetMesh(ObjModel *model)
+{
+    objModel = model;
+}
