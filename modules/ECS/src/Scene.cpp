@@ -68,7 +68,7 @@ std::vector<GameObject *> Scene::findGameObjects(TagEnum tagEnum)
 
     for (auto* gameObject: this->gameobjects)
     {
-        if (gameObject->tagEnum == tagEnum)
+        if (gameObject->getTagEnum() == tagEnum)
             foundObjects.push_back(gameObject);
     }
 

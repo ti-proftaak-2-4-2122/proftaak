@@ -16,15 +16,9 @@
 #include "GameTimer.h"
 #include "Collider.h"
 #include "ImageProvider.h"
-#include "CharacterStats.h"
 
 #include "user-config.h"
 #include "Spawner.h"
-#include "AIPrefab.h"
-#include "TowerPrefab.h"
-#include "UnitTypeEnum.h"
-#include "Animator.h"
-#include "gui/Gui.h"
 #include "gui/StrGuiComponent.h"
 
 //aspect ratio should always be 4:3 when using realsense camera
@@ -53,9 +47,6 @@ void mouseButtonCallback(GLFWwindow *_window, int button, int action, int mods);
 int currentWidth;
 int currentHeight;
 
-Gui *GUIgameobject;
-
-//VirtualCamera* virtualCamera;
 int main()
 {
     //Init GLFW
@@ -153,28 +144,28 @@ void init()
 
 void worldInit()
 {
+//    auto *collisionTest = new GameObject();
+//    auto *collider = new Collider(1.0f);
+//    collisionTest->AddComponent(collider);
+//    auto *collisionTest1 = new GameObject(new Transform(glm::vec3(1.0f, 0, 0)));
+//    auto *collider1 = new Collider(1.0f);
+//    collisionTest1->AddComponent(collider1);
+//
+//    Scene::getSingleton().AddGameObject(collisionTest);
+//    Scene::getSingleton().AddGameObject(collisionTest1);
 
-    auto *collisionTest = new GameObject();
-    auto *collider = new Collider(1.0f, glm::vec3(0, 0, 0));
-    collisionTest->AddComponent(collider);
-    auto *collisionTest1 = new GameObject();
-    auto *collider1 = new Collider(1.0f, glm::vec3(1.0f, 0, 0));
-    collisionTest1->AddComponent(collider1);
+    auto *GUIgameobject = new GameObject();
 
-
-    GUIgameobject = new Gui();
 
     auto guiComponent0 = new StrGuiComponent("bada bing badaboem", glm::vec3(0.0f, 0.5f, 0));
     auto guiComponent1 = new StrGuiComponent("wat zie ik daar", glm::vec3(0.0f, -0.5f, 0),
                                              glm::vec3(2.0, 2.0f, 2.0f));
     auto guiComponent2 = new StrGuiComponent("jaja het werkt");
 
+
     GUIgameobject->AddComponent(guiComponent0);
     GUIgameobject->AddComponent(guiComponent1);
     GUIgameobject->AddComponent(guiComponent2);
-
-    Scene::getSingleton().AddGameObject(collisionTest);
-    Scene::getSingleton().AddGameObject(collisionTest1);
 
     float mapAlpha = CONFIG_PLAYFIELD_ALPHA;
 
@@ -197,6 +188,7 @@ void worldInit()
     auto *spawner = new Spawner();
     spawnManager->AddComponent(spawner);
     Scene::getSingleton().AddGameObject(spawnManager);
+    Scene::getSingleton().AddGameObject(GUIgameobject);
 
     SceneManager::LoadScene(Scene::getSingleton());
 }
@@ -256,14 +248,12 @@ void draw()
     cs::shader->setProjectionMatrix(
             glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH,
                              0.1f, 200.0f));
+
     cs::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0, 0.5f, 2.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+            glm::lookAt(glm::vec3(0, 60, 0.01f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
     // Draw 3D Scene
     SceneManager::UpdatePoll(Scene::getSingleton());
-    tigl::shader->use();
-
-    GUIgameobject->Draw();
 }
 
 void createMapObject(const std::string &filePath, glm::vec4 color)
@@ -295,12 +285,12 @@ void mouseButtonCallback(GLFWwindow *_window, int button, int action, int mods)
     {
         double xPosition, yPosition;
         glfwGetCursorPos(window, &xPosition, &yPosition);
-        float xNormalized,yNormalized;
-        xNormalized = ((float)(xPosition / width) * 2.0f)-1.0f;
-        yNormalized = ((float)(yPosition / height) * -2.0f)+1.0f;
+        float xNormalized, yNormalized;
+        xNormalized = ((float) (xPosition / width) * 2.0f) - 1.0f;
+        yNormalized = ((float) (yPosition / height) * -2.0f) + 1.0f;
 
         std::cout << xNormalized << "," << yNormalized << std::endl;
         std::cout << "Mouse left input working" << std::endl; //testing
-        GUIgameobject->MouseButtonPress(xNormalized, yNormalized);
+        //GUIgameobject->MouseButtonPress(xNormalized, yNormalized);
     }
 }

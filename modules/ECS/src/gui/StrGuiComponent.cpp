@@ -14,7 +14,8 @@
 #include "gui/StrGuiComponent.h"
 
 #include "Transform.h"
-#include "gui/Gui.h"
+#include "TextureLoader.h"
+#include "glm/gtc/type_ptr.hpp"
 
 #define ATLAS_WIDTH 10
 #define ATLAS_HEIGHT 10
@@ -42,9 +43,9 @@ void StrGuiComponent::DrawChar(glm::mat4 &modelMatrix, char characteristic)
     tigl::end();
 }
 
-void StrGuiComponent::Draw()
+void StrGuiComponent::UpdateAfterDraw()
 {
-    auto *gui = dynamic_cast<Gui *>(gameObject);
+    tigl::shader->use();
     glDisable(GL_CULL_FACE);
     tigl::shader->setProjectionMatrix(glm::ortho(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 200.0f));
     tigl::shader->setViewMatrix(glm::lookAt(
@@ -53,8 +54,7 @@ void StrGuiComponent::Draw()
             glm::vec3(0.0f, 1, 0)
     ));
 
-
-    glBindTexture(GL_TEXTURE_2D, gui->fontTxId);
+    glBindTexture(GL_TEXTURE_2D, fontTxId);
 
     tigl::shader->enableAlphaTest(true);
     tigl::shader->enableTexture(true);
@@ -79,12 +79,22 @@ void StrGuiComponent::Draw()
 StrGuiComponent::StrGuiComponent(std::string text, const glm::vec3 &position, const
 glm::vec3 &scale) : text(std::move(text)), position(position), scale(scale)
 {
-
+    fontTxId = textureLoader::getTexture("../resource/textures/Courier.png");
 }
 
 void StrGuiComponent::setPosition(const glm::vec3 &newPosition)
 {
-    StrGuiComponent::position = newPosition;
+    glm::mat4 model = glm::lookAt(glm::vec3(0, 15.0f, 5.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)); //viewmatrix
+    glm::mat4 projection = glm::perspective(glm::radians(90.0f), (float) 1440 / (float) 1080, 0.1f, 200.0f);
+    glm::ivec4 viewport;
+    glGetIntegerv(GL_VIEWPORT, glm::value_ptr(viewport));
+
+    glm::vec3 projected = glm::project(newPosition, model, projection, viewport);
+
+    StrGuiComponent::position = projected;
 }
 
-
+void StrGuiComponent::setPosition(const glm::vec2 &newPosition)
+{
+    StrGuiComponent::position = glm::vec3(newPosition.x,newPosition.y,0);
+}

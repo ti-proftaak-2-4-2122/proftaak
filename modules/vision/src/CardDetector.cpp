@@ -10,7 +10,6 @@
 #include <iostream> //Dit is ffe voor debug waardes bekijken
 
 
-
 cv::Mat CardDetector::GetBlurredImage(const cv::Mat &input_img)
 {
     cv::Mat output_img;
@@ -82,7 +81,7 @@ cv::Mat CardDetector::FilterTheBlob(const cv::Mat *img, const ColorFilter &color
                    (int) key_point.size, cv::Scalar(255, 255, 255), 5);
 
         Card *card = new Card{color.color, key_point.pt.x / img_with_keypoints.cols, key_point
-                              .pt.y / img_with_keypoints.rows};
+                                                                                             .pt.y / img_with_keypoints.rows};
         cards.push_back(*card);
     }
     return img_with_keypoints;

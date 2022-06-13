@@ -13,5 +13,6 @@
 enum TagEnum {
     ENEMY,
     STATE,
-    GUI
+    GUI,
+    NONE
 };

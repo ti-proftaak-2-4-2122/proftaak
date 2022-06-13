@@ -22,11 +22,13 @@ private:
     std::vector<Component *> components;
     std::vector<GameObject*> children;
 
+protected:
+    TagEnum tagEnum = TagEnum::NONE;
+
 public:
     Transform &transform;
-    GameObject(Transform* transform);
-
-    TagEnum tagEnum;
+    GameObject();
+    explicit GameObject(Transform* transform);
 
     Component &AddComponent(Component *component);
 
@@ -75,6 +77,10 @@ public:
     virtual void onTriggerExit(Collider* other) {
 //        std::cout << "On Trigger Exit called" << std::endl;
     };
+
+    TagEnum getTagEnum() const;
+
+    void setTagEnum(TagEnum newTagEnum);
 
 };
 
