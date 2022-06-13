@@ -121,8 +121,8 @@ void Spawner::Awake()
 
 glm::vec3 Spawner::ConvertCords(CardDetector::Card* card)
 {
-    glm::mat4 model = MATRIX_VIEW;
-    glm::mat4 projection = MATRIX_PROJECTION;
+    glm::mat4 model = CONFIG_MATRIX_VIEW;
+    glm::mat4 projection = CONFIG_MATRIX_PROJECTION;
     glm::ivec4 viewport;
     glGetIntegerv(GL_VIEWPORT, glm::value_ptr(viewport));
     glm::vec3 cvPos = {card->x * viewport[2], viewport[3] - card->y * viewport[3], 0.991f};

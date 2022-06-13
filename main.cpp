@@ -58,7 +58,7 @@ int main()
         throw "Could not initialize glwf";
 
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
-    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGTH, "NOT CLASH ROYALE", nullptr, nullptr);
+    window = glfwCreateWindow(CONFIG_WINDOW_WIDTH, CONFIG_WINDOW_HEIGTH, "NOT CLASH ROYALE", nullptr, nullptr);
     if (!window)
     {
         glfwTerminate();
@@ -236,9 +236,9 @@ void draw()
 
     cs::shader->use();
 
-    cs::shader->setProjectionMatrix(MATRIX_PROJECTION);
+    cs::shader->setProjectionMatrix(CONFIG_MATRIX_PROJECTION);
 
-    cs::shader->setViewMatrix(MATRIX_VIEW);
+    cs::shader->setViewMatrix(CONFIG_MATRIX_VIEW);
 
     // Draw 3D Scene
     SceneManager::UpdatePoll(Scene::getSingleton());
