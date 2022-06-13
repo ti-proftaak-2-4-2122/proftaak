@@ -8,15 +8,17 @@
 
 #include "Mesh.h"
 #include "ModelManager.h"
-#include "OpenCVVideoCapture.h"
+#include "ImageProvider.h"
 #include "Scene.h"
 #include "SceneManager.h"
 #include "Transform.h"
 #include "GameTimer.h"
 #include "Collider.h"
+#include "ImageProvider.h"
 #include "CharacterStats.h"
 
 #include "user-config.h"
+#include "Spawner.h"
 #include "AIPrefab.h"
 #include "TowerPrefab.h"
 #include "UnitTypeEnum.h"
@@ -30,7 +32,7 @@ using tigl::Vertex;
 GLFWwindow *window;
 
 std::shared_ptr<cv::VideoCapture> capture;
-OpenCVVideoCapture *openCvComponent;
+ImageProvider *imageProvider;
 
 void init();
 
@@ -98,12 +100,11 @@ void init()
 
     if (capture->isOpened())
     {
-        openCvComponent = new OpenCVVideoCapture(capture);
-        openCvComponent->Awake();
+        imageProvider = new ImageProvider(capture);
+        imageProvider->Awake();
     }
 
     glfwSetTime(0);
-
 
     //setting up lights and render stuff
     tigl::shader->enableColor(false);
@@ -126,14 +127,11 @@ void init()
 
 void worldInit()
 {
-    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(-15.0f, 0.0f, -8.0f), glm::vec3(0, 0, 0),
+    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(-15.0f, 0.0f, -12.0f), glm::vec3(0, 0, 0),
                                          glm::vec3(1.0f,1.0f,1.0f)), FAST);
 
     TowerPrefab* towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
     TowerPrefab* towerPrefab1 = new TowerPrefab(new Transform(glm::vec3(50.0f, 0.0f, 0.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
-
-
-
 
     GameObject* field = new GameObject(new Transform(glm::vec3(0, 0, 0),
                                                           glm::vec3(0,0,0),
@@ -157,8 +155,8 @@ void worldInit()
 //    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1});
 //    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f});
 //    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f});
-//
-    Scene::getSingleton().AddGameObject(aiPrefab);
+
+//    Scene::getSingleton().AddGameObject(aiPrefab);
     Scene::getSingleton().AddGameObject(towerPrefab);
     Scene::getSingleton().AddGameObject(towerPrefab1);
     Scene::getSingleton().AddGameObject(field);
@@ -167,13 +165,18 @@ void worldInit()
 //    Scene::getSingleton().AddGameObject(field);
 //    Scene::getSingleton().AddGameObject(bridge);
 
+    auto *spawnManager = new GameObject(new Transform());
+    auto *spawner = new Spawner();
+    spawnManager->AddComponent(spawner);
+    Scene::getSingleton().AddGameObject(spawnManager);
+
     SceneManager::LoadScene(Scene::getSingleton());
 }
 
 void update()
 {
     if (capture->isOpened())
-        openCvComponent->Update();
+        imageProvider->Update();
 
     Scene::getSingleton().update();
     GameTimer::update(glfwGetTime());
@@ -202,7 +205,7 @@ void draw()
         tigl::shader->enableTexture(true);
 
         // Draw Background
-        openCvComponent->Draw();
+        imageProvider->Draw();
     }
 
     // Prepare for 3D Scene
@@ -213,6 +216,7 @@ void draw()
     tigl::shader->setProjectionMatrix(
             glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH,
                              0.1f, 200.0f));
+
     tigl::shader->setViewMatrix(
             glm::lookAt(glm::vec3(0, 60, 0.01f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
 
@@ -226,12 +230,9 @@ void draw()
 
 void createMapObject(const std::string &filePath, glm::vec3 diffuseColor)
 {
-    auto* map_object = new GameObject(new Transform());
+    auto* map_object = new GameObject(new Transform(CONFIG_PLAYFIELD_POSITION, CONFIG_PLAYFIELD_ROTATION, CONFIG_PLAYFIELD_SCALE));
 
     map_object->AddComponent(new Mesh(ModelManager::getModel(filePath)));
-    map_object->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
-    map_object->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
-    map_object->transform.setScale(CONFIG_PLAYFIELD_SCALE);
     auto mesh_map_object = map_object->FindComponent<Mesh>();
     if (mesh_map_object)
     {

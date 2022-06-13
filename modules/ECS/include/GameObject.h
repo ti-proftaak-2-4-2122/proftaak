@@ -61,6 +61,8 @@ public:
 
     void Draw();
 
+    void UpdateAfterDraw();
+
     ~GameObject();
 
     virtual void onTriggerEnter(Collider* other) {

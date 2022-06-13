@@ -12,8 +12,6 @@ void LerpController::Move(glm::vec3 startPos, glm::vec3 endPos, float speed)
 {
     this->endPos = endPos;
 
-    std::cout << "Going to move" << std::endl;
-
     float deltaZ = endPos.z-startPos.z;
     float deltaX = endPos.x-startPos.x;
 

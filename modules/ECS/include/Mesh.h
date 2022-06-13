@@ -25,7 +25,7 @@ class Mesh : public Component
 private:
     ObjModel *objModel;
     glm::vec3 diffuseColor = {0.8f, 0.8f, 0.8f};
-    ParentTransform* parentTransform;
+    ParentTransform* parentTransform = nullptr;
 public:
 
     explicit Mesh(ObjModel *_objmodel);

@@ -103,6 +103,15 @@ void GameObject::Draw()
         child->Draw();
 }
 
+void GameObject::UpdateAfterDraw()
+{
+    for(auto component : this->components)
+        component->UpdateAfterDraw();
+
+    for(auto child : this->children)
+        child->UpdateAfterDraw();
+}
+
 GameObject::~GameObject()
 {
     for(auto child : this->children)

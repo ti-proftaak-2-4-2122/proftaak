@@ -16,7 +16,7 @@ void Scene::AddGameObject(GameObject *gameObject)
 
     if(pos != this->gameobjects.end())
         throw std::invalid_argument("GameObject was already added to scene");
-
+    gameObject->Awake();
     gameobjects.push_back(gameObject);
 }
 

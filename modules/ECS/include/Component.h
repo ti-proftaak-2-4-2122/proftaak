@@ -20,6 +20,9 @@ public:
     virtual void Update() {};
 
     virtual void Draw() {};
+
+    virtual void UpdateAfterDraw() {};
+
     Component();
 
     void SetParent(GameObject *parentGameObject);

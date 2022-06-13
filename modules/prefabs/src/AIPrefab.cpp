@@ -23,6 +23,8 @@ AIPrefab::AIPrefab(Transform *transform, UnitTypeEnum type) : GameObject(transfo
     this->collider = new Collider(this->characterStats->range);
     AddComponent(collider);
 
+    InitCheckpoints();
+
     lerpController->Move(this->transform.getPosition(), checkPoints[0],
                          characterStats->moveSpeed);
 }
@@ -41,10 +43,7 @@ void AIPrefab::onTriggerEnter(Collider *other)
     if (otherStats)
     {
         //Start combat
-        std::cout << "Starting combat" << std::endl;
         StartCombat(otherStats);
-    } else {
-        std::cout << "Other Stats are null" << std::endl;
     }
 
 }
@@ -57,13 +56,19 @@ void AIPrefab::onTriggerExit(Collider *other)
 void AIPrefab::Update()
 {
     GameObject::Update();
-    if(lerpController->CheckPos(this->transform.getPosition(), checkPoints[0])) {
-        lerpController->Move(this->transform.getPosition(), checkPoints[1],
-                             characterStats->moveSpeed);
+    if(IsAttacking) DoDamage();
+    if(wayPointIndex >= checkPoints.size()) {
+        lerpController->Move(this->transform.getPosition(), this->transform.getPosition(), characterStats->moveSpeed);
+        return;
     }
-    if (!IsAttacking) return;
-    else DoDamage();
+    //std::cout << "waypoint " << wayPointIndex << '\n';
+    if(lerpController->CheckPos(this->transform.getPosition(), checkPoints[wayPointIndex])) {
 
+        wayPointIndex++;
+        std::cout << "waypointindex: " << wayPointIndex << " to point: " << checkPoints[wayPointIndex].x << "," << checkPoints[wayPointIndex].z <<
+        std::endl;
+        lerpController->Move(this->transform.getPosition(), checkPoints[wayPointIndex], characterStats->moveSpeed);
+    }
 }
 
 void AIPrefab::StartCombat(CharacterStats *otherStats)
@@ -109,14 +114,56 @@ void AIPrefab::StopCombat()
 
 void AIPrefab::InitStats(UnitTypeEnum type)
 {
+
+    std::cout << "Init stats: " << ToString(type) << std::endl;
     switch (type)
     {
         case FAST:
-            this->characterStats = new CharacterStats {4.0f, 100.0f, 5.0f, 3.0f, 3.0f, LAND};
+            this->characterStats = new CharacterStats {2.0f, 100.0f, 5.0f, 3.0f, 3.0f, LAND};
             break;
         case SLOW:
-            this->characterStats = new CharacterStats {4.0f, 100.0f, 10.0f, 1.0f, 1.0f, LAND};
+            this->characterStats = new CharacterStats {2.0f, 100.0f, 10.0f, 1.0f, 1.0f, LAND};
             break;
+        case LAND:
+            this->characterStats = new CharacterStats {2.0f, 100.0f, 10.0f, 1.0f, 1.0f, LAND};
+            break;
+        default:
+            this->characterStats = new CharacterStats {2.0f, 100.0f, 10.0f, 1.0f, 1.0f, LAND};
+            break;
+    }
+}
+
+void AIPrefab::InitCheckpoints()
+{
+    glm::vec3 pos = this->transform.getPosition();
+
+    if(pos.x < 0 && pos.z < 0)
+    {
+        //links boven
+        this->checkPoints.push_back(this->predefinedPositions[TOP_LEFT_BRIDGE]);
+        this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_RIGHT]);
+        this->checkPoints.push_back(this->predefinedPositions[TOWER_BOTTOM_RIGHT]);
+    }
+    else if(pos.x < 0 && pos.z > 0)
+    {
+        // links onder spawnen
+        this->checkPoints.push_back(this->predefinedPositions[BOTTOM_LEFT_BRIDGE]);
+        this->checkPoints.push_back(this->predefinedPositions[TOWER_BOTTOM_RIGHT]);
+        this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_RIGHT]);
+    }
+    else if(pos.x > 0 && pos.z < 0)
+    {
+        //Rechts boven
+        this->checkPoints.push_back(this->predefinedPositions[TOP_RIGHT_BRIDGE]);
+        this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_LEFT]);
+        this->checkPoints.push_back(this->predefinedPositions[TOWER_BOTTOM_LEFT]);
+    }
+    else if(pos.x > 0 && pos.z > 0)
+    {
+        //Rechts onder
+        this->checkPoints.push_back(this->predefinedPositions[BOTTOM_RIGHT_BRIDGE]);
+        this->checkPoints.push_back(this->predefinedPositions[TOWER_BOTTOM_LEFT]);
+        this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_LEFT]);
     }
 }
 
