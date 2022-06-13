@@ -48,7 +48,7 @@ private:
 
     const std::vector<ColorFilter> colours = {yellow, red, green};
 
-    std::vector<Card> cards;
+    std::vector<Card*> cards;
 
     void Initialize();
 
@@ -81,7 +81,7 @@ public:
 
     cv::Mat UpdateCards(const cv::Mat &input_image);
 
-    std::vector<Card> GetDetectedCards();
+    std::vector<Card*> GetDetectedCards();
 
     void PrintCards();
 };

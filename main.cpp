@@ -10,20 +10,24 @@
 
 #include "Mesh.h"
 #include "ModelManager.h"
+#include "ImageProvider.h"
 #include "Scene.h"
 #include "SceneManager.h"
 #include "Transform.h"
 #include "GameTimer.h"
 #include "Collider.h"
 #include "ImageProvider.h"
+#include "CharacterStats.h"
 
 #include "user-config.h"
 #include "Spawner.h"
-#include "gui/StrGuiComponent.h"
+#include "AIPrefab.h"
+#include "TowerPrefab.h"
+#include "UnitTypeEnum.h"
+#include "InputHandler.h"
+#include "Animator.h"
 
-//aspect ratio should always be 4:3 when using realsense camera
-#define WINDOW_WIDTH 1440
-#define WINDOW_HEIGTH 1080
+
 
 using tigl::Vertex;
 
@@ -31,6 +35,7 @@ GLFWwindow *window;
 
 std::shared_ptr<cv::VideoCapture> capture;
 ImageProvider *imageProvider;
+Scene *scene;
 
 void init();
 
@@ -42,18 +47,18 @@ void worldInit();
 
 void createMapObject(const std::string &filePath, glm::vec4 color);
 
-void mouseButtonCallback(GLFWwindow *_window, int button, int action, int mods);
-
 int currentWidth;
 int currentHeight;
 
+//VirtualCamera* virtualCamera;
 int main()
 {
     //Init GLFW
     if (!glfwInit())
         throw "Could not initialize glwf";
 
-    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGTH, "Hello World", nullptr, nullptr);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+    window = glfwCreateWindow(CONFIG_WINDOW_WIDTH, CONFIG_WINDOW_HEIGTH, "NOT CLASH ROYALE", nullptr, nullptr);
     if (!window)
     {
         glfwTerminate();
@@ -86,18 +91,16 @@ int main()
 
     return 0;
 }
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    InputHandler::getSingleton().check_keys(key, action);
+}
 
 
 void init()
 {
-    glfwSetKeyCallback(window, [](GLFWwindow *window, int key, int scancode, int action, int mods)
-    {
-        if (key == GLFW_KEY_ESCAPE)
-            glfwSetWindowShouldClose(window, true);
-    });
 
-    glfwSetMouseButtonCallback(window, mouseButtonCallback);
-
+    glfwSetKeyCallback(window, key_callback);
 
     // Init OpenCV
     capture = std::make_shared<cv::VideoCapture>(CONFIG_OPENCV_CAMERA_INDEX);
@@ -142,53 +145,42 @@ void init()
     cs::shader->setLightPosition(CONFIG_LIGHT_POSITION);
 }
 
+void closeWindow()
+{
+    std::cout << "Closing window" << std::endl;
+    glfwSetWindowShouldClose(window, true);
+}
+
 void worldInit()
 {
-//    auto *collisionTest = new GameObject();
-//    auto *collider = new Collider(1.0f);
-//    collisionTest->AddComponent(collider);
-//    auto *collisionTest1 = new GameObject(new Transform(glm::vec3(1.0f, 0, 0)));
-//    auto *collider1 = new Collider(1.0f);
-//    collisionTest1->AddComponent(collider1);
+    InputHandler::getSingleton().AddCallback(GLFW_KEY_ESCAPE, GLFW_PRESS, closeWindow);
+//    AIPrefab* aiPrefab = new AIPrefab(new Transform(glm::vec3(-15.0f, 0.0f, -12.0f), glm::vec3(0, 0, 0),
+//                                         glm::vec3(1.0f,1.0f,1.0f)), FAST);
 //
-//    Scene::getSingleton().AddGameObject(collisionTest);
-//    Scene::getSingleton().AddGameObject(collisionTest1);
+    TowerPrefab* towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+//    TowerPrefab* towerPrefab1 = new TowerPrefab(new Transform(glm::vec3(50.0f, 0.0f, 0.0f),glm::vec3(0,0,0),glm::vec3(1.0f, 1.0f, 1.0f)));
+//
+    GameObject* field = new GameObject(new Transform(glm::vec3(0, 0, 0),
+                                                          glm::vec3(0,0,0),
+                                                          glm::vec3(1, 1, 1)));
 
-    auto *GUIgameobject = new GameObject();
+    field->AddComponent(new Mesh(ModelManager::getModel("../resource/models/map_ground.obj")));
 
-
-    auto guiComponent0 = new StrGuiComponent("bada bing badaboem", glm::vec3(0.0f, 0.5f, 0));
-    auto guiComponent1 = new StrGuiComponent("wat zie ik daar", glm::vec3(0.0f, -0.5f, 0),
-                                             glm::vec3(2.0, 2.0f, 2.0f));
-    auto guiComponent2 = new StrGuiComponent("jaja het werkt");
-
-
-    GUIgameobject->AddComponent(guiComponent0);
-    GUIgameobject->AddComponent(guiComponent1);
-    GUIgameobject->AddComponent(guiComponent2);
 
     float mapAlpha = CONFIG_PLAYFIELD_ALPHA;
 
-    //building map
-    createMapObject("../resource/models/map_ground.obj", {0.0f, 1, 0, mapAlpha});
-    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1, mapAlpha});
-    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f, mapAlpha});
-    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f, 1.0f});
-
-//    Scene::getSingleton().AddGameObject(aiPrefab);
-//    Scene::getSingleton().AddGameObject(towerPrefab);
+    Scene::getSingleton().AddGameObject(towerPrefab);
 //    Scene::getSingleton().AddGameObject(towerPrefab1);
-//    Scene::getSingleton().AddGameObject(field);
+    Scene::getSingleton().AddGameObject(field);
 //    Scene::getSingleton().AddGameObject(bridge);
 //    Scene::getSingleton().AddGameObject(towerPrefab1);
-//    Scene::getSingleton().AddGameObject(field);
 //    Scene::getSingleton().AddGameObject(bridge);
 
     auto *spawnManager = new GameObject(new Transform());
     auto *spawner = new Spawner();
+
     spawnManager->AddComponent(spawner);
     Scene::getSingleton().AddGameObject(spawnManager);
-    Scene::getSingleton().AddGameObject(GUIgameobject);
 
     SceneManager::LoadScene(Scene::getSingleton());
 }
@@ -202,8 +194,7 @@ void update()
     GameTimer::update(glfwGetTime());
 
 //    std::cout << "Frametime: " << GameTimer::getDeltaTime() * 1000 << "ms;"
-//                                                                      "\tFPS: "
-//              << 1 / GameTimer::getDeltaTime() << std::endl;
+//          "\tFPS: " << 1 / GameTimer::getDeltaTime() << std::endl;
 }
 
 void draw()
@@ -245,12 +236,9 @@ void draw()
 
     cs::shader->use();
 
-    cs::shader->setProjectionMatrix(
-            glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH,
-                             0.1f, 200.0f));
+    cs::shader->setProjectionMatrix(CONFIG_MATRIX_PROJECTION);
 
-    cs::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0, 60, 0.01f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+    cs::shader->setViewMatrix(CONFIG_MATRIX_VIEW);
 
     // Draw 3D Scene
     SceneManager::UpdatePoll(Scene::getSingleton());
@@ -258,7 +246,7 @@ void draw()
 
 void createMapObject(const std::string &filePath, glm::vec4 color)
 {
-    auto *map_object = new GameObject();
+    auto *map_object = new GameObject(new Transform);
 
     map_object->AddComponent(new Mesh(ModelManager::getModel(filePath)));
 
@@ -272,25 +260,5 @@ void createMapObject(const std::string &filePath, glm::vec4 color)
         mesh_map_object->SetColor(color);
     }
 
-    Scene::getSingleton().AddGameObject(map_object);
-}
-
-
-void mouseButtonCallback(GLFWwindow *_window, int button, int action, int mods)
-{
-    int width, height;
-    glfwGetWindowSize(_window, &width, &height);
-
-    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
-    {
-        double xPosition, yPosition;
-        glfwGetCursorPos(window, &xPosition, &yPosition);
-        float xNormalized, yNormalized;
-        xNormalized = ((float) (xPosition / width) * 2.0f) - 1.0f;
-        yNormalized = ((float) (yPosition / height) * -2.0f) + 1.0f;
-
-        std::cout << xNormalized << "," << yNormalized << std::endl;
-        std::cout << "Mouse left input working" << std::endl; //testing
-        //GUIgameobject->MouseButtonPress(xNormalized, yNormalized);
-    }
+    scene->getSingleton().AddGameObject(map_object);
 }
