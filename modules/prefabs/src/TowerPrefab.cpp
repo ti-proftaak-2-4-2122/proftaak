@@ -5,6 +5,8 @@
 #include <iostream>
 #include "Mesh.h"
 #include "glm/glm.hpp"
+#include "../../../colours.h"
+
 TowerPrefab::TowerPrefab(Transform *transform) : GameObject
 (transform)
 {
@@ -13,7 +15,7 @@ TowerPrefab::TowerPrefab(Transform *transform) : GameObject
     this->characterStats = new CharacterStats{4.0f, 5.0f, 5.0f, 0.0f, 1.0f, TOWER};
     this->collider = new Collider(this->characterStats->range);
     Mesh* mesh = new Mesh(ModelManager::getModel("../resource/models/tower.obj"));
-    mesh->SetDiffuseColor({0.619, 0, 0.537});
+    mesh->SetColor(RED_BARRA);
     AddComponent(mesh);
     AddComponent(this->collider);
     AddComponent(this->characterStats);
@@ -25,7 +27,7 @@ void TowerPrefab::onTriggerEnter(Collider *other)
     GameObject::onTriggerEnter(other);
     CharacterStats* otherStats = other->getGameObject()->FindComponent<CharacterStats>();
 
-    if(otherStats) {
+    if(otherStats && otherStats->type != TOWER) {
         StartCombat(otherStats);
         std::cout << "The character got damaged, his health is: " << otherStats->health <<
         std::endl;
