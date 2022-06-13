@@ -11,15 +11,32 @@
 
 class Scene
 {
+
+private:
+    inline static Scene* singleton = nullptr;
+
+    Scene() {
+        gameobjects = std::vector<GameObject *>();
+    }
+    ~Scene();
+
 public:
+    static Scene& getSingleton()
+    {
+        if(!singleton)
+        {
+            singleton = new Scene();
+        }
+
+        return *singleton;
+    }
+
+
     std::vector<GameObject *> gameobjects;
 
     void AddGameObject(GameObject *gameObject);
-    void RemoveGameObject(GameObject*& gameObject);
+    void RemoveGameObject(GameObject* gameObject);
 
     void update();
-
-    Scene();
-    ~Scene();
 };
 

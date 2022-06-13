@@ -31,7 +31,9 @@ void SceneManager::LoadScene(Scene &scene)
 {
 
     for (const auto &gameObject : scene.gameobjects)
-        gameObject->Awake();
+    {
+        //gameObject->Awake();
+    }
 
     std::vector<Collider*> colliders = GetAllComponents(scene);
     for(Collider* collider : colliders) {
@@ -39,7 +41,7 @@ void SceneManager::LoadScene(Scene &scene)
             if(collider == collider1) {
                 continue;
             }
-            collider->otherColliders.push_back(collider1);
+            Collider::addCollider(collider1);
         }
     }
 
@@ -54,4 +56,7 @@ void SceneManager::UpdatePoll(Scene &scene)
 
     for (const auto &gameObject : scene.gameobjects)
         gameObject->Draw();
+
+    for (const auto &gameObject : scene.gameobjects)
+        gameObject->UpdateAfterDraw();
 }

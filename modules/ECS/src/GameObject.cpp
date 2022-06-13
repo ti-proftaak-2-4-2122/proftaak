@@ -12,10 +12,7 @@
 #include <typeinfo>
 #include <stdexcept>
 
-GameObject::GameObject() : transform((this->AddComponent<Transform>()))
-{
 
-}
 
 Component &GameObject::AddComponent(Component *component)
 {
@@ -31,6 +28,11 @@ Component &GameObject::AddComponent(Component *component)
     component->SetParent(this);
     components.push_back(component);
     return *component;
+}
+
+GameObject::GameObject(Transform* _transform) : transform(*_transform)
+{
+    this->AddComponent(&transform);
 }
 
 void GameObject::AddChild(GameObject* child)
@@ -104,6 +106,15 @@ void GameObject::Draw()
         child->Draw();
 }
 
+void GameObject::UpdateAfterDraw()
+{
+    for(auto component : this->components)
+        component->UpdateAfterDraw();
+
+    for(auto child : this->children)
+        child->UpdateAfterDraw();
+}
+
 GameObject::~GameObject()
 {
     for(auto child : this->children)
@@ -111,4 +122,9 @@ GameObject::~GameObject()
 
     for(auto component : this->components)
         delete component;
+}
+
+const std::vector<Component *> &GameObject::getComponents() const
+{
+    return components;
 }
