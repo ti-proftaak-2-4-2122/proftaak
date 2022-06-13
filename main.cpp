@@ -193,6 +193,9 @@ void worldInit()
     SceneManager::LoadScene(Scene::getSingleton());
 }
 
+int frameCount = 0;
+double lastFramePrint = -1;
+
 void update()
 {
     if (capture->isOpened())
@@ -202,8 +205,23 @@ void update()
     GameTimer::update(glfwGetTime());
 
     if(CONFIG_FPS_COUNTER) {
-        std::cout << "Frametime: " << GameTimer::getDeltaTime() * 1000 << "ms;"
-            "\tFPS: " << 1 / GameTimer::getDeltaTime() << std::endl;
+        frameCount++;
+
+        if(lastFramePrint > 0)
+        {
+            double deltaTime = GameTimer::getCurrentTime() - lastFramePrint;
+            if(deltaTime >= 1.0) {
+                std::cout << "Avg Frametime: " << (deltaTime / (double)frameCount) * 1000.0 << "ms;"
+                      "\tAvg FPS: " << frameCount / deltaTime << std::endl;
+
+                frameCount = 0;
+                lastFramePrint = GameTimer::getCurrentTime();
+            }
+        }
+        else
+        {
+            lastFramePrint = GameTimer::getCurrentTime();
+        }
     }
 }
 
