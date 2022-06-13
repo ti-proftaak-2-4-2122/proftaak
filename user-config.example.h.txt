@@ -17,4 +17,5 @@
 
 #define CONFIG_FPS_COUNTER false
 #define CONFIG_FPS_COUNTER_ACCURACY 1.0
+#define CONFIG_FPS_VSYNC true
 #define CONFIG_FPS_GO_BRRR false
