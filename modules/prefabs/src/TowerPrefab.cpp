@@ -27,7 +27,8 @@ void TowerPrefab::onTriggerEnter(Collider *other)
     GameObject::onTriggerEnter(other);
     CharacterStats* otherStats = other->getGameObject()->FindComponent<CharacterStats>();
 
-    if(otherStats && otherStats->type != TOWER) {
+    if(otherStats) {
+        if( otherStats->type == TOWER) return;
         StartCombat(otherStats);
         std::cout << "The character got damaged, his health is: " << otherStats->health <<
         std::endl;

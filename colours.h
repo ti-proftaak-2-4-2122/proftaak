@@ -6,7 +6,7 @@
 //SOURCE: https://flatuicolors.com/palette/nl 
 #define ALPHA 1.0f
 #define YELLOW_SUNFLOWER glm::vec4(1, 0.764f, 0.070f, ALPHA)
-#define YELLOW_RADAINT glm::vec4(0.968f, 0.623f, 0.121f, ALPHA)
+#define YELLOW_RADIANT glm::vec4(0.968f, 0.623f, 0.121f, ALPHA)
 #define ORANGE_PUFFINS glm::vec4(0.933f, 0.352f, 0.141f, ALPHA)
 #define PIGMENT_RED glm::vec4(0.917f, 0.125f, 0.152f, ALPHA)
 #define GREEN_ERENOS glm::vec4(0.768f, 0.898f, 0.219f, ALPHA)

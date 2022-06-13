@@ -168,7 +168,9 @@ void worldInit()
     field->AddComponent(mesh);
 
     GameObject* bridge = new GameObject(new Transform(glm::vec3(0, 0, 0),glm::vec3(0,0,0),glm::vec3(1, 1, 1)));
-    bridge->AddComponent(new Mesh(ModelManager::getModel("../resource/models/map_bridges.obj")));
+    Mesh* mesh1 = new Mesh(ModelManager::getModel("../resource/models/map_bridges.obj"));
+    mesh1->SetColor(YELLOW_SUNFLOWER);
+    bridge->AddComponent(mesh1);
 
 
     float mapAlpha = CONFIG_PLAYFIELD_ALPHA;

@@ -9,6 +9,7 @@
 #include "ModelManager.h"
 #include "GameTimer.h"
 #include "Scene.h"
+#include "../../../colours.h"
 
 #include <iostream>
 
@@ -18,6 +19,7 @@ AIPrefab::AIPrefab(Transform *transform, UnitTypeEnum type) : GameObject(transfo
     AddComponent(lerpController);
 
     Mesh *renderMesh = new Mesh(ModelManager::getModel("../resource/models/box.obj"));
+    renderMesh->SetColor(TEAL_TURKISH);
     AddComponent(renderMesh);
 
     InitStats(type);
