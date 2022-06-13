@@ -27,9 +27,7 @@
 #include "InputHandler.h"
 #include "Animator.h"
 
-//aspect ratio should always be 4:3 when using realsense camera
-#define WINDOW_WIDTH 1440
-#define WINDOW_HEIGTH 1080
+
 
 using tigl::Vertex;
 
@@ -59,7 +57,8 @@ int main()
     if (!glfwInit())
         throw "Could not initialize glwf";
 
-    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGTH, "Hello World", nullptr, nullptr);
+    glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+    window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGTH, "NOT CLASH ROYALE", nullptr, nullptr);
     if (!window)
     {
         glfwTerminate();
@@ -200,8 +199,8 @@ void update()
     Scene::getSingleton().update();
     GameTimer::update(glfwGetTime());
 
-    std::cout << "Frametime: " << GameTimer::getDeltaTime() * 1000 << "ms;"
-          "\tFPS: " << 1 / GameTimer::getDeltaTime() << std::endl;
+//    std::cout << "Frametime: " << GameTimer::getDeltaTime() * 1000 << "ms;"
+//          "\tFPS: " << 1 / GameTimer::getDeltaTime() << std::endl;
 }
 
 void draw()
@@ -243,11 +242,9 @@ void draw()
 
     cs::shader->use();
 
-    cs::shader->setProjectionMatrix(
-            glm::perspective(glm::radians(90.0f), (float) WINDOW_WIDTH / (float) WINDOW_HEIGTH,
-                             0.1f, 200.0f));
-    cs::shader->setViewMatrix(
-            glm::lookAt(glm::vec3(0, 0.5f, 2.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));
+    cs::shader->setProjectionMatrix(MATRIX_PROJECTION);
+
+    cs::shader->setViewMatrix(MATRIX_VIEW);
 
     // Draw 3D Scene
     SceneManager::UpdatePoll(Scene::getSingleton());

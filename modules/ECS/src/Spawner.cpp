@@ -6,6 +6,7 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "AIPrefab.h"
 #include "InputHandler.h"
+#include "../../../user-config.h"
 
 bool Spawner::HasCard(unsigned int color)
 {
@@ -120,9 +121,8 @@ void Spawner::Awake()
 
 glm::vec3 Spawner::ConvertCords(CardDetector::Card* card)
 {
-    glm::mat4 model = glm::lookAt(glm::vec3(0, 15.0f, 5.0f), glm::vec3(0, 0, 0), glm::vec3(0,1,0)); //viewmatrix
-    glm::mat4 projection = glm::perspective(glm::radians(90.0f), (float) 1440 /
-                                                                 (float) 1080, 0.1f, 200.0f);
+    glm::mat4 model = MATRIX_VIEW;
+    glm::mat4 projection = MATRIX_PROJECTION;
     glm::ivec4 viewport;
     glGetIntegerv(GL_VIEWPORT, glm::value_ptr(viewport));
     glm::vec3 cvPos = {card->x * viewport[2], viewport[3] - card->y * viewport[3], 0.991f};
