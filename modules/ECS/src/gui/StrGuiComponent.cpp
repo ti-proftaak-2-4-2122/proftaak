@@ -16,6 +16,7 @@
 #include "Transform.h"
 #include "TextureLoader.h"
 #include "glm/gtc/type_ptr.hpp"
+#include "../../../../user-config.h"
 
 #define ATLAS_WIDTH 10
 #define ATLAS_HEIGHT 10
@@ -84,17 +85,34 @@ glm::vec3 &scale) : text(std::move(text)), position(position), scale(scale)
 
 void StrGuiComponent::setPosition(const glm::vec3 &newPosition)
 {
-    glm::mat4 model = glm::lookAt(glm::vec3(0, 15.0f, 5.0f), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)); //viewmatrix
-    glm::mat4 projection = glm::perspective(glm::radians(90.0f), (float) 1440 / (float) 1080, 0.1f, 200.0f);
+    glm::mat4 model = CONFIG_MATRIX_VIEW;
+    glm::mat4 projection = CONFIG_MATRIX_PROJECTION;
     glm::ivec4 viewport;
     glGetIntegerv(GL_VIEWPORT, glm::value_ptr(viewport));
 
     glm::vec3 projected = glm::project(newPosition, model, projection, viewport);
 
-    StrGuiComponent::position = projected;
+    int width = CONFIG_WINDOW_WIDTH;
+    int height = CONFIG_WINDOW_HEIGTH;
+
+    float xNormalized, yNormalized;
+    xNormalized = ((float) (projected.x / (float) width) * 2.0f) - 1.0f;
+    yNormalized = ((float) (projected.y / (float) height) * 2.0f) - 1.0f;
+
+    StrGuiComponent::position = glm::vec3(xNormalized, yNormalized, 0);
 }
 
 void StrGuiComponent::setPosition(const glm::vec2 &newPosition)
 {
-    StrGuiComponent::position = glm::vec3(newPosition.x,newPosition.y,0);
+    StrGuiComponent::position = glm::vec3(newPosition.x, newPosition.y, 0);
+}
+
+const glm::vec3 &StrGuiComponent::getPosition() const
+{
+    return position;
+}
+
+void StrGuiComponent::setText(const std::string &text)
+{
+    StrGuiComponent::text = text;
 }

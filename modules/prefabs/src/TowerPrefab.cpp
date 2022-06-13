@@ -4,7 +4,6 @@
 #include "Scene.h"
 #include <iostream>
 #include "Mesh.h"
-#include "glm/glm.hpp"
 #include "gui/StrGuiComponent.h"
 
 TowerPrefab::TowerPrefab(Transform *transform) : GameObject
@@ -13,7 +12,7 @@ TowerPrefab::TowerPrefab(Transform *transform) : GameObject
     std::cout << "Constructor call for tower" << std::endl;
     this->characterStats = new CharacterStats{4.0f, 5.0f, 5.0f, 0.0f, 1.0f, TOWER};
     this->collider = new Collider(this->characterStats->range);
-    this->strGuiComponent = new StrGuiComponent("Ik lik pik");
+    this->strGuiComponent = new StrGuiComponent("");
 
 
     Mesh *mesh = new Mesh(ModelManager::getModel("../resource/models/tower.obj"));
@@ -22,9 +21,8 @@ TowerPrefab::TowerPrefab(Transform *transform) : GameObject
     AddComponent(this->collider);
     AddComponent(this->characterStats);
     AddComponent(this->strGuiComponent);
-    //strGuiComponent->setPosition( glm::vec2(0.0f,0.5f));
 
-    //strGuiComponent->setPosition(transform->getPosition());
+    strGuiComponent->setPosition(transform->getPosition());
 }
 
 void TowerPrefab::onTriggerEnter(Collider *other)
@@ -44,6 +42,9 @@ void TowerPrefab::onTriggerEnter(Collider *other)
 void TowerPrefab::Update()
 {
     GameObject::Update();
+    char buffer[15];
+    snprintf(buffer, 15, "Health: %.2f", characterStats->health);
+    strGuiComponent->setText(buffer);
 
     if (!IsAttacking) return;
     DoDamage();

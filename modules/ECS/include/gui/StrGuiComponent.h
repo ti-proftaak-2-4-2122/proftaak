@@ -30,6 +30,10 @@ public:
                     const glm::vec3 &scale = glm::vec3(1.0f, 1.0f, 1.0f));
 
     void setPosition(const glm::vec2 &newPosition);
+
+    const glm::vec3 &getPosition() const;
+
+    void setText(const std::string &text);
 };
 
 
