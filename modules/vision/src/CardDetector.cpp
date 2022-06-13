@@ -83,7 +83,7 @@ cv::Mat CardDetector::FilterTheBlob(const cv::Mat *img, const ColorFilter &color
 
         Card *card = new Card{color.color, key_point.pt.x / img_with_keypoints.cols, key_point
                               .pt.y / img_with_keypoints.rows};
-        cards.push_back(*card);
+        cards.push_back(card);
     }
     return img_with_keypoints;
 }
@@ -106,13 +106,13 @@ cv::Mat CardDetector::UpdateCards(const cv::Mat &input_image)
 
     for (const auto &card: cards)
     {
-        cv::circle(input_image, cv::Point((int) card.x * input_image.rows, (int) card.y * input_image.cols),
-                   40, GetColor(card.color), 4);
+        cv::circle(input_image, cv::Point((int) (card->x * input_image.cols), (int) (card->y * input_image.rows)),
+                   40, GetColor(card->color), 4);
     }
     return input_image;
 }
 
-std::vector<CardDetector::Card> CardDetector::GetDetectedCards()
+std::vector<CardDetector::Card*> CardDetector::GetDetectedCards()
 {
     return cards;
 }
@@ -131,7 +131,7 @@ void CardDetector::PrintCards()
     }
     for (auto &card: cards)
     {
-        PrintCard(card);
+        PrintCard(*card);
     }
 }
 
