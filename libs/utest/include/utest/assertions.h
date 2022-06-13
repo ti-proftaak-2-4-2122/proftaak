@@ -36,4 +36,9 @@
     TEST_FAILED(#code " should have thrown"); \
 } catch (std::exception& ex) {}
 
+#define assert_equals(value, expected) if(value != expected) \
+{                                                            \
+    TEST_FAILED(std::to_string(value) + " is not equal to " + std::to_string(expected) + ". Expression: " #value " == " #expected); \
+}
+
 // EOF
