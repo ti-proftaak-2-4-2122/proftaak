@@ -192,6 +192,7 @@ void worldInit()
 
     GameObject* gangGangStyleGang = new GameObject(new Transform());
     Mesh* mesh = new Mesh(ModelManager::getModel("../resource/models/box.obj"));
+    mesh->SetColor(TEAL_TURKISH);
     Animator* animator = new Animator("../resource/models/animation", *mesh, 30);
     gangGangStyleGang->AddComponent(mesh);
     gangGangStyleGang->AddComponent(animator);
