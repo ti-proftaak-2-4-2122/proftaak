@@ -9,6 +9,7 @@
 #include "tigl.h"
 
 using tigl::Vertex;
+using tigl::VBO;
 
 namespace cs
 {
@@ -21,4 +22,8 @@ namespace cs
     void end();
 
     void drawVertices(GLenum shape, const std::vector<Vertex> &vertices);
+
+    VBO* createVbo(const std::vector<Vertex>& vertices);
+
+    void drawVertices(GLenum shape, VBO* vbo);
 }
