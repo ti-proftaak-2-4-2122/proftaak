@@ -9,6 +9,8 @@
 
 #include "Scene.h"
 #include "Collider.h"
+#include "GLFW/glfw3.h"
+
 void Scene::AddGameObject(GameObject *gameObject)
 {
     auto pos = std::find(

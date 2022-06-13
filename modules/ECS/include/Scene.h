@@ -31,7 +31,6 @@ public:
         return *singleton;
     }
 
-
     std::vector<GameObject *> gameobjects;
 
     void AddGameObject(GameObject *gameObject);

@@ -15,19 +15,10 @@
 #include "SceneManager.h"
 #include "Transform.h"
 #include "GameTimer.h"
-#include "Collider.h"
-#include "ImageProvider.h"
-#include "CharacterStats.h"
-
 #include "user-config.h"
 #include "Spawner.h"
-#include "AIPrefab.h"
 #include "TowerPrefab.h"
-#include "UnitTypeEnum.h"
 #include "InputHandler.h"
-#include "Animator.h"
-
-
 
 using tigl::Vertex;
 
@@ -35,7 +26,6 @@ GLFWwindow *window;
 
 std::shared_ptr<cv::VideoCapture> capture;
 ImageProvider *imageProvider;
-Scene *scene;
 
 void init();
 
@@ -260,5 +250,25 @@ void createMapObject(const std::string &filePath, glm::vec4 color)
         mesh_map_object->SetColor(color);
     }
 
-    scene->getSingleton().AddGameObject(map_object);
+    Scene::getSingleton().getSingleton().AddGameObject(map_object);
+}
+
+
+void mouseButtonCallback(GLFWwindow *_window, int button, int action, int mods)
+{
+    int width, height;
+    glfwGetWindowSize(_window, &width, &height);
+
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+    {
+        double xPosition, yPosition;
+        glfwGetCursorPos(window, &xPosition, &yPosition);
+        float xNormalized, yNormalized;
+        xNormalized = ((float) (xPosition / width) * 2.0f) - 1.0f;
+        yNormalized = ((float) (yPosition / height) * -2.0f) + 1.0f;
+
+        std::cout << xNormalized << "," << yNormalized << std::endl;
+        std::cout << "Mouse left input working" << std::endl; //testing
+        //GUIgameobject->MouseButtonPress(xNormalized, yNormalized);
+    }
 }
