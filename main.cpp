@@ -164,22 +164,16 @@ void worldInit()
                                                           glm::vec3(0,0,0),
                                                           glm::vec3(1, 1, 1)));
 
+    field->AddComponent(new Mesh(ModelManager::getModel("../resource/models/map_ground.obj")));
+
 
     float mapAlpha = CONFIG_PLAYFIELD_ALPHA;
 
-    //building map
-    createMapObject("../resource/models/map_ground.obj", {0.0f, 1, 0, mapAlpha});
-    createMapObject("../resource/models/map_river.obj", {0.0f, 0, 1, mapAlpha});
-    createMapObject("../resource/models/map_bridges.obj", {1.0f, 0.392f, 0.3137f, mapAlpha});
-    createMapObject("../resource/models/map_towers.obj", {1.0f, 0.392f, 0.3137f, 1.0f});
-
-//    Scene::getSingleton().AddGameObject(aiPrefab);
-//    Scene::getSingleton().AddGameObject(towerPrefab);
+    Scene::getSingleton().AddGameObject(towerPrefab);
 //    Scene::getSingleton().AddGameObject(towerPrefab1);
-//    Scene::getSingleton().AddGameObject(field);
+    Scene::getSingleton().AddGameObject(field);
 //    Scene::getSingleton().AddGameObject(bridge);
 //    Scene::getSingleton().AddGameObject(towerPrefab1);
-//    Scene::getSingleton().AddGameObject(field);
 //    Scene::getSingleton().AddGameObject(bridge);
 
     auto *spawnManager = new GameObject(new Transform());
