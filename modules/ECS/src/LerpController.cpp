@@ -24,8 +24,6 @@ void LerpController::Update()
 
     if (CheckPos(gameObject->transform.getPosition(), endPos)) return;
 
-    gameObject->transform.setPosition((gameObject->transform.getPosition() + (this->slope *
-    GameTimer::getDeltaTime())));
     auto targetPos = glm::lerp(startPos, endPos, fraction);
     gameObject->transform.setPosition((targetPos));
 
@@ -34,7 +32,6 @@ void LerpController::Update()
 
 LerpController::LerpController()
 {
-    slope = glm::vec3(0, 0, 0);
 }
 
 bool LerpController::CheckPos(glm::vec3 currentPos, glm::vec3 resultPos) const
