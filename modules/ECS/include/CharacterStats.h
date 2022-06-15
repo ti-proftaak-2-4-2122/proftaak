@@ -18,6 +18,7 @@ struct CharacterStats : public Component
     float moveSpeed;
     float attackSpeed;
     UnitTypeEnum type;
+    short team = -1; // this should only be set on 0(left), 1(right) or -1(uninitialized)
 
     CharacterStats(float range, float health, float damage, float moveSpeed, float attackSpeed,
                    UnitTypeEnum typeEnum)

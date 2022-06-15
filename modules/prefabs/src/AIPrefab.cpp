@@ -150,6 +150,7 @@ void AIPrefab::InitCheckpoints()
         this->checkPoints.push_back(this->predefinedPositions[TOP_LEFT_BRIDGE]);
         this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_RIGHT]);
         this->checkPoints.push_back(this->predefinedPositions[TOWER_BOTTOM_RIGHT]);
+        this->characterStats->team = 0;
     } else if (pos.x <= 0 && pos.z > 0)
     {
         // links onder spawnen
@@ -157,6 +158,7 @@ void AIPrefab::InitCheckpoints()
         this->checkPoints.push_back(this->predefinedPositions[BOTTOM_LEFT_BRIDGE]);
         this->checkPoints.push_back(this->predefinedPositions[TOWER_BOTTOM_RIGHT]);
         this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_RIGHT]);
+        this->characterStats->team = 0;
     } else if (pos.x > 0 && pos.z <= 0)
     {
         //Rechts boven
@@ -164,6 +166,7 @@ void AIPrefab::InitCheckpoints()
         this->checkPoints.push_back(this->predefinedPositions[TOP_RIGHT_BRIDGE]);
         this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_LEFT]);
         this->checkPoints.push_back(this->predefinedPositions[TOWER_BOTTOM_LEFT]);
+        this->characterStats->team = 1;
     } else if (pos.x > 0 && pos.z > 0)
     {
         //Rechts onder
@@ -171,6 +174,7 @@ void AIPrefab::InitCheckpoints()
         this->checkPoints.push_back(this->predefinedPositions[BOTTOM_RIGHT_BRIDGE]);
         this->checkPoints.push_back(this->predefinedPositions[TOWER_BOTTOM_LEFT]);
         this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_LEFT]);
+        this->characterStats->team = 1;
     }
 }
 
