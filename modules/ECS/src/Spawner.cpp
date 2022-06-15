@@ -6,6 +6,7 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "AIPrefab.h"
 #include "InputHandler.h"
+#include "TeamHelper.h"
 #include "../../../user-config.h"
 
 bool Spawner::HasCard(unsigned int color)
@@ -102,10 +103,10 @@ void Spawner::Spawn()
         requiredMoney = 1.0f;
     }
     //std::cout << ToString(type) << std::endl;
-    int currentPlayer = 0; // TODO: Replace with real player
-    if(currencyManager.requirePlayerCurrency(currentPlayer, requiredMoney))
+    short currentTeam = TeamHelper::getTeamByPosition(glPos);
+    if(currencyManager.requirePlayerCurrency(currentTeam, requiredMoney))
     {
-        currencyManager.updatePlayerCurrency(currentPlayer, -requiredMoney);
+        currencyManager.updatePlayerCurrency(currentTeam, -requiredMoney);
 
         glm::mat4 model = CONFIG_MATRIX_VIEW;
         glm::mat4 projection = CONFIG_MATRIX_PROJECTION;
@@ -118,7 +119,7 @@ void Spawner::Spawn()
     }
     else
     {
-        std::cout << "Currency " << currencyManager.getPlayerCurrency(currentPlayer) << " is to low for spawning" << std::endl;
+        std::cout << "Currency " << currencyManager.getPlayerCurrency(currentTeam) << " is to low for spawning" << std::endl;
     }
 }
 
