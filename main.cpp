@@ -27,6 +27,7 @@
 #include "InputHandler.h"
 #include "Animator.h"
 #include "colours.h"
+#include "CurrencyDisplayPrefab.h"
 
 
 using tigl::Vertex;
@@ -192,6 +193,8 @@ void worldInit()
 
     spawnManager->AddComponent(spawner);
     Scene::getSingleton().AddGameObject(spawnManager);
+
+    Scene::getSingleton().AddGameObject(new CurrencyDisplayPrefab());
 
 //    GameObject* gangGangStyleGang = new GameObject(new Transform());
 //    Mesh* mesh = new Mesh(ModelManager::getModel("../resource/models/box.obj"));

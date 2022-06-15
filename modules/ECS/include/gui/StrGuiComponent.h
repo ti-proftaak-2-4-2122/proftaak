@@ -6,6 +6,8 @@
 
 #include "Component.h"
 #include <string>
+#include "glm/glm.hpp"
+#include <glad/glad.h>
 
 class StrGuiComponent : public Component
 {

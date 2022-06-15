@@ -96,12 +96,12 @@ void StrGuiComponent::setPosition(const glm::vec3 &newPosition)
     xNormalized = ((float) (projected.x / (float) width) * 2.0f) - 1.0f;
     yNormalized = ((float) (projected.y / (float) height) * 2.0f) - 1.0f;
 
-    StrGuiComponent::position = glm::vec3(xNormalized, yNormalized, 0);
+    StrGuiComponent::position = glm::vec3(xNormalized, yNormalized, 1);
 }
 
 [[maybe_unused]] void StrGuiComponent::setPosition(const glm::vec2 &newPosition)
 {
-    StrGuiComponent::position = glm::vec3(newPosition.x, newPosition.y, 0);
+    StrGuiComponent::position = glm::vec3(newPosition.x, newPosition.y, 1);
 }
 
 const glm::vec3 &StrGuiComponent::getPosition() const
