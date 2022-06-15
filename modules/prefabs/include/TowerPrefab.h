@@ -8,6 +8,7 @@
 #include "CharacterStats.h"
 #include "CombatController.h"
 #include "Mesh.h"
+#include "gui/StrGuiComponent.h"
 
 class GameObject;
 
@@ -21,17 +22,20 @@ private:
     Collider* collider;
     CharacterStats* characterStats;
     CharacterStats* otherStats;
+    StrGuiComponent *strGuiComponent;
 
     void StartCombat(CharacterStats* otherStats);
     void StopCombat();
     void DoDamage();
 
 public:
-    TowerPrefab(Transform *transform);
+    explicit TowerPrefab(Transform *transform);
 
     void onTriggerEnter(Collider* other) override;
 
     void Update() override;
+
+
 };
 
 

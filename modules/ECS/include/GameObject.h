@@ -22,11 +22,13 @@ private:
     std::vector<Component *> components;
     std::vector<GameObject*> children;
 
+protected:
+    TagEnum tagEnum = TagEnum::NONE;
+
 public:
     Transform &transform;
-    GameObject(Transform* transform);
-
-    TagEnum tagEnum;
+    GameObject();
+    explicit GameObject(Transform* transform);
 
     Component &AddComponent(Component *component);
 
@@ -45,7 +47,7 @@ public:
         return nullptr;
     }
 
-    const std::vector<Component *> &getComponents() const;
+    [[nodiscard]] const std::vector<Component *> &getComponents() const;
 
     template<class T>
     T& AddComponent()
@@ -75,6 +77,10 @@ public:
     virtual void onTriggerExit(Collider* other) {
 //        std::cout << "On Trigger Exit called" << std::endl;
     };
+
+    [[nodiscard]] TagEnum getTagEnum() const;
+
+    void setTagEnum(TagEnum newTagEnum);
 
 };
 

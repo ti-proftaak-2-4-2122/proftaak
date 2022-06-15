@@ -13,10 +13,10 @@
 #include "glm/gtx/string_cast.hpp"
 #include "glm/gtx/compatibility.hpp"
 
-void LerpController::Move(glm::vec3 startPos, glm::vec3 endPos, float speed)
+void LerpController::Move(glm::vec3 nStartPos, glm::vec3 nEndPos, float speed)
 {
-    this->endPos = endPos;
-    this->startPos = startPos;
+    this->endPos = nEndPos;
+    this->startPos = nStartPos;
 
     fraction = 0.0f;
 }

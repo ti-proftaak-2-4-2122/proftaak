@@ -9,6 +9,8 @@
 
 #include "Scene.h"
 #include "Collider.h"
+#include "GLFW/glfw3.h"
+
 void Scene::AddGameObject(GameObject *gameObject)
 {
     auto pos = std::find(
@@ -58,8 +60,21 @@ void Scene::update()
 
 Scene::~Scene()
 {
-    for(auto gameObject : this->gameobjects)
+    for (auto gameObject: this->gameobjects)
         delete gameObject;
+}
+
+std::vector<GameObject *> Scene::findGameObjects(TagEnum tagEnum)
+{
+    auto foundObjects = std::vector<GameObject *>();
+
+    for (auto* gameObject: this->gameobjects)
+    {
+        if (gameObject->getTagEnum() == tagEnum)
+            foundObjects.push_back(gameObject);
+    }
+
+    return foundObjects;
 }
 
 CurrencyManager& Scene::getCurrencyManager()

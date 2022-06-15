@@ -21,6 +21,7 @@ public:
     Collider(float radius);
     void CheckCollision(Collider* other);
 
+
     void Update() override;
 
     static void CleanUp(Collider* collider);

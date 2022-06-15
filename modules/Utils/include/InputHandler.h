@@ -32,7 +32,7 @@ public:
 
     void check_keys(int key, int action);
     void Init();
-    void AddCallback(int keycode, int keyaction, std::function<void()> callback);
+    void AddCallback(int keycode, int keyaction, const std::function<void()>& callback);
 private:
     inline static InputHandler* singleton = nullptr;
     std::map<InputState*, std::function<void()>> inputCallbacks;

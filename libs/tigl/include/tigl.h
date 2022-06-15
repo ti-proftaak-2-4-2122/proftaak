@@ -137,11 +137,12 @@ namespace tigl
 	{
 	public:
 		~VBO();
+        GLuint id;
+        unsigned int size;
+        friend void drawVertices(GLenum shape, VBO* vbo);
+        friend VBO* createVbo(const std::vector<Vertex>& vertices);
 	private:
-		GLuint id;
-		unsigned int size;
-		friend void drawVertices(GLenum shape, VBO* vbo);
-		friend VBO* createVbo(const std::vector<Vertex>& vertices);
+
 	};
 
 	// Access point for the shader

@@ -18,20 +18,18 @@ private:
     void StopCombat();
     void Damage();
 
-    float currentTime;
-    float maxTime;
+    float currentTime = 0.0f;
+    float maxTime = 0.0f;
     bool isTowerDestroyed = false;
-    CharacterStats* yourStats;
-    CharacterStats* otherStats;
-    LerpController* lerpController;
-
-
+    CharacterStats* yourStats = nullptr;
+    CharacterStats* otherStats = nullptr;
+    LerpController* lerpController = nullptr;
 
 public:
     bool IsAttacking = false;
     bool hasFought = false;
 
-    void StartCombat(CharacterStats* yourStats, CharacterStats* otherStats, LerpController* lerpController);
+    void StartCombat(CharacterStats* characterStats, CharacterStats* pCharacterStats, LerpController* lerpController);
     void Update() override;
 
     CombatController();
