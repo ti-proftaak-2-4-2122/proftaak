@@ -15,17 +15,11 @@
 #include "SceneManager.h"
 #include "Transform.h"
 #include "GameTimer.h"
-#include "Collider.h"
-#include "ImageProvider.h"
-#include "CharacterStats.h"
 
 #include "user-config.h"
 #include "Spawner.h"
-#include "AIPrefab.h"
 #include "TowerPrefab.h"
-#include "UnitTypeEnum.h"
 #include "InputHandler.h"
-#include "Animator.h"
 #include "colours.h"
 
 
@@ -44,8 +38,6 @@ void update();
 void draw();
 
 void worldInit();
-
-void createMapObject(const std::string &filePath, glm::vec4 color);
 
 int currentWidth;
 int currentHeight;
@@ -165,7 +157,7 @@ void worldInit()
     TowerPrefab *towerPrefab3 = new TowerPrefab(new Transform(glm::vec3(-30.0f, 0.0f, -12.0f), glm::vec3(0, 0, 0), glm::vec3(1.0f, 1.0f, 1.0f)));
     TowerPrefab *towerPrefab4 = new TowerPrefab(new Transform(glm::vec3(50.0f, 0.0f, 0.0f), glm::vec3(0, 0, 0), glm::vec3(1.0f, 1.0f, 1.0f)));
     TowerPrefab *towerPrefab5 = new TowerPrefab(new Transform(glm::vec3(-50.0f, 0.0f, 0.0f), glm::vec3(0, 0, 0), glm::vec3(1.0f, 1.0f, 1.0f)));
-//
+
     GameObject *field = new GameObject(new Transform(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1, 1, 1)));
     Mesh *mesh = new Mesh(ModelManager::getModel("../resource/models/map_ground.obj"));
     mesh->SetColor(GREEN_GRASS);
@@ -281,23 +273,4 @@ void draw()
 
     // Draw 3D Scene
     SceneManager::UpdatePoll(Scene::getSingleton());
-}
-
-void createMapObject(const std::string &filePath, glm::vec4 color)
-{
-    auto *map_object = new GameObject(new Transform);
-
-    map_object->AddComponent(new Mesh(ModelManager::getModel(filePath)));
-
-    map_object->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
-    map_object->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
-    map_object->transform.setScale(CONFIG_PLAYFIELD_SCALE);
-
-    auto mesh_map_object = map_object->FindComponent<Mesh>();
-    if (mesh_map_object)
-    {
-        mesh_map_object->SetColor(color);
-    }
-
-    scene->getSingleton().AddGameObject(map_object);
 }
