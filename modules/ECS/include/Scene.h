@@ -31,11 +31,13 @@ public:
         return *singleton;
     }
 
-
     std::vector<GameObject *> gameobjects;
 
     void AddGameObject(GameObject *gameObject);
     void RemoveGameObject(GameObject* gameObject);
+
+
+    std::vector<GameObject *> findGameObjects(TagEnum tagEnum);
 
     void update();
 };

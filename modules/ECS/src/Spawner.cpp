@@ -135,3 +135,8 @@ glm::vec3 Spawner::ConvertCords(CardDetector::Card& card)
 
     return glPos;
 }
+
+void Spawner::Wrapper(void (*fun)())
+{
+
+}

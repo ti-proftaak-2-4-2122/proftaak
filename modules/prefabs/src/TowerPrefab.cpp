@@ -4,46 +4,54 @@
 #include "Scene.h"
 #include <iostream>
 #include "Mesh.h"
+#include "gui/StrGuiComponent.h"
+
 #include "glm/glm.hpp"
 #include "../../../colours.h"
 
-TowerPrefab::TowerPrefab(Transform *transform) : GameObject
-(transform)
+TowerPrefab::TowerPrefab(Transform *transform) : GameObject(transform)
 {
     std::cout << "Constructor call for tower" << std::endl;
-
     this->characterStats = new CharacterStats{4.0f, 5.0f, 5.0f, 0.0f, 1.0f, TOWER};
     this->collider = new Collider(this->characterStats->range);
+     this->strGuiComponent = new StrGuiComponent("");
+
+     this->strGuiComponent->setPosition(transform->getPosition());
     Mesh* mesh = new Mesh(ModelManager::getModel("../resource/models/tower.obj"));
     mesh->SetColor(RED_BARRA);
+
     AddComponent(mesh);
     AddComponent(this->collider);
     AddComponent(this->characterStats);
+    AddComponent(this->strGuiComponent);
+
 }
 
 void TowerPrefab::onTriggerEnter(Collider *other)
 {
     //std::cout << "On Trigger Enter for tower" << std::endl;
     GameObject::onTriggerEnter(other);
-    CharacterStats* otherStats = other->getGameObject()->FindComponent<CharacterStats>();
+    auto *oCharacterStats = other->getGameObject()->FindComponent<CharacterStats>();
 
-    if(otherStats) {
-        if( otherStats->type == TOWER) return;
-        StartCombat(otherStats);
-        std::cout << "The character got damaged, his health is: " << otherStats->health <<
-        std::endl;
+    if(oCharacterStats) {
+        if(oCharacterStats->type == TOWER) return;
+        StartCombat(oCharacterStats);
+        std::cout << "The character got damaged, his health is: " << oCharacterStats->health << std::endl;
     }
 }
 
 void TowerPrefab::Update()
 {
     GameObject::Update();
+    char buffer[15];
+    snprintf(buffer, 15, "Health: %.2f", characterStats->health);
+    strGuiComponent->setText(buffer);
 
-    if(!IsAttacking) return;
+    if (!IsAttacking) return;
     DoDamage();
 }
 
-void TowerPrefab::StartCombat(CharacterStats* otherStats)
+void TowerPrefab::StartCombat(CharacterStats *otherStats)
 {
     this->otherStats = otherStats;
     this->IsAttacking = true;

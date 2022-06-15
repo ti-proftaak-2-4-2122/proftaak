@@ -12,7 +12,8 @@
 
 void CombatController::Damage()
 {
-    if(otherStats->health-yourStats->damage < 0) {
+    if (otherStats->health - yourStats->damage < 0)
+    {
         Scene::getSingleton().RemoveGameObject(otherStats->getGameObject());
         StopCombat();
         std::cout << "Stopping combat" << std::endl;
@@ -20,24 +21,25 @@ void CombatController::Damage()
     }
     otherStats->health -= yourStats->damage;
     std::cout << "Did Damage from: " << ToString(yourStats->type) << " to: " << ToString
-    (otherStats->type) << " new amount: " << otherStats->health << std::endl;
+            (otherStats->type) << " new amount: " << otherStats->health << std::endl;
 }
 
-void CombatController::StartCombat(CharacterStats* yourStats, CharacterStats* otherStats,
-                                   LerpController* lerpController)
+void CombatController::StartCombat(CharacterStats *yCharacterStats, CharacterStats *oCharacterStats,
+                                   LerpController *nlerpController)
 {
-    this->yourStats = yourStats;
-    this->otherStats = otherStats;
-    this->maxTime = yourStats->attackSpeed;
+    this->yourStats = yCharacterStats;
+    this->otherStats = oCharacterStats;
+    this->maxTime = yCharacterStats->attackSpeed;
     IsAttacking = true;
-    this->lerpController = lerpController;
+    this->lerpController = nlerpController;
 }
 
 
 void CombatController::Update()
 {
     currentTime += GameTimer::getDeltaTime();
-    if(IsAttacking && currentTime >= maxTime) {
+    if (IsAttacking && currentTime >= maxTime)
+    {
         Damage();
         currentTime = 0;
     }
@@ -45,8 +47,7 @@ void CombatController::Update()
 
 
 CombatController::CombatController()
-{
-}
+= default;
 
 void CombatController::StopCombat()
 {
