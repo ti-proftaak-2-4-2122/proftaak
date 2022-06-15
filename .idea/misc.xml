@@ -2,12 +2,11 @@
 <project version="4">
   <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$" />
   <component name="CidrRootsConfiguration">
-    <sourceRoots>
-      <file path="$PROJECT_DIR$/modules/ECS" />
-      <file path="$PROJECT_DIR$/modules/objLoader" />
-    </sourceRoots>
     <libraryRoots>
       <file path="$PROJECT_DIR$/libs" />
     </libraryRoots>
+    <excludeRoots>
+      <file path="$PROJECT_DIR$/resource" />
+    </excludeRoots>
   </component>
 </project>

@@ -13,6 +13,8 @@ namespace tigl
 		{
 		public:
 			virtual ~Shader() {};
+
+            virtual void use() = 0;
 			
 			// Sets the projection matrix
 			virtual void setProjectionMatrix(const glm::mat4& matrix) = 0;
@@ -135,11 +137,12 @@ namespace tigl
 	{
 	public:
 		~VBO();
+        GLuint id;
+        unsigned int size;
+        friend void drawVertices(GLenum shape, VBO* vbo);
+        friend VBO* createVbo(const std::vector<Vertex>& vertices);
 	private:
-		GLuint id;
-		unsigned int size;
-		friend void drawVertices(GLenum shape, VBO* vbo);
-		friend VBO* createVbo(const std::vector<Vertex>& vertices);
+
 	};
 
 	// Access point for the shader

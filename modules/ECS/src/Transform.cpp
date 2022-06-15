@@ -1,6 +1,9 @@
-//
-// Created by Ewout on 13-5-2022.
-//
+/**
+ * @file
+ * @brief Source file for the Transform class
+ * @author Ewout
+ * @date 13-05-2022
+ */
 
 #include "Transform.h"
 
@@ -11,6 +14,9 @@ Transform::Transform()
     scale = glm::vec3(1, 1, 1);
 }
 
+Transform::Transform(const glm::vec3 &position, const glm::vec3 &rotation, const glm::vec3 &scale)
+        : position(position), rotation(rotation), scale(scale) {}
+
 const glm::vec3 &Transform::getPosition() const
 {
     return position;
@@ -19,12 +25,11 @@ const glm::vec3 &Transform::getPosition() const
 void Transform::setPosition(const glm::vec3 &newPosition)
 {
     position = newPosition;
-
 }
 
-const glm::vec3 &Transform::getRotation() const
+glm::vec3 Transform::getRotation() const
 {
-    return rotation;
+    return glm::degrees(rotation);
 }
 
 void Transform::setRotation(const glm::vec3 &newRotation)
@@ -41,5 +46,7 @@ void Transform::setScale(const glm::vec3 &newScale)
 {
     Transform::scale = newScale;
 }
+
+
 
 

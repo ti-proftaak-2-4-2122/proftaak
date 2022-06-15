@@ -1,6 +1,9 @@
-//
-// Created by Daan van Donk on 10/05/2022.
-//
+/**
+ * @file
+ * @brief Header file for the Component class
+ * @author Daan van Donk
+ * @date 10-05-2022
+ */
 
 #pragma once
 
@@ -13,11 +16,15 @@ class Component
 protected:
     GameObject *gameObject = nullptr;
 public:
+
+    GameObject* getGameObject();
     virtual void Awake() {};
 
     virtual void Update() {};
 
     virtual void Draw() {};
+
+    virtual void UpdateAfterDraw() {};
 
     Component();
 

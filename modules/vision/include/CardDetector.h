@@ -1,6 +1,9 @@
-//
-// Created by tjtle on 13/05/2022.
-//
+/**
+ * @file
+ * @brief Header file for the CardDetector class
+ * @author tjtle
+ * @date 13-05-2022
+ */
 #pragma once
 
 #include <opencv2/core.hpp>
@@ -8,21 +11,29 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/features2d.hpp>
+#include "UnitTypeEnum.h"
 
 
 class CardDetector
 {
-protected:
+public:
     struct Card
     {
         unsigned int color;
         double x;
         double y;
+        bool isUsed;
     };
 
 private:
+    CardDetector() = default;
+
+    inline static CardDetector* singleton_;
+
     cv::Mat loaded_img;
     bool initialized = false;
+
+    std::mutex cardsUpdateLock;
 
     //colours
     struct ColorFilter
@@ -46,13 +57,29 @@ private:
 
     static cv::Mat GetFilteredImage(const cv::Mat *img, const ColorFilter &color);
 
-    cv::Mat FilterTheBlob(const cv::Mat *img, const ColorFilter& color);
+    std::vector<CardDetector::Card> FilterTheBlob(const cv::Mat *img, const ColorFilter& color);
 
-    static void PrintCard(Card card);
+    static void PrintCard(Card& card);
 
     static cv::Scalar GetColor(unsigned int colorCode);
 
 public:
+
+    /**
+ * Static methods should be defined outside the class.
+ */
+    static CardDetector *GetInstance()
+    {
+        /**
+         * This is a safer way to create an instance. instance = new Singleton is
+         * dangeruous in case two instance threads wants to access at the same time
+         */
+        if(singleton_==nullptr){
+            singleton_ = new CardDetector();
+        }
+        return singleton_;
+    }
+
     cv::Mat UpdateCards(const cv::Mat &input_image);
 
     std::vector<Card> GetDetectedCards();

@@ -1,10 +1,15 @@
-//
-// Created by Daan van Donk on 10/05/2022.
-//
+/**
+ * @file
+ * @brief Source file for the Scene class
+ * @author Daan van Donk
+ * @date 10-05-2022
+ */
 
 #include <stdexcept>
 
 #include "Scene.h"
+#include "Collider.h"
+#include "GLFW/glfw3.h"
 
 void Scene::AddGameObject(GameObject *gameObject)
 {
@@ -16,7 +21,7 @@ void Scene::AddGameObject(GameObject *gameObject)
 
     if(pos != this->gameobjects.end())
         throw std::invalid_argument("GameObject was already added to scene");
-
+    gameObject->Awake();
     gameobjects.push_back(gameObject);
 }
 
@@ -26,7 +31,7 @@ void Scene::AddGameObject(GameObject *gameObject)
  * If the deletion was successful, gameObject will be nullptr.
  * Don't use the GameObject after calling this function!
  */
-void Scene::RemoveGameObject(GameObject*& gameObject)
+void Scene::RemoveGameObject(GameObject* gameObject)
 {
     auto pos = std::find(
         this->gameobjects.begin(),
@@ -36,16 +41,16 @@ void Scene::RemoveGameObject(GameObject*& gameObject)
 
     // If gameObject is in vector, remove
     if(pos != this->gameobjects.end()) {
+        auto* collider = gameObject->FindComponent<Collider>();
+        if(collider)
+        {
+            Collider::CleanUp(collider);
+        }
         this->gameobjects.erase(pos);
 
         delete gameObject;
-        gameObject = nullptr;
+       gameObject = nullptr;
     }
-}
-
-Scene::Scene()
-{
-    gameobjects = std::vector<GameObject *>();
 }
 
 void Scene::update()
@@ -55,6 +60,19 @@ void Scene::update()
 
 Scene::~Scene()
 {
-    for(auto gameObject : this->gameobjects)
+    for (auto gameObject: this->gameobjects)
         delete gameObject;
+}
+
+std::vector<GameObject *> Scene::findGameObjects(TagEnum tagEnum)
+{
+    auto foundObjects = std::vector<GameObject *>();
+
+    for (auto* gameObject: this->gameobjects)
+    {
+        if (gameObject->getTagEnum() == tagEnum)
+            foundObjects.push_back(gameObject);
+    }
+
+    return foundObjects;
 }

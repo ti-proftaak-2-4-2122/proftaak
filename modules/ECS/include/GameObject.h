@@ -1,6 +1,9 @@
-//
-// Created by Daan van Donk on 11/05/2022.
-//
+/**
+ * @file
+ * @brief Header file for the GameObject class
+ * @author Daan van Donk
+ * @date 11-05-2022
+ */
 
 #pragma once
 
@@ -19,11 +22,13 @@ private:
     std::vector<Component *> components;
     std::vector<GameObject*> children;
 
+protected:
+    TagEnum tagEnum = TagEnum::NONE;
+
 public:
     Transform &transform;
     GameObject();
-
-    TagEnum tagEnum;
+    explicit GameObject(Transform* transform);
 
     Component &AddComponent(Component *component);
 
@@ -42,6 +47,8 @@ public:
         return nullptr;
     }
 
+    [[nodiscard]] const std::vector<Component *> &getComponents() const;
+
     template<class T>
     T& AddComponent()
     {
@@ -53,21 +60,27 @@ public:
     void AddChild(GameObject* child);
     void RemoveChild(GameObject*& child);
 
-    void Awake();
+    virtual void Awake();
 
-    void Update();
+    virtual void Update();
 
     void Draw();
 
+    void UpdateAfterDraw();
 
     ~GameObject();
-    virtual void onTriggerEnter(Collider* collider) {
-        std::cout << "On Trigger Enter called" << std::endl;
+
+    virtual void onTriggerEnter(Collider* other) {
+//        std::cout << "On Trigger Enter called" << std::endl;
     };
 
-    virtual void onTriggerExit(Collider* collider) {
-        std::cout << "On Trigger Exit called" << std::endl;
+    virtual void onTriggerExit(Collider* other) {
+//        std::cout << "On Trigger Exit called" << std::endl;
     };
+
+    [[nodiscard]] TagEnum getTagEnum() const;
+
+    void setTagEnum(TagEnum newTagEnum);
 
 };
 
