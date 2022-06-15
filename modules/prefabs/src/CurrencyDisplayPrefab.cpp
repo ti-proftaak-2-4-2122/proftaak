@@ -14,6 +14,8 @@
 #include "GameObject.h"
 #include "glm/glm.hpp"
 
+#include "../../../colours.h"
+
 #include "CurrencyDisplayPrefab.h"
 
 CurrencyDisplayPrefab::CurrencyDisplayPrefab() : GameObject()
@@ -21,10 +23,12 @@ CurrencyDisplayPrefab::CurrencyDisplayPrefab() : GameObject()
     this->player1StrGuiComponent = new StrGuiComponent("Green Goop: 0.0");
     this->player1StrGuiComponent->setScale({0.7f, 0.7f, 0.7f});
     this->player1StrGuiComponent->setPosition({ -1.0, 0.95 });
+    this->player1StrGuiComponent->setColor(GREEN_ANDROID);
 
     this->player2StrGuiComponent = new StrGuiComponent("Green Goop: 0.0");
     this->player2StrGuiComponent->setScale({0.7f, 0.7f, 0.7f});
     this->player2StrGuiComponent->setPosition({ 0.56, 0.95 });
+    this->player2StrGuiComponent->setColor(GREEN_ANDROID);
 
     GameObject::AddComponent(this->player1StrGuiComponent);
     GameObject::AddComponent(this->player2StrGuiComponent);
