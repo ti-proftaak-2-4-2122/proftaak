@@ -47,5 +47,5 @@ void CurrencyDisplayPrefab::Update()
         << std::fixed << std::setprecision(1) << Scene::getSingleton().getCurrencyManager().getPlayerCurrency(1);
 
     this->player1StrGuiComponent->setText(player1Stream.str());
-    this->player2StrGuiComponent->setText(player1Stream.str());
+    this->player2StrGuiComponent->setText(player2Stream.str());
 }
