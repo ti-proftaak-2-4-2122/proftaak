@@ -15,6 +15,7 @@ TowerPrefab::TowerPrefab(Transform *transform) : GameObject(transform)
     this->characterStats = new CharacterStats{4.0f, 5.0f, 5.0f, 0.0f, 1.0f, TOWER};
     this->collider = new Collider(this->characterStats->range);
      this->strGuiComponent = new StrGuiComponent("");
+     this->strGuiComponent->setScale({0.7f, 0.7f, 0.7f});
 
      this->strGuiComponent->setPosition(transform->getPosition());
     Mesh* mesh = new Mesh(ModelManager::getModel("../resource/models/tower.obj"));

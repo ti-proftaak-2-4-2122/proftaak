@@ -31,6 +31,8 @@ public:
 
     [[maybe_unused]] void setPosition(const glm::vec2 &newPosition);
 
+    [[maybe_unused]] void setScale(const glm::vec3& newScale);
+
     [[nodiscard]] const glm::vec3 &getPosition() const;
 
     void setText(const std::string &text);

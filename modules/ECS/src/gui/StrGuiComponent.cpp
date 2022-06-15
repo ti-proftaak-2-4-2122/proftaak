@@ -113,3 +113,8 @@ void StrGuiComponent::setText(const std::string &nText)
 {
     StrGuiComponent::text = nText;
 }
+
+void StrGuiComponent::setScale(const glm::vec3 &newScale)
+{
+    StrGuiComponent::scale = newScale;
+}
