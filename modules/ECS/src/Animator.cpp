@@ -11,8 +11,8 @@
 #include "ModelManager.h"
 
 namespace fs = std::filesystem;
-Animator::Animator(std::string folderName, Mesh& mesh, int fps) : mesh(mesh) {
-    speedBetweenFrames = 1.0f/fps;
+Animator::Animator(const std::string& folderName, Mesh& mesh, int fps) : mesh(mesh) {
+    speedBetweenFrames = 1.0f/(float)fps;
 
     for (const auto & entry : fs::directory_iterator(folderName))
         frames.push_back(ModelManager::getModel(entry.path().string()));

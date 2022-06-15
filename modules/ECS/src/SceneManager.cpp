@@ -17,7 +17,7 @@ std::vector<Collider *> SceneManager::GetAllComponents(Scene& scene)
     std::vector<Collider*> result;
 
     for(auto gameobject : scene.gameobjects) {
-        Collider* component = gameobject->FindComponent<Collider>();
+        auto* component = gameobject->FindComponent<Collider>();
 
         if(component) {
             result.push_back(component);

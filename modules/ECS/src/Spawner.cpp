@@ -10,8 +10,8 @@
 
 bool Spawner::HasCard(unsigned int color)
 {
-    for (auto card : receivedCards){
-        if (card->color == color)
+    for (auto& card : receivedCards){
+        if (card.color == color)
             return true;
     }
     return false;
@@ -20,9 +20,9 @@ bool Spawner::HasCard(unsigned int color)
 void Spawner::UpdateAfterDraw()
 {
     receivedCards = detector->GetDetectedCards();
-    for(auto card : receivedCards)
+    for(auto& card : receivedCards)
     {
-        if(spawnedObjects.empty() || !spawnedObjects.contains(card->color))
+        if(spawnedObjects.empty() || !spawnedObjects.contains(card.color))
         {
            // std::cout << "Drawing new card" << std::endl;
             //add new card to spawnedcards
@@ -36,11 +36,11 @@ void Spawner::UpdateAfterDraw()
 //            spawnedObjects.insert(std::pair<unsigned int, GameObject>(card.color,
 //             *charGameObject));
 
-            spawnedObjects.insert({card->color,charGameObject});
+            spawnedObjects.insert({card.color,charGameObject});
             continue;
         }
 
-        auto foundModel = spawnedObjects.find(card->color);
+        auto foundModel = spawnedObjects.find(card.color);
         if (foundModel != spawnedObjects.end())
         {
            // std::cout << "Drawing known card" << std::endl;
@@ -54,7 +54,7 @@ void Spawner::UpdateAfterDraw()
 //            Scene::getSingleton().AddGameObject(foundModel->second);
         }
         //spawning
-        this->currentCard = card;
+        this->currentCard = &card;
     }
 
     for (auto spawnedObject = spawnedObjects.begin();spawnedObject != spawnedObjects.end(); ++spawnedObject) {
@@ -77,7 +77,7 @@ void Spawner::Spawn()
         return;
     }
     //std::cout << "YO IMMA SPAWN EM";
-    glm::vec3 glPos = ConvertCords(currentCard);
+    glm::vec3 glPos = ConvertCords(*currentCard);
     std::cout << "Pos: " << glPos.x << "," << glPos.y << "," << glPos.z << ".\n";
     UnitTypeEnum type;
     //std::cout << "color = " << card.color << std::endl;
@@ -119,13 +119,13 @@ void Spawner::Awake()
 
 }
 
-glm::vec3 Spawner::ConvertCords(CardDetector::Card* card)
+glm::vec3 Spawner::ConvertCords(CardDetector::Card& card)
 {
     glm::mat4 model = CONFIG_MATRIX_VIEW;
     glm::mat4 projection = CONFIG_MATRIX_PROJECTION;
     glm::ivec4 viewport;
     glGetIntegerv(GL_VIEWPORT, glm::value_ptr(viewport));
-    glm::vec3 cvPos = {card->x * viewport[2], viewport[3] - card->y * viewport[3], 0.991f};
+    glm::vec3 cvPos = {card.x * viewport[2], viewport[3] - card.y * viewport[3], 0.991f};
 
     glReadPixels(cvPos.x, cvPos.y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &cvPos.z);
 
@@ -134,4 +134,9 @@ glm::vec3 Spawner::ConvertCords(CardDetector::Card* card)
     glPos = {glPos.x*1.0f, 0.0f, glPos.z*1.0f};
 
     return glPos;
+}
+
+void Spawner::Wrapper(void (*fun)())
+{
+
 }

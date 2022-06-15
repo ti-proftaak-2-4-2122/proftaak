@@ -7,29 +7,35 @@
 
 #include "Collider.h"
 #include "Transform.h"
-Collider::Collider(float radius) : radius(radius) {
+
+Collider::Collider(float radius) : radius(radius)
+{
 
 }
 
-void Collider::CheckCollision(Collider* other)
+void Collider::CheckCollision(Collider *other)
 {
-    glm::vec3 pos= gameObject->transform.getPosition();
+    glm::vec3 pos = gameObject->transform.getPosition();
     glm::vec3 otherPos = other->gameObject->transform.getPosition();
 
     //Distance calculation between this collider and other collider
-    double distance = sqrt((((otherPos.x+other->radius)-(pos.x+this->radius))*(
-            (otherPos.x+other->radius)-
-            (pos.x+this->radius))) + (((otherPos.y+other->radius)-(pos.y+this->radius))*(
-                    (otherPos.y+other->radius)-(pos.y+this->radius))));
+    double distance = std::sqrt((((otherPos.x + other->radius) - (pos.x + this->radius)) * (
+            (otherPos.x + other->radius) -
+            (pos.x + this->radius))) + (((otherPos.y + other->radius) - (pos.y + this->radius)) * (
+            (otherPos.y + other->radius) - (pos.y + this->radius))));
 
-    if(distance <= this->radius + other->radius) {
+    if (distance <= this->radius + other->radius)
+    {
 //        std::cout << "Testing" << std::endl;
-        if(!hasEntered) {
+        if (!hasEntered)
+        {
             gameObject->onTriggerEnter(other);
             hasEntered = true;
         }
-    } else {
-        if(hasEntered) {
+    } else
+    {
+        if (hasEntered)
+        {
             gameObject->onTriggerExit(other);
             hasEntered = false;
         }
@@ -39,20 +45,21 @@ void Collider::CheckCollision(Collider* other)
 void Collider::Update()
 {
     Component::Update();
-    for(auto other : otherColliders) {
-        if(other == this)
+    for (auto other: otherColliders)
+    {
+        if (other == this)
             continue;
         CheckCollision(other);
     }
 }
 
-void Collider::CleanUp(Collider* collider)
+void Collider::CleanUp(Collider *collider)
 {
     auto pos = std::find(
             otherColliders.begin(),
             otherColliders.end(),
             collider
-            );
+    );
 
     std::cout << " Erasing collider from list" << std::endl;
 
@@ -65,9 +72,9 @@ void Collider::addCollider(Collider *collider)
             otherColliders.begin(),
             otherColliders.end(),
             collider
-            );
+    );
 
-    if(pos == otherColliders.end())
+    if (pos == otherColliders.end())
     {
         otherColliders.push_back(collider);
     }
