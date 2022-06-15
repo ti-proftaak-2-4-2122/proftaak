@@ -16,6 +16,8 @@ private:
     glm::vec3 scale{};
     GLuint fontTxId;
 
+    glm::vec4 color { 0.0f, 0.0f, 0.0f, 1.0f };
+
     static void DrawChar(glm::mat4 &modelMatrix, char characteristic);
 
     std::string text;
@@ -38,6 +40,8 @@ public:
     [[nodiscard]] const glm::vec3 &getPosition() const;
 
     void setText(const std::string &text);
+
+    void setColor(const glm::vec4 color);
 };
 
 

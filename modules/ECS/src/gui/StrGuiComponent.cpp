@@ -56,6 +56,9 @@ void StrGuiComponent::UpdateAfterDraw()
 
     tigl::shader->enableAlphaTest(true);
     tigl::shader->enableTexture(true);
+    tigl::shader->enableColorMult(true);
+
+    tigl::shader->setColorMult(this->color);
 
     auto modelMatrix = glm::mat4(1.0f);
     modelMatrix = glm::translate(modelMatrix, position);
@@ -68,6 +71,7 @@ void StrGuiComponent::UpdateAfterDraw()
 
     tigl::shader->enableAlphaTest(false);
     tigl::shader->enableTexture(false);
+    tigl::shader->enableColorMult(false);
 
     glDisable(GL_BLEND);
     glEnable(GL_CULL_FACE);
@@ -77,7 +81,7 @@ void StrGuiComponent::UpdateAfterDraw()
 StrGuiComponent::StrGuiComponent(std::string text, const glm::vec3 &position, const glm::vec3 &scale) : text(std::move(text)), position(position),
                                                                                                         scale(scale)
 {
-    fontTxId = textureLoader::getTexture("../resource/textures/Courier.png");
+    fontTxId = textureLoader::getTexture("../resource/textures/Courier-White.png");
 }
 
 void StrGuiComponent::setPosition(const glm::vec3 &newPosition)
@@ -117,4 +121,9 @@ void StrGuiComponent::setText(const std::string &nText)
 void StrGuiComponent::setScale(const glm::vec3 &newScale)
 {
     StrGuiComponent::scale = newScale;
+}
+
+void StrGuiComponent::setColor(const glm::vec4 color)
+{
+    this->color = color;
 }
