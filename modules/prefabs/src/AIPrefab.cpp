@@ -9,7 +9,9 @@
 #include "ModelManager.h"
 #include "GameTimer.h"
 #include "Scene.h"
+#include "gui/StrGuiComponent.h"
 #include "../../../colours.h"
+#include "TowerPrefab.h"
 
 #include <iostream>
 
@@ -23,12 +25,15 @@ AIPrefab::AIPrefab(Transform *transform, UnitTypeEnum type) : GameObject(transfo
     AddComponent(renderMesh);
 
     InitStats(type);
+    InitCheckpoints();
     AddComponent(this->characterStats);
+
+    this->strGuiComponent = new StrGuiComponent("");
+    this->strGuiComponent->setScale({0.5f, 0.5f, 0.5f});
 
     this->collider = new Collider(this->characterStats->range);
     AddComponent(collider);
-
-    InitCheckpoints();
+    AddComponent(this->strGuiComponent);
 
     lerpController->Move(this->transform.getPosition(), checkPoints[0],
                          characterStats->moveSpeed);
@@ -38,15 +43,13 @@ void AIPrefab::onTriggerEnter(Collider *other)
 {
     GameObject::onTriggerEnter(other);
 
-    glm::vec3 pos = this->transform.getPosition();
-
-    Transform transform1 = this->transform;
-    transform1.setPosition(glm::vec3(pos.x + 1, pos.y, pos.z));
-    //lerpController->Move(this->transform.getPosition(), transform1.getPosition() ,characterStats->moveSpeed);
+    lerpController->Move(this->transform.getPosition(), this->transform.getPosition(),characterStats->moveSpeed);
     otherStats = other->getGameObject()->FindComponent<CharacterStats>();
 
-    if (otherStats)
+    if (otherStats && (this->characterStats->team != otherStats->team))
     {
+        std::cout << "Starting combat with tower: " << otherStats->name << std::endl;
+
         //Start combat
         StartCombat(otherStats);
     }
@@ -61,44 +64,51 @@ void AIPrefab::onTriggerExit(Collider *other)
 void AIPrefab::Update()
 {
     GameObject::Update();
-    if (IsAttacking) DoDamage();
-    if (wayPointIndex >= checkPoints.size())
+    char buffer[15];
+    snprintf(buffer, 15, "Health: %.2f", this->characterStats->health);
+    this->strGuiComponent->setText(buffer);
+    this->strGuiComponent->setPosition({this->transform.getPosition().x-10,
+                                        this->transform.getPosition().y,
+                                        this->transform.getPosition().z-3});
+
+    if (this->IsAttacking) DoDamage();
+
+    if(this->isLerpINTR) return;
+
+    if (this->wayPointIndex >= this->checkPoints.size())
     {
-        lerpController->Move(this->transform.getPosition(), this->transform.getPosition(), characterStats->moveSpeed);
+        this->lerpController->Move(this->transform.getPosition(), this->transform.getPosition(), this->characterStats->moveSpeed);
         return;
     }
-    if (lerpController->CheckPos(this->transform.getPosition(), checkPoints[wayPointIndex]))
-    {
 
-        wayPointIndex++;
-        std::cout << "waypointindex: " << wayPointIndex << " to point: " << checkPoints[wayPointIndex].x << "," << checkPoints[wayPointIndex].z <<
-                  std::endl;
-        lerpController->Move(this->transform.getPosition(), checkPoints[wayPointIndex], characterStats->moveSpeed);
+
+    if (this->lerpController->CheckPos(this->transform.getPosition(), this->checkPoints[wayPointIndex]))
+    {
+        std::cout << "doing the lerpy derp " << '\n';
+        this->wayPointIndex++;
+        this->lerpController->Move(this->transform.getPosition(), this->checkPoints[wayPointIndex], this->characterStats->moveSpeed);
     }
 }
 
 void AIPrefab::StartCombat(CharacterStats *otherStats2)
 {
+    this->currentTime = this->characterStats->attackSpeed;
     this->otherStats = otherStats2;
     this->IsAttacking = true;
+    this->isLerpINTR = true;
 }
 
 void AIPrefab::DoDamage()
 {
     currentTime += GameTimer::getDeltaTime();
-    if (IsAttacking && currentTime >= this->characterStats->attackSpeed)
+    if (IsAttacking && (currentTime >= this->characterStats->attackSpeed))
     {
-        otherStats->health -= this->characterStats->damage;
-        //std::cout << "New Health: " << otherStats->health << std::endl;
+        otherStats->TakeDamage(this->characterStats->damage);
         currentTime = 0;
     }
     if (otherStats->health <= 0)
     {
-        if (otherStats->type == TOWER)
-        {
-            IsTowerDestroyed = true;
-        }
-
+        std::cout << "Enemy: " << otherStats->name << " Has 0 Hp" << std::endl;
         Scene::getSingleton().RemoveGameObject(otherStats->getGameObject());
         StopCombat();
     }
@@ -106,35 +116,25 @@ void AIPrefab::DoDamage()
 
 void AIPrefab::StopCombat()
 {
-    if (IsTowerDestroyed)
-    {
-        lerpController->Move(this->transform.getPosition(), checkPoints[2],
-                             characterStats->moveSpeed);
-    } else
-    {
-        lerpController->Move(this->transform.getPosition(), checkPoints[1],
-                             characterStats->moveSpeed);
-    }
+    this->isLerpINTR = false;
     IsAttacking = false;
 }
 
 void AIPrefab::InitStats(UnitTypeEnum type)
 {
-
-    //std::cout << "Init stats: " << ToString(type) << std::endl;
     switch (type)
     {
         case FAST:
-            this->characterStats = new CharacterStats{2.0f, 100.0f, 5.0f, 0.5f, 3.0f, LAND};
+            this->characterStats = new CharacterStats{"FAST prefab",2.f, 100.0f, 3.0f, 0.5f, 0.5f, LAND};
             break;
         case SLOW:
-            this->characterStats = new CharacterStats{2.0f, 100.0f, 10.0f, 0.5f, 1.0f, LAND};
+            this->characterStats = new CharacterStats{"SLOW prefab",4.f, 100.0f, 10.0f, 0.2f, 1.f, LAND};
             break;
         case LAND:
-            this->characterStats = new CharacterStats{2.0f, 100.0f, 10.0f, 0.5f, 1.0f, LAND};
+            this->characterStats = new CharacterStats{"LAND prefab",2.5f, 100.0f, 10.0f, 0.5f, 1.0f, LAND};
             break;
         default:
-            this->characterStats = new CharacterStats{2.0f, 100.0f, 10.0f, 0.5f, 1.0f, LAND};
+            this->characterStats = new CharacterStats{"Default LAND unit",2.5f, 100.0f, 10.0f, 0.5f, 1.0f, LAND};
             break;
     }
 }
@@ -167,7 +167,7 @@ void AIPrefab::InitCheckpoints()
         this->checkPoints.push_back(this->predefinedPositions[TOWER_TOP_LEFT]);
         this->checkPoints.push_back(this->predefinedPositions[TOWER_BOTTOM_LEFT]);
         this->characterStats->team = 1;
-    } else if (pos.x > 0 && pos.z > 0)
+    }else if (pos.x > 0 && pos.z > 0)
     {
         //Rechts onder
         std::cout << "rechtsonder\n";
@@ -178,4 +178,8 @@ void AIPrefab::InitCheckpoints()
     }
 }
 
+bool AIPrefab::setLerpINTR(const bool& newLerpINTR)
+{
+    return this->isLerpINTR = newLerpINTR;
+}
 

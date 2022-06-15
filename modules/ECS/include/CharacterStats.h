@@ -12,6 +12,7 @@
 
 struct CharacterStats : public Component
 {
+    std::string name;
     float range;
     float health;
     float damage;
@@ -20,9 +21,10 @@ struct CharacterStats : public Component
     UnitTypeEnum type;
     short team = -1; // this should only be set on 0(left), 1(right) or -1(uninitialized)
 
-    CharacterStats(float range, float health, float damage, float moveSpeed, float attackSpeed,
+    CharacterStats(std::string name, float range, float health, float damage, float moveSpeed, float attackSpeed,
                    UnitTypeEnum typeEnum)
-    : range(range),
+    : name(name),
+    range(range),
     health(health),
     damage(damage),
     moveSpeed
@@ -30,5 +32,10 @@ struct CharacterStats : public Component
     attackSpeed
     (attackSpeed),
     type(typeEnum) {}
+
+    void TakeDamage(const float& damageTaken)
+    {
+        this->health -= damageTaken;
+    }
 };
 #endif //PROFTAAK24_CHARACTERSTATS_H
