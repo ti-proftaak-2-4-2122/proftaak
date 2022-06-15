@@ -17,6 +17,7 @@ private:
     void loadVertices();
 
     std::vector<tigl::Vertex> vertices;
+    tigl::VBO* vbo;
 
 public:
     class Face
@@ -35,5 +36,7 @@ public:
     std::vector<tigl::Vertex>& GetVertices();
 
     std::string toString();
+
+    tigl::VBO *getVbo();
 };
 

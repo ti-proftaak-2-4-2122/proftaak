@@ -8,7 +8,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-
+#include "cs/func.h"
 
 ObjModel::ObjModel(const std::string &fileName)
 {
@@ -98,13 +98,21 @@ void ObjModel::loadVertices()
         {
             auto vertexPosition = this->positions[face.pos[i]];
             auto normalPosition = this->normals[face.normal[i]];
+
             vertices.push_back(tigl::Vertex::PCN(vertexPosition, {100,100,100,100},
                                                  normalPosition));
         }
     }
+    vbo = tigl::createVbo(vertices);
+    vertices.clear();
 }
 
 std::vector<tigl::Vertex>& ObjModel::GetVertices()
 {
     return vertices;
+}
+
+tigl::VBO* ObjModel::getVbo()
+{
+    return this->vbo;
 }

@@ -43,7 +43,7 @@ void Mesh::Draw()
     cs::shader->setModelMatrix(modelMatrix);
     cs::shader->setColorMult(this->color);
 
-    cs::drawVertices(GL_TRIANGLES, this->objModel->GetVertices());
+    cs::drawVertices(GL_TRIANGLES, this->objModel->getVbo());
 
 }
 
