@@ -8,6 +8,7 @@
 #include "InputHandler.h"
 #include "TeamHelper.h"
 #include "../../../user-config.h"
+#include "../../../colours.h"
 
 bool Spawner::HasCard(unsigned int color)
 {
@@ -20,113 +21,70 @@ bool Spawner::HasCard(unsigned int color)
 
 void Spawner::UpdateAfterDraw()
 {
+    this->greenPoolIndex = 0;
+    this->redPoolIndex = 0;
+    this->yellowPoolIndex = 0;
+
     receivedCards = detector->GetDetectedCards();
     for(auto& card : receivedCards)
     {
-        if(spawnedObjects.empty() || !spawnedObjects.contains(card.color))
-        {
-           // std::cout << "Drawing new card" << std::endl;
-            //add new card to spawnedcards
-            glm::vec3 glPos = ConvertCords(card);
-            auto *charGameObject = new GameObject(new Transform(glPos));
-            charGameObject->AddComponent(new Mesh(ModelManager::getModel("../resource/models/tower.obj")));
-
-            Scene::getSingleton().AddGameObject(charGameObject);
-            //std::cout << "Trying to spawn on color: "<< card.color << " on X:" << glPos.x
-            //<< ", Y:" << glPos.y << "\n";
-//            spawnedObjects.insert(std::pair<unsigned int, GameObject>(card.color,
-//             *charGameObject));
-
-            spawnedObjects.insert({card.color,charGameObject});
-            continue;
-        }
-
-        auto foundModel = spawnedObjects.find(card.color);
-        if (foundModel != spawnedObjects.end())
-        {
-           // std::cout << "Drawing known card" << std::endl;
-
-            glm::vec3 glPos = ConvertCords(card);
-
-            //std::cout << "Trying to spawn on color: "<< card.color << " on X:" << glPos.x
-            //          << ", Y:" << glPos.y << ", Z:" << glPos.z << "\n";
-
-            foundModel->second->transform.setPosition(glPos);
-//            Scene::getSingleton().AddGameObject(foundModel->second);
-        }
-
-        //spawning
-        this->currentCard = &card;
-    }
-
-    for (auto spawnedObject = spawnedObjects.begin();spawnedObject != spawnedObjects.end(); ++spawnedObject) {
-        if(!HasCard(spawnedObject->first))
-        {
-            //std::cout << "Card no longer found destoying: "<< spawnedObject->first
-            //<<"\n size of array: " << spawnedObjects.size() << std::endl;
-            Scene::getSingleton().RemoveGameObject(spawnedObject->second);
-            spawnedObjects.erase(spawnedObject);
-            //std::cout << "Size after deletion: "<< spawnedObjects.size() << std::endl;
-        }
+        GameObject* spawnPreviewObj = this->getPreviewGameObjectForCard(card);
+        glm::vec3 glPos = ConvertCords(card);
+        spawnPreviewObj->transform.setPosition(glPos);
     }
 }
 
 void Spawner::Spawn()
 {
-    if(!currentCard)
+    for(auto& currentCard : receivedCards)
     {
-        std::cout << "currentcard is null";
-        return;
-    }
+        CurrencyManager& currencyManager = Scene::getSingleton().getCurrencyManager();
+        float requiredMoney = 0.0f;
 
-    CurrencyManager& currencyManager = Scene::getSingleton().getCurrencyManager();
-    float requiredMoney = 0.0f;
+        //std::cout << "YO IMMA SPAWN EM";
+        glm::vec3 glPos = ConvertCords(currentCard);
+        std::cout << "Pos: " << glPos.x << "," << glPos.y << "," << glPos.z << ".\n";
+        UnitTypeEnum type;
+        //std::cout << "color = " << card.color << std::endl;
+        if(currentCard.color == 0) {
+            type = FAST;
+            //std::cout << "type = fast\n";
+            requiredMoney = 1.0f;
+        }
+        if(currentCard.color == 1) {
+            type = SLOW;
+            //std::cout << "type = slow\n";
+            requiredMoney = 1.0f;
+        }
+        if(currentCard.color == 2) {
+            type = LAND;
+            //std::cout << "type = land\n";
+            requiredMoney = 1.0f;
+        }
+        //std::cout << ToString(type) << std::endl;
+        short currentTeam = TeamHelper::getTeamByPosition(glPos);
+        if(currencyManager.requirePlayerCurrency(currentTeam, requiredMoney))
+        {
+            currencyManager.updatePlayerCurrency(currentTeam, -requiredMoney);
 
-    //std::cout << "YO IMMA SPAWN EM";
-    glm::vec3 glPos = ConvertCords(*currentCard);
-    std::cout << "Pos: " << glPos.x << "," << glPos.y << "," << glPos.z << ".\n";
-    UnitTypeEnum type;
-    //std::cout << "color = " << card.color << std::endl;
-    if(currentCard->color == 0) {
-        type = FAST;
-        //std::cout << "type = fast\n";
-        requiredMoney = 1.0f;
-    }
-    if(currentCard->color == 1) {
-        type = SLOW;
-        //std::cout << "type = slow\n";
-        requiredMoney = 1.0f;
-    }
-    if(currentCard->color == 2) {
-        type = LAND;
-        //std::cout << "type = land\n";
-        requiredMoney = 1.0f;
-    }
-    //std::cout << ToString(type) << std::endl;
-    short currentTeam = TeamHelper::getTeamByPosition(glPos);
-    if(currencyManager.requirePlayerCurrency(currentTeam, requiredMoney))
-    {
-        currencyManager.updatePlayerCurrency(currentTeam, -requiredMoney);
-
-        glm::mat4 model = CONFIG_MATRIX_VIEW;
-        glm::mat4 projection = CONFIG_MATRIX_PROJECTION;
-        glm::ivec4 viewport;
-        glGetIntegerv(GL_VIEWPORT, glm::value_ptr(viewport));
-        glm::vec3 Projected = glm::project(glPos, model, projection,viewport);
-        auto *AIcharacter = new AIPrefab(new Transform(glPos), type);
-        Scene::getSingleton().AddGameObject(AIcharacter);
-        currentCard = nullptr;
-    }
-    else
-    {
-        std::cout << "Currency " << currencyManager.getPlayerCurrency(currentTeam) << " is to low for spawning" << std::endl;
+            glm::mat4 model = CONFIG_MATRIX_VIEW;
+            glm::mat4 projection = CONFIG_MATRIX_PROJECTION;
+            glm::ivec4 viewport;
+            glGetIntegerv(GL_VIEWPORT, glm::value_ptr(viewport));
+            glm::vec3 Projected = glm::project(glPos, model, projection,viewport);
+            auto *AIcharacter = new AIPrefab(new Transform(glPos), type);
+            Scene::getSingleton().AddGameObject(AIcharacter);
+        }
+        else
+        {
+            std::cout << "Currency " << currencyManager.getPlayerCurrency(currentTeam) << " is to low for spawning" << std::endl;
+        }
     }
 }
 
 void Spawner::Awake()
 {
     Component::Awake();
-    spawnedObjects = std::map<unsigned int, GameObject*>();
 
     std::function<void()> functionPointer = [this](){
         this->Spawn();
@@ -135,6 +93,24 @@ void Spawner::Awake()
 
     InputHandler::getSingleton().AddCallback(GLFW_KEY_SPACE, GLFW_PRESS, functionPointer);
 
+}
+
+void Spawner::Update()
+{
+    Component::Update();
+
+    this->updatePreviewList(this->greenPreviewPool, greenPoolIndex);
+    this->updatePreviewList(this->redPreviewPool, redPoolIndex);
+    this->updatePreviewList(this->yellowPreviewPool, yellowPoolIndex);
+}
+
+void Spawner::Draw()
+{
+    Component::Draw();
+
+    this->drawPreviewList(this->greenPreviewPool, greenPoolIndex);
+    this->drawPreviewList(this->redPreviewPool, redPoolIndex);
+    this->drawPreviewList(this->yellowPreviewPool, yellowPoolIndex);
 }
 
 glm::vec3 Spawner::ConvertCords(CardDetector::Card& card)
@@ -154,7 +130,75 @@ glm::vec3 Spawner::ConvertCords(CardDetector::Card& card)
     return glPos;
 }
 
-void Spawner::Wrapper(void (*fun)())
+GameObject* Spawner::getPreviewGameObjectForCard(const CardDetector::Card& card)
 {
+    GameObject* result = nullptr;
 
+    switch(card.color) {
+        case 0 /* green */:
+            if(this->greenPoolIndex == this->greenPreviewPool.size()) {
+                // Create new
+                auto* charGameObject = new GameObject();
+                auto* mesh = new Mesh(ModelManager::getModel("../resource/models/tower.obj"));
+
+                mesh->SetColor(GREEN_ANDROID);
+                mesh->SetAlpha(0.7f);
+
+                charGameObject->AddComponent(mesh);
+
+                this->greenPreviewPool.push_back(charGameObject);
+            }
+
+            // Get the last item out of pool
+            result = this->greenPreviewPool[this->greenPoolIndex++];
+            break;
+        case 1 /* red */:
+            if(this->redPoolIndex == this->redPreviewPool.size()) {
+                // Create new
+                auto* charGameObject = new GameObject();
+                auto* mesh = new Mesh(ModelManager::getModel("../resource/models/tower.obj"));
+
+                mesh->SetColor(RED_BERRY);
+                mesh->SetAlpha(0.7f);
+
+                charGameObject->AddComponent(mesh);
+
+                this->redPreviewPool.push_back(charGameObject);
+            }
+
+            // Get the last item out of pool
+            result = this->redPreviewPool[this->redPoolIndex++];
+            break;
+        case 2 /* yellow */:
+            if(this->yellowPoolIndex == this->yellowPreviewPool.size()) {
+                // Create new
+                auto* charGameObject = new GameObject();
+                auto* mesh = new Mesh(ModelManager::getModel("../resource/models/tower.obj"));
+
+                mesh->SetColor(YELLOW_SUNFLOWER);
+                mesh->SetAlpha(0.7f);
+
+                charGameObject->AddComponent(mesh);
+
+                this->yellowPreviewPool.push_back(charGameObject);
+            }
+
+            // Get the last item out of pool
+            result = this->yellowPreviewPool[this->yellowPoolIndex++];
+            break;
+    }
+
+    return result;
+}
+
+void Spawner::drawPreviewList(const std::vector<GameObject*>& previewPool, const int& usedCount)
+{
+    for(int i = 0; i < usedCount && i < previewPool.size(); i++)
+        previewPool[i]->Draw();
+}
+
+void Spawner::updatePreviewList(const std::vector<GameObject*>& previewPool, const int& usedCount)
+{
+    for(int i = 0; i < usedCount && i < previewPool.size(); i++)
+        previewPool[i]->Update();
 }
