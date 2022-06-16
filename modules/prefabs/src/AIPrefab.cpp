@@ -119,7 +119,7 @@ void AIPrefab::StopCombat()
     std::cout << "Stopping combat with: " << this->otherStats->name << std::endl;
     this->isLerpINTR = false;
     IsAttacking = false;
-    this->lerpController->Move(this->transform.getPosition(), this->checkPoints[1], this->characterStats->moveSpeed);
+    this->lerpController->Move(this->transform.getPosition(), this->checkPoints[this->wayPointIndex], this->characterStats->moveSpeed);
 }
 
 void AIPrefab::InitStats(UnitTypeEnum type)

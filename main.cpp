@@ -159,9 +159,9 @@ void worldInit()
 {
     InputHandler::getSingleton().AddCallback(GLFW_KEY_ESCAPE, GLFW_PRESS, closeWindow);
 
-    AIPrefab* aiPrefab = new AIPrefab(new Transform({-9.0f, 0.0f, -12.0f}, {0,0,0}, {1.0f,1.0f,1.0f}), UnitTypeEnum::FAST);
+    AIPrefab* aiPrefab = new AIPrefab(new Transform({9.0f, 0.0f, -12.0f}, {0,0,0}, {1.0f,1.0f,1.0f}), UnitTypeEnum::FAST);
 
-    AIPrefab* aiPrefab2 = new AIPrefab(new Transform({9.0f, 0.0f, -12.0f}, {0,0,0}, {1.0f,1.0f,1.0f}), UnitTypeEnum::SLOW);
+    AIPrefab* aiPrefab2 = new AIPrefab(new Transform({-9.0f, 0.0f, -12.0f}, {0,0,0}, {1.0f,1.0f,1.0f}), UnitTypeEnum::SLOW);
 
 
     TowerPrefab *towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f), glm::vec3(0, 0, 0), glm::vec3(1.0f, 1.0f, 1.0f)),
@@ -188,12 +188,10 @@ void worldInit()
 
     Scene::getSingleton().AddGameObject(aiPrefab);
     Scene::getSingleton().AddGameObject(aiPrefab2);
-//    Scene::getSingleton().AddGameObject(towerPrefab);
-//    Scene::getSingleton().AddGameObject(towerPrefab1);
-//    Scene::getSingleton().AddGameObject(towerPrefab2);
-//    Scene::getSingleton().AddGameObject(towerPrefab3);
-//    Scene::getSingleton().AddGameObject(towerPrefab4);
-//    Scene::getSingleton().AddGameObject(towerPrefab5);
+    Scene::getSingleton().AddGameObject(towerPrefab);
+    Scene::getSingleton().AddGameObject(towerPrefab1);
+    Scene::getSingleton().AddGameObject(towerPrefab2);
+    Scene::getSingleton().AddGameObject(towerPrefab3);
     Scene::getSingleton().AddGameObject(field);
     Scene::getSingleton().AddGameObject(bridge);
 
