@@ -130,6 +130,9 @@ void AIPrefab::InitStats(UnitTypeEnum type)
         case LAND:
             this->characterStats = new CharacterStats{"LAND prefab",2.f, 100.0f, 10.0f, 0.5f, 1.0f, LAND};
             break;
+        case DUMMY_UNIT:
+            this->characterStats = new CharacterStats{"DUMMY prefab",2.f, 100.0f, 1.0f, 0.5f, 5.0f, DUMMY_UNIT};
+            break;
         default:
             this->characterStats = new CharacterStats{"Default LAND unit",2.f, 100.0f, 10.0f, 0.5f, 1.0f, LAND};
             break;
@@ -139,6 +142,13 @@ void AIPrefab::InitStats(UnitTypeEnum type)
 void AIPrefab::InitCheckpoints()
 {
     glm::vec3 pos = this->transform.getPosition();
+
+    if(this->characterStats->type == DUMMY_UNIT)
+    {
+        std::cout << "DUMMY UNIT SPAWNED" << std::endl;
+        this->checkPoints.push_back(this->predefinedPositions[TOP_RIGHT_BRIDGE]);
+        return;
+    }
 
     if (pos.x <= 0 && pos.z <= 0)
     {

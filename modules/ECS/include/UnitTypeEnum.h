@@ -9,6 +9,7 @@ enum UnitTypeEnum {
     SLOW,
     LAND,
     TOWER,
+    DUMMY_UNIT,
 };
 
 inline const char* ToString(UnitTypeEnum v)
