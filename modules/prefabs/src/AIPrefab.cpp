@@ -8,6 +8,7 @@
 #include "Transform.h"
 #include "ModelManager.h"
 #include "GameTimer.h"
+#include "glm/gtx/string_cast.hpp"
 #include "Scene.h"
 #include "gui/StrGuiComponent.h"
 #include "../../../colours.h"
@@ -49,7 +50,6 @@ void AIPrefab::onTriggerEnter(Collider *other)
     if (otherStats && (this->characterStats->team != otherStats->team))
     {
         std::cout << "Starting combat with tower: " << otherStats->name << std::endl;
-
         //Start combat
         StartCombat(otherStats);
     }
@@ -73,18 +73,18 @@ void AIPrefab::Update()
 
     if (this->IsAttacking) DoDamage();
 
-    if(this->isLerpINTR) return;
-
     if (this->wayPointIndex >= this->checkPoints.size())
     {
         this->lerpController->Move(this->transform.getPosition(), this->transform.getPosition(), this->characterStats->moveSpeed);
         return;
     }
 
+    if(this->isLerpINTR) return;
 
     if (this->lerpController->CheckPos(this->transform.getPosition(), this->checkPoints[wayPointIndex]))
     {
         std::cout << "doing the lerpy derp " << '\n';
+        std::cout << "Position of the lerpy derp " << glm::to_string(this->checkPoints[wayPointIndex]) << '\n';
         this->wayPointIndex++;
         this->lerpController->Move(this->transform.getPosition(), this->checkPoints[wayPointIndex], this->characterStats->moveSpeed);
     }
@@ -101,7 +101,7 @@ void AIPrefab::StartCombat(CharacterStats *otherStats2)
 void AIPrefab::DoDamage()
 {
     currentTime += GameTimer::getDeltaTime();
-    if (IsAttacking && (currentTime >= this->characterStats->attackSpeed))
+    if (currentTime >= this->characterStats->attackSpeed)
     {
         otherStats->TakeDamage(this->characterStats->damage);
         currentTime = 0;
@@ -116,8 +116,10 @@ void AIPrefab::DoDamage()
 
 void AIPrefab::StopCombat()
 {
+    std::cout << "Stopping combat with: " << this->otherStats->name << std::endl;
     this->isLerpINTR = false;
     IsAttacking = false;
+    this->lerpController->Move(this->transform.getPosition(), this->checkPoints[1], this->characterStats->moveSpeed);
 }
 
 void AIPrefab::InitStats(UnitTypeEnum type)

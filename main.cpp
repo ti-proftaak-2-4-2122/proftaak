@@ -188,10 +188,10 @@ void worldInit()
 
     Scene::getSingleton().AddGameObject(aiPrefab);
     Scene::getSingleton().AddGameObject(aiPrefab2);
-    Scene::getSingleton().AddGameObject(towerPrefab);
-    Scene::getSingleton().AddGameObject(towerPrefab1);
-    Scene::getSingleton().AddGameObject(towerPrefab2);
-    Scene::getSingleton().AddGameObject(towerPrefab3);
+//    Scene::getSingleton().AddGameObject(towerPrefab);
+//    Scene::getSingleton().AddGameObject(towerPrefab1);
+//    Scene::getSingleton().AddGameObject(towerPrefab2);
+//    Scene::getSingleton().AddGameObject(towerPrefab3);
 //    Scene::getSingleton().AddGameObject(towerPrefab4);
 //    Scene::getSingleton().AddGameObject(towerPrefab5);
     Scene::getSingleton().AddGameObject(field);
