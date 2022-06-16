@@ -86,3 +86,17 @@ void TowerPrefab::InitTowerTeam()
         this->characterStats->team = 1;
     }
 }
+
+TowerPrefab::~TowerPrefab()
+{
+    if(this->characterStats->team == 1)
+    {
+        Scene::getSingleton().team_2_towerDestroyed++;
+        std::cout << "Team 2 tower destroyed " << Scene::getSingleton().team_2_towerDestroyed << std::endl;
+    }
+    else
+    {
+        Scene::getSingleton().team_1_towerDestroyed++;
+        std::cout << "Team 1 tower destroyed " << Scene::getSingleton().team_1_towerDestroyed << std::endl;
+    }
+}

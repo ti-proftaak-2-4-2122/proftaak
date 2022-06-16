@@ -30,6 +30,7 @@ private:
 
 public:
     explicit TowerPrefab(Transform *transform, std::string name);
+    ~TowerPrefab();
 
     void InitTowerTeam();
 

@@ -159,19 +159,19 @@ void worldInit()
 {
     InputHandler::getSingleton().AddCallback(GLFW_KEY_ESCAPE, GLFW_PRESS, closeWindow);
 
-    AIPrefab* aiPrefab = new AIPrefab(new Transform({9.0f, 0.0f, -12.0f}, {0,0,0}, {1.0f,1.0f,1.0f}), UnitTypeEnum::FAST);
+//    AIPrefab* aiPrefab = new AIPrefab(new Transform({-9.0f, 0.0f, -12.0f}, {0,0,0}, {1.0f,1.0f,1.0f}), UnitTypeEnum::FAST);
 
-    AIPrefab* aiPrefab2 = new AIPrefab(new Transform({-9.0f, 0.0f, -12.0f}, {0,0,0}, {1.0f,1.0f,1.0f}), UnitTypeEnum::SLOW);
+//    AIPrefab* aiPrefab2 = new AIPrefab(new Transform({-9.0f, 0.0f, -12.0f}, {0,0,0}, {1.0f,1.0f,1.0f}), UnitTypeEnum::SLOW);
 
 
     TowerPrefab *towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f), glm::vec3(0, 0, 0), glm::vec3(1.0f, 1.0f, 1.0f)),
-                                               "Rechtsboven");
+                                               "RechtsBoven");
     TowerPrefab *towerPrefab1 = new TowerPrefab(new Transform(glm::vec3(-30.0f, 0.0f, 12.0f), glm::vec3(0, 0, 0), glm::vec3(1.0f, 1.0f, 1.0f)),
-                                                "LinksBoven");
+                                                "LinksOnder");
     TowerPrefab *towerPrefab2 = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, 12.0f), glm::vec3(0, 0, 0), glm::vec3(1.0f, 1.0f, 1.0f)),
-                                                "Rechtsonder");
+                                                "RechtsOnder");
     TowerPrefab *towerPrefab3 = new TowerPrefab(new Transform(glm::vec3(-30.0f, 0.0f, -12.0f), glm::vec3(0, 0, 0), glm::vec3(1.0f, 1.0f, 1.0f)),
-                                                "Linksonder");
+                                                "LinksBoven");
 
     GameObject *field = new GameObject(new Transform(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), glm::vec3(1, 1, 1)));
     Mesh *mesh = new Mesh(ModelManager::getModel("../resource/models/map_ground.obj"));
@@ -186,8 +186,8 @@ void worldInit()
 
     float mapAlpha = CONFIG_PLAYFIELD_ALPHA;
 
-    Scene::getSingleton().AddGameObject(aiPrefab);
-    Scene::getSingleton().AddGameObject(aiPrefab2);
+//    Scene::getSingleton().AddGameObject(aiPrefab);
+//    Scene::getSingleton().AddGameObject(aiPrefab2);
     Scene::getSingleton().AddGameObject(towerPrefab);
     Scene::getSingleton().AddGameObject(towerPrefab1);
     Scene::getSingleton().AddGameObject(towerPrefab2);
@@ -195,11 +195,11 @@ void worldInit()
     Scene::getSingleton().AddGameObject(field);
     Scene::getSingleton().AddGameObject(bridge);
 
-//    auto *spawnManager = new GameObject(new Transform());
-//    auto *spawner = new Spawner();
-//
-//    spawnManager->AddComponent(spawner);
-//    Scene::getSingleton().AddGameObject(spawnManager);
+    auto *spawnManager = new GameObject(new Transform());
+    auto *spawner = new Spawner();
+
+    spawnManager->AddComponent(spawner);
+    Scene::getSingleton().AddGameObject(spawnManager);
 
 //    GameObject* gangGangStyleGang = new GameObject(new Transform());
 //    Mesh* mesh = new Mesh(ModelManager::getModel("../resource/models/box.obj"));
@@ -241,6 +241,11 @@ void update()
         {
             lastFramePrint = GameTimer::getCurrentTime();
         }
+    }
+
+    if(Scene::getSingleton().checkPlayerWinCondition())
+    {
+        closeWindow();
     }
 }
 

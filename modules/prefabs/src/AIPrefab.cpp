@@ -49,7 +49,6 @@ void AIPrefab::onTriggerEnter(Collider *other)
 
     if (otherStats && (this->characterStats->team != otherStats->team))
     {
-        std::cout << "Starting combat with tower: " << otherStats->name << std::endl;
         //Start combat
         StartCombat(otherStats);
     }
@@ -83,8 +82,6 @@ void AIPrefab::Update()
 
     if (this->lerpController->CheckPos(this->transform.getPosition(), this->checkPoints[wayPointIndex]))
     {
-        std::cout << "doing the lerpy derp " << '\n';
-        std::cout << "Position of the lerpy derp " << glm::to_string(this->checkPoints[wayPointIndex]) << '\n';
         this->wayPointIndex++;
         this->lerpController->Move(this->transform.getPosition(), this->checkPoints[wayPointIndex], this->characterStats->moveSpeed);
     }
@@ -108,7 +105,6 @@ void AIPrefab::DoDamage()
     }
     if (otherStats->health <= 0)
     {
-        std::cout << "Enemy: " << otherStats->name << " Has 0 Hp" << std::endl;
         Scene::getSingleton().RemoveGameObject(otherStats->getGameObject());
         StopCombat();
     }
@@ -116,7 +112,6 @@ void AIPrefab::DoDamage()
 
 void AIPrefab::StopCombat()
 {
-    std::cout << "Stopping combat with: " << this->otherStats->name << std::endl;
     this->isLerpINTR = false;
     IsAttacking = false;
     this->lerpController->Move(this->transform.getPosition(), this->checkPoints[this->wayPointIndex], this->characterStats->moveSpeed);
@@ -130,13 +125,13 @@ void AIPrefab::InitStats(UnitTypeEnum type)
             this->characterStats = new CharacterStats{"FAST prefab",2.f, 100.0f, 3.0f, 0.5f, 0.5f, LAND};
             break;
         case SLOW:
-            this->characterStats = new CharacterStats{"SLOW prefab",4.f, 100.0f, 10.0f, 0.2f, 1.f, LAND};
+            this->characterStats = new CharacterStats{"SLOW prefab",2.f, 100.0f, 10.0f, 0.2f, 1.f, LAND};
             break;
         case LAND:
-            this->characterStats = new CharacterStats{"LAND prefab",2.5f, 100.0f, 10.0f, 0.5f, 1.0f, LAND};
+            this->characterStats = new CharacterStats{"LAND prefab",2.f, 100.0f, 10.0f, 0.5f, 1.0f, LAND};
             break;
         default:
-            this->characterStats = new CharacterStats{"Default LAND unit",2.5f, 100.0f, 10.0f, 0.5f, 1.0f, LAND};
+            this->characterStats = new CharacterStats{"Default LAND unit",2.f, 100.0f, 10.0f, 0.5f, 1.0f, LAND};
             break;
     }
 }
