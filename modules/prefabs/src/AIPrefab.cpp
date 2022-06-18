@@ -147,6 +147,7 @@ void AIPrefab::InitCheckpoints()
     {
         std::cout << "DUMMY UNIT SPAWNED" << std::endl;
         this->checkPoints.push_back(this->predefinedPositions[TOP_RIGHT_BRIDGE]);
+        this->characterStats->team = 1;   
         return;
     }
 

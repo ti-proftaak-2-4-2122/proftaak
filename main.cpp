@@ -160,7 +160,7 @@ void worldInit()
 {
     InputHandler::getSingleton().AddCallback(GLFW_KEY_ESCAPE, GLFW_PRESS, closeWindow);
 
-    AIPrefab* aiPrefab = new AIPrefab(new Transform({9.0f, 0.0f, -12.0f}, {0,0,0}, {1.0f,1.0f,1.0f}), UnitTypeEnum::DUMMY_UNIT);
+    AIPrefab* aiPrefab = new AIPrefab(new Transform({15.0f, 0.0f, -12.0f}, {0,0,0}, {1.0f,1.0f,1.0f}), UnitTypeEnum::DUMMY_UNIT);
 
 //    AIPrefab* aiPrefab2 = new AIPrefab(new Transform({-9.0f, 0.0f, -12.0f}, {0,0,0}, {1.0f,1.0f,1.0f}), UnitTypeEnum::SLOW);
 
