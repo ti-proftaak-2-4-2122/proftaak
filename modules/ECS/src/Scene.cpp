@@ -62,6 +62,7 @@ void Scene::RemoveGameObject(GameObject* gameObject)
  */
 void Scene::update()
 {
+    this->currencyManager.update();
 }
 
 Scene::~Scene()
@@ -96,4 +97,10 @@ bool Scene::checkPlayerWinCondition()
         return true;
     }
     return false;
+}
+
+
+CurrencyManager& Scene::getCurrencyManager()
+{
+    return this->currencyManager;
 }

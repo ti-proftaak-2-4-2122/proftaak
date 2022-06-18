@@ -6,6 +6,8 @@
 
 #include "Component.h"
 #include <string>
+#include "glm/glm.hpp"
+#include <glad/glad.h>
 
 class StrGuiComponent : public Component
 {
@@ -13,6 +15,8 @@ private:
     glm::vec3 position{};
     glm::vec3 scale{};
     GLuint fontTxId;
+
+    glm::vec4 color { 0.0f, 0.0f, 0.0f, 1.0f };
 
     static void DrawChar(glm::mat4 &modelMatrix, char characteristic);
 
@@ -36,6 +40,8 @@ public:
     [[nodiscard]] const glm::vec3 &getPosition() const;
 
     void setText(const std::string &text);
+
+    void setColor(const glm::vec4 color);
 };
 
 

@@ -27,6 +27,7 @@
 #include "InputHandler.h"
 #include "Animator.h"
 #include "colours.h"
+#include "CurrencyDisplayPrefab.h"
 
 
 using tigl::Vertex;
@@ -183,7 +184,6 @@ void worldInit()
     mesh1->SetColor(YELLOW_SUNFLOWER);
     bridge->AddComponent(mesh1);
 
-
     float mapAlpha = CONFIG_PLAYFIELD_ALPHA;
 
     Scene::getSingleton().AddGameObject(aiPrefab);
@@ -200,6 +200,8 @@ void worldInit()
 
     spawnManager->AddComponent(spawner);
     Scene::getSingleton().AddGameObject(spawnManager);
+
+    Scene::getSingleton().AddGameObject(new CurrencyDisplayPrefab());
 
 //    GameObject* gangGangStyleGang = new GameObject(new Transform());
 //    Mesh* mesh = new Mesh(ModelManager::getModel("../resource/models/box.obj"));
@@ -220,8 +222,8 @@ void update()
 {
     imageProvider->Update();
 
-    Scene::getSingleton().update();
     GameTimer::update(glfwGetTime());
+    Scene::getSingleton().update();
 
     if(CONFIG_FPS_COUNTER) {
         frameCount++;
@@ -311,5 +313,5 @@ void createMapObject(const std::string &filePath, glm::vec4 color)
         mesh_map_object->SetColor(color);
     }
 
-    scene->getSingleton().AddGameObject(map_object);
+    scene->AddGameObject(map_object);
 }

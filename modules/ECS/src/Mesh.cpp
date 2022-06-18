@@ -62,8 +62,3 @@ void Mesh::SetMesh(ObjModel *model)
 {
     objModel = model;
 }
-
-void Mesh::SetDiffuseColor(const glm::vec3 &nColor)
-{
-    this->diffuseColor = nColor;
-}

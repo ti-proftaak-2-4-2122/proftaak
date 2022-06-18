@@ -12,8 +12,8 @@ TowerPrefab::TowerPrefab(Transform *transform, std::string name) : GameObject(tr
 {
     this->characterStats = new CharacterStats{name, 4.f, 100.0f, 10.0f, 0.0f, 1.5f, TOWER};
     this->collider = new Collider(this->characterStats->range);
-     this->strGuiComponent = new StrGuiComponent("");
-     this->strGuiComponent->setScale({0.7f, 0.7f, 0.7f});
+    this->strGuiComponent = new StrGuiComponent("");
+    this->strGuiComponent->setScale({0.7f, 0.7f, 0.7f});
 
      InitTowerTeam();
 

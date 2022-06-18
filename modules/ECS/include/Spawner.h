@@ -21,18 +21,29 @@ class Spawner : public Component
 public:
     void UpdateAfterDraw() override;
     void Awake() override;
+    void Update() override;
+    void Draw() override;
     void Spawn();
 private:
 
-    CardDetector *detector = CardDetector::GetInstance();
-    std::map<unsigned int, GameObject*> spawnedObjects;
-    std::vector<CardDetector::Card> receivedCards;
+    int greenPoolIndex = 0;
+    std::vector<GameObject*> greenPreviewPool;
 
-    CardDetector::Card* currentCard;
+    int redPoolIndex = 0;
+    std::vector<GameObject*> redPreviewPool;
+
+    int yellowPoolIndex = 0;
+    std::vector<GameObject*> yellowPreviewPool;
+
+    CardDetector *detector = CardDetector::GetInstance();
+    std::vector<CardDetector::Card> receivedCards;
 
     bool HasCard(unsigned int color);
 
     static glm::vec3 ConvertCords(CardDetector::Card& card);
 
-    void Wrapper(void (*fun)());
+    GameObject* getPreviewGameObjectForCard(const CardDetector::Card& card);
+
+    void updatePreviewList(const std::vector<GameObject*>& previewPool, const int& usedCount);
+    void drawPreviewList(const std::vector<GameObject*>& previewPool, const int& usedCount);
 };
