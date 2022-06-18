@@ -10,6 +10,7 @@
 #include "Collider.h"
 #include "CharacterStats.h"
 #include "Mesh.h"
+#include "gui/StrGuiComponent.h"
 #include "LerpController.h"
 #include "CombatController.h"
 #include "map"
@@ -31,13 +32,15 @@ private:
         TOWER_BOTTOM_RIGHT
     } AI_POSITION;
 
-    bool IsTowerDestroyed = false;
+    bool isLerpINTR = false;
     float currentTime;
     int wayPointIndex = 0;
+
     LerpController* lerpController;
     Collider* collider;
     CharacterStats* characterStats;
     CharacterStats* otherStats;
+    StrGuiComponent *strGuiComponent;
     std::vector<glm::vec3> checkPoints {};
 
     std::map<AI_POSITION, glm::vec3> predefinedPositions {{TOP_LEFT_BRIDGE,     glm::vec3(-9.0f, 0.0f, -12.0f)},
@@ -58,11 +61,11 @@ private:
 
 public:
 
-    //Combat logic
     bool IsAttacking = false;
-    bool hasFought = false;
 
     AIPrefab(Transform* transform, UnitTypeEnum type);
+
+    bool setLerpINTR(const bool& newLerpINTR);
 
     void onTriggerEnter(Collider* other) override;
     void onTriggerExit(Collider* other) override;

@@ -68,7 +68,7 @@ public:
 
     void UpdateAfterDraw();
 
-    ~GameObject();
+    virtual ~GameObject();
 
     virtual void onTriggerEnter(Collider* other) {
 //        std::cout << "On Trigger Enter called" << std::endl;

@@ -4,18 +4,18 @@
 #include "Scene.h"
 #include <iostream>
 #include "Mesh.h"
-#include "gui/StrGuiComponent.h"
 
 #include "glm/glm.hpp"
 #include "../../../colours.h"
 
-TowerPrefab::TowerPrefab(Transform *transform) : GameObject(transform)
+TowerPrefab::TowerPrefab(Transform *transform, std::string name) : GameObject(transform)
 {
-    std::cout << "Constructor call for tower" << std::endl;
-    this->characterStats = new CharacterStats{4.0f, 5.0f, 5.0f, 0.0f, 1.0f, TOWER};
+    this->characterStats = new CharacterStats{name, 4.f, 100.0f, 10.0f, 0.0f, 1.5f, TOWER};
     this->collider = new Collider(this->characterStats->range);
      this->strGuiComponent = new StrGuiComponent("");
      this->strGuiComponent->setScale({0.7f, 0.7f, 0.7f});
+
+     InitTowerTeam();
 
      this->strGuiComponent->setPosition(transform->getPosition());
     Mesh* mesh = new Mesh(ModelManager::getModel("../resource/models/tower.obj"));
@@ -25,19 +25,16 @@ TowerPrefab::TowerPrefab(Transform *transform) : GameObject(transform)
     AddComponent(this->collider);
     AddComponent(this->characterStats);
     AddComponent(this->strGuiComponent);
-
 }
 
 void TowerPrefab::onTriggerEnter(Collider *other)
 {
-    //std::cout << "On Trigger Enter for tower" << std::endl;
     GameObject::onTriggerEnter(other);
     auto *oCharacterStats = other->getGameObject()->FindComponent<CharacterStats>();
 
     if(oCharacterStats) {
-        if(oCharacterStats->type == TOWER) return;
+        if((oCharacterStats->type == TOWER) && (this->characterStats->team == oCharacterStats->team)) return;
         StartCombat(oCharacterStats);
-        std::cout << "The character got damaged, his health is: " << oCharacterStats->health << std::endl;
     }
 }
 
@@ -67,9 +64,9 @@ void TowerPrefab::StopCombat()
 void TowerPrefab::DoDamage()
 {
     currentTime += GameTimer::getDeltaTime();
-    if (IsAttacking && currentTime >= this->characterStats->attackSpeed)
+    if (currentTime >= this->characterStats->attackSpeed)
     {
-        otherStats->health -= this->characterStats->damage;
+        otherStats->TakeDamage(this->characterStats->damage);
         currentTime = 0;
     }
     if (otherStats->health <= 0)
@@ -78,3 +75,28 @@ void TowerPrefab::DoDamage()
     }
 }
 
+void TowerPrefab::InitTowerTeam()
+{
+    if(this->transform.getPosition().x <= 0)
+    {
+        this->characterStats->team = 0;
+    }
+    else
+    {
+        this->characterStats->team = 1;
+    }
+}
+
+TowerPrefab::~TowerPrefab()
+{
+    if(this->characterStats->team == 1)
+    {
+        Scene::getSingleton().team_2_towerDestroyed++;
+        std::cout << "Team 2 tower destroyed " << Scene::getSingleton().team_2_towerDestroyed << std::endl;
+    }
+    else
+    {
+        Scene::getSingleton().team_1_towerDestroyed++;
+        std::cout << "Team 1 tower destroyed " << Scene::getSingleton().team_1_towerDestroyed << std::endl;
+    }
+}

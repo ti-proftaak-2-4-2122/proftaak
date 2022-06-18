@@ -10,6 +10,7 @@
 #include "Scene.h"
 #include "Collider.h"
 #include "GLFW/glfw3.h"
+#include "CharacterStats.h"
 
 void Scene::AddGameObject(GameObject *gameObject)
 {
@@ -41,6 +42,7 @@ void Scene::RemoveGameObject(GameObject* gameObject)
 
     // If gameObject is in vector, remove
     if(pos != this->gameobjects.end()) {
+
         auto* collider = gameObject->FindComponent<Collider>();
         if(collider)
         {
@@ -53,9 +55,13 @@ void Scene::RemoveGameObject(GameObject* gameObject)
     }
 }
 
+/**
+ * The Scene update checks if one of the players has won
+ * This is wholly dependend on if they defeated 2 towers
+ * of their on the opponents side.
+ */
 void Scene::update()
 {
-
 }
 
 Scene::~Scene()
@@ -75,4 +81,19 @@ std::vector<GameObject *> Scene::findGameObjects(TagEnum tagEnum)
     }
 
     return foundObjects;
+}
+
+bool Scene::checkPlayerWinCondition()
+{
+    if(this->team_1_towerDestroyed == 1)
+    {
+        std::cout << "Team 2 WINS" << std::endl;
+        return true;
+    }
+    if (this->team_2_towerDestroyed == 1)
+    {
+        std::cout << "Team 1 WINS" << std::endl;
+        return true;
+    }
+    return false;
 }

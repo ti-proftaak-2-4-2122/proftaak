@@ -32,9 +32,12 @@ public:
     }
 
     std::vector<GameObject *> gameobjects;
+    short team_1_towerDestroyed = -1;
+    short team_2_towerDestroyed = -1;
 
     void AddGameObject(GameObject *gameObject);
     void RemoveGameObject(GameObject* gameObject);
+    bool checkPlayerWinCondition();
 
 
     std::vector<GameObject *> findGameObjects(TagEnum tagEnum);

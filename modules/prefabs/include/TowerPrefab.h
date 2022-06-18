@@ -29,7 +29,10 @@ private:
     void DoDamage();
 
 public:
-    explicit TowerPrefab(Transform *transform);
+    explicit TowerPrefab(Transform *transform, std::string name);
+    ~TowerPrefab();
+
+    void InitTowerTeam();
 
     void onTriggerEnter(Collider* other) override;
 
