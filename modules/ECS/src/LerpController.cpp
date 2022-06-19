@@ -1,49 +1,44 @@
-//
-// Created by Daan van Donk on 11/05/2022.
-//
+/**
+ * @file
+ * @brief Source file for the LerpController class
+ * @author Daan van Donk
+ * @date 11-05-2022
+ */
 
 #include <iostream>
 #include "LerpController.h"
 #include "Transform.h"
 #include "glm/vec3.hpp"
+#include "GameTimer.h"
+#include "glm/gtx/string_cast.hpp"
+#include "glm/gtx/compatibility.hpp"
 
-void LerpController::Move(glm::vec3 startPos, glm::vec3 endPos, float speed)
+void LerpController::Move(glm::vec3 nStartPos, glm::vec3 nEndPos, float speed)
 {
-    std::cout << "Going to move" << std::endl;
-    //Reset lerp
-    stepCount = 0;
-    //Calculate 3D slope
-    slope = glm::vec3(speed / (endPos.x - startPos.x), speed / (endPos.y - startPos.y),
-                      speed / (endPos
-                                       .z - startPos.z));
+    this->endPos = nEndPos;
+    this->startPos = nStartPos;
 
-    for (int i = 0; i < 3; ++i)
-    {
-        if (std::isinf(slope[i]))
-        {
-            slope[i] = 0;
-        }
-    }
-    // startPos*speed + endPos*(1.f-speed);
-    //Calculate how many ticks is needed to complete to full move
-    stepAmount = (int) ((endPos.x - startPos.x) / slope.x);
+    fraction = 0.0f;
 }
-
 
 void LerpController::Update()
 {
     Component::Update();
 
-    if (stepCount >= stepAmount) return;
-    //Move the gameobject
-    gameObject->transform.setPosition(gameObject->transform.getPosition() + slope);
-    stepCount++;
+    if (CheckPos(gameObject->transform.getPosition(), endPos)) return;
 
+    auto targetPos = glm::lerp(startPos, endPos, fraction);
+    gameObject->transform.setPosition((targetPos));
+
+    fraction += GameTimer::getDeltaTime() * 0.5f;
 }
 
 LerpController::LerpController()
 {
-    slope = glm::vec3(0, 0, 0);
-    stepAmount = 0;
-    stepCount = 0;
+}
+
+bool LerpController::CheckPos(glm::vec3 currentPos, glm::vec3 resultPos) const
+{
+    auto distance = glm::length(resultPos - currentPos);
+    return distance <= roundValue;
 }

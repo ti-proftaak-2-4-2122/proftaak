@@ -1,25 +1,31 @@
-//
-// Created by Daan van Donk on 12/05/2022.
-//
+/**
+ * @file
+ * @brief Source file for the Mesh class
+ * @author Daan van Donk
+ * @date 12-05-2022
+ */
 
 #include "Mesh.h"
 #include "tigl.h"
 #include "ObjModel.h"
 #include "Transform.h"
 #include "ParentTransform.h"
+#include "cs/func.h"
 
 #include <glm/vec3.hpp> // glm::vec3
 #include <glm/mat4x4.hpp> // glm::mat4
 #include <glm/ext/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale
 #include <iostream>
 
+void Mesh::Awake() {
+    this->parentTransform = this->gameObject->FindComponent<ParentTransform>();
+}
+
 void Mesh::Draw()
 {
     auto transform = this->gameObject->transform;
 
-    auto* parentTransform = this->gameObject->FindComponent<ParentTransform>();
-
-    auto modelMatrix = parentTransform == nullptr ?
+    auto modelMatrix = this->parentTransform == nullptr ?
             glm::mat4(1.0f)
             : parentTransform->GetParentModelMatrix();
 
@@ -32,22 +38,27 @@ void Mesh::Draw()
     modelMatrix = glm::rotate(modelMatrix, rotation.y, glm::vec3(0, 1, 0));
     modelMatrix = glm::rotate(modelMatrix, rotation.z, glm::vec3(0, 0, 1));
 
-    tigl::shader->setModelMatrix(modelMatrix);
-    tigl::shader->setLightDiffuse(0, diffuseColor);
-    tigl::shader->setLightDiffuse(2, diffuseColor);
-    tigl::drawVertices(GL_TRIANGLES, objModel->GetVertices());
+    cs::shader->use();
+
+    cs::shader->setModelMatrix(modelMatrix);
+    cs::shader->setColorMult(this->color);
+
+    cs::drawVertices(GL_TRIANGLES, this->objModel->getVbo());
+
 }
 
 Mesh::Mesh(ObjModel *_objmodel) : objModel(_objmodel) {}
 
-void Mesh::SetColor(const glm::vec4& color)
+void Mesh::SetColor(const glm::vec4& nColor)
 {
-    for(auto &vertex : objModel->GetVertices())
-        vertex.color = color;
-
+    this->color = nColor;
 }
 
-void Mesh::SetDiffuseColor(const glm::vec3& color)
+void Mesh::SetAlpha(float alpha) {
+    this->color.a = alpha;
+}
+
+void Mesh::SetMesh(ObjModel *model)
 {
-    this->diffuseColor = color;
+    objModel = model;
 }

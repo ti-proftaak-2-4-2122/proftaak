@@ -1,6 +1,9 @@
-//
-// Created by Ewout on 17-5-2022.
-//
+/**
+ * @file
+ * @brief Header file for the ModelManager class
+ * @author Ewout
+ * @date 17-05-2022
+ */
 
 #pragma once
 
@@ -8,9 +11,11 @@
 #include <string>
 #include "ObjModel.h"
 
+/**
+ * @class Manager to cache the Model of the objects from the @Mesh of a GameObject
+ */
 class ModelManager
 {
-
 private:
     static std::map<std::string, ObjModel *> modelCache;
 

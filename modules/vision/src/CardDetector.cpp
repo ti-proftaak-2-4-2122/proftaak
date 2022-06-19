@@ -1,10 +1,15 @@
-//
-// Created by tjtle on 13/05/2022.
-//
+/**
+ * @file
+ * @brief Source file for the CardDetector class
+ * @author tjtle
+ * @date 13-05-2022
+ */
 
 #include "CardDetector.h"
 #include <vector>
 #include <iostream> //Dit is ffe voor debug waardes bekijken
+
+
 
 cv::Mat CardDetector::GetBlurredImage(const cv::Mat &input_img)
 {
@@ -25,8 +30,10 @@ cv::Mat CardDetector::GetFilteredImage(const cv::Mat *img, const ColorFilter &co
     return output_img;
 }
 
-cv::Mat CardDetector::FilterTheBlob(const cv::Mat *img, const ColorFilter &color)
+std::vector<CardDetector::Card> CardDetector::FilterTheBlob(const cv::Mat *img, const ColorFilter &color)
 {
+    std::vector<CardDetector::Card> result;
+
     cv::Mat grey_img;
     cv::cvtColor(*img, grey_img, cv::COLOR_HSV2RGB_FULL);
     cv::cvtColor(grey_img, grey_img, cv::COLOR_RGB2GRAY);
@@ -70,37 +77,42 @@ cv::Mat CardDetector::FilterTheBlob(const cv::Mat *img, const ColorFilter &color
     //Met een for-loop de info uit de vector halen.
     for (auto &key_point: key_points)
     {
-        std::cout << " Size of blob: " << key_point.size << std::endl;
-        std::cout << " Point x of blob: " << key_point.pt.x << "\t" << "Point y of blob: " <<
-                  key_point.pt.y << std::endl;
-        cv::circle(img_with_keypoints, cv::Point((int) key_point.pt.x, (int) key_point.pt.y),
-                   (int) key_point.size, cv::Scalar(255, 255, 255), 5);
-
-        Card *card = new Card{color.color, key_point.pt.x, key_point.pt.y};
-        cards.push_back(*card);
+        Card card = {color.color, key_point.pt.x / img_with_keypoints.cols, key_point
+                              .pt.y / img_with_keypoints.rows};
+        result.push_back(card);
     }
-    return img_with_keypoints;
+
+    return result;
 }
 
 cv::Mat CardDetector::UpdateCards(const cv::Mat &input_image)
 {
     if (!initialized) Initialize();
 
-    //empty list with old cards
-    cards.clear();
+    std::vector<CardDetector::Card> detectedCards;
 
-    //fill list with new cards
+    // Detect new cards
     cv::Mat temp, temp2;
     temp = GetBlurredImage(input_image);
     for (const auto &color: colours)
     {
         temp2 = GetFilteredImage(&temp, color);
-        FilterTheBlob(&temp2, color);
+        detectedCards = FilterTheBlob(&temp2, color);
+        if(detectedCards.data())
+            break; //If a card has been detected break out of loop, draw it
     }
+
+    this->cardsUpdateLock.lock();
+
+    // empty and update list with old cards
+    cards.clear();
+    cards = detectedCards;
+
+    this->cardsUpdateLock.unlock();
 
     for (const auto &card: cards)
     {
-        cv::circle(input_image, cv::Point((int) card.x, (int) card.y),
+        cv::circle(input_image, cv::Point((int) (card.x * input_image.cols), (int) (card.y * input_image.rows)),
                    40, GetColor(card.color), 4);
     }
     return input_image;
@@ -108,16 +120,24 @@ cv::Mat CardDetector::UpdateCards(const cv::Mat &input_image)
 
 std::vector<CardDetector::Card> CardDetector::GetDetectedCards()
 {
-    return cards;
+    std::vector<CardDetector::Card> result;
+
+    this->cardsUpdateLock.lock();
+    result = this->cards;
+    this->cardsUpdateLock.unlock();
+
+    return result;
 }
 
-void CardDetector::PrintCard(Card card)
+void CardDetector::PrintCard(Card& card)
 {
     std::cout << "Color: " << card.color << " Position: " << card.x << "," << card.y << "\n";
 }
 
 void CardDetector::PrintCards()
 {
+    this->cardsUpdateLock.lock();
+
     if (cards.empty())
     {
         //std::cout << "empty\n";
@@ -127,6 +147,8 @@ void CardDetector::PrintCards()
     {
         PrintCard(card);
     }
+
+    this->cardsUpdateLock.unlock();
 }
 
 void CardDetector::Initialize()
