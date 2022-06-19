@@ -18,6 +18,25 @@ class GameObject;
  */
 class TowerPrefab : public GameObject
 {
+private:
+
+    bool IsAttacking = false;
+    float currentTime;
+
+    Collider* collider;
+    CharacterStats* characterStats;
+    CharacterStats* otherStats;
+    StrGuiComponent *strGuiComponent;
+
+    /**
+     * @brief Combat behaviour
+     * @param otherStats is the unit that it collided with in @OnTriggerEnter,
+     * this unit is of the other team and not of the same team.
+     */
+    void StartCombat(CharacterStats* otherStats);
+    void StopCombat();
+    void DoDamage();
+
 public:
     explicit TowerPrefab(Transform *transform, std::string name);
     ~TowerPrefab();
@@ -45,25 +64,6 @@ public:
      * Attacking behaviour gets checked.
      */
     void Update() override;
-
-private:
-
-    bool IsAttacking = false;
-    float currentTime;
-
-    Collider* collider;
-    CharacterStats* characterStats;
-    CharacterStats* otherStats;
-    StrGuiComponent *strGuiComponent;
-
-    /**
-     * @brief Combat behaviour
-     * @param otherStats is the unit that it collided with in @OnTriggerEnter,
-     * this unit is of the other team and not of the same team.
-     */
-    void StartCombat(CharacterStats* otherStats);
-    void StopCombat();
-    void DoDamage();
 };
 
 

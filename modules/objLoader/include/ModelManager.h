@@ -16,7 +16,6 @@
  */
 class ModelManager
 {
-
 private:
     static std::map<std::string, ObjModel *> modelCache;
 

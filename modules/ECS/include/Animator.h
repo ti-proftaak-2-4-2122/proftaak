@@ -28,6 +28,7 @@ private:
     Mesh& mesh;
 
     void NextFrame();
+
 public:
     Animator(const std::string& folderName, Mesh& mesh, int fps);
 

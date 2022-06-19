@@ -25,15 +25,6 @@
  */
 class Spawner : public Component
 {
-public:
-    /**
-     * @brief Overrides see @Component for explanation
-     */
-    void UpdateAfterDraw() override;
-    void Awake() override;
-    void Update() override;
-    void Draw() override;
-    void Spawn();
 private:
 
     int greenPoolIndex = 0;
@@ -75,4 +66,14 @@ private:
      */
     void updatePreviewList(const std::vector<GameObject*>& previewPool, const int& usedCount);
     void drawPreviewList(const std::vector<GameObject*>& previewPool, const int& usedCount);
+
+public:
+    /**
+     * @brief Overrides see @Component for explanation
+     */
+    void UpdateAfterDraw() override;
+    void Awake() override;
+    void Update() override;
+    void Draw() override;
+    void Spawn();
 };

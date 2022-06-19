@@ -18,6 +18,9 @@ class Transform;
  */
 class ParentTransform : public Component
 {
+private:
+    GameObject* parent;
+
 public:
     /**
      * @brief Default constructor, requires a reference to a parent GameObject
@@ -36,8 +39,5 @@ public:
      * @return The parent model matrix
      */
     glm::mat4 GetParentModelMatrix();
-
-private:
-    GameObject* parent;
 };
 

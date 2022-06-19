@@ -28,6 +28,11 @@ class ParentTransform;
  */
 class Mesh : public Component
 {
+private:
+    ObjModel *objModel;
+    glm::vec4 color = {1.0f, 1.0f, 1.0f, 1.0f};
+    ParentTransform* parentTransform = nullptr;
+
 public:
 
     /**
@@ -58,9 +63,4 @@ public:
      * Does the drawing with VBO to save performance.
      */
     void Draw() override;
-
-private:
-    ObjModel *objModel;
-    glm::vec4 color = {1.0f, 1.0f, 1.0f, 1.0f};
-    ParentTransform* parentTransform = nullptr;
 };

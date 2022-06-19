@@ -20,6 +20,12 @@ class Component;
  */
 class LerpController : public Component
 {
+private:
+    glm::vec3 endPos;
+    glm::vec3 startPos;
+    float fraction = 0.0f;
+    const float roundValue = 1.0f;
+
 public:
     /**
      * @brief Inits the values for calculation of the slope/lerp
@@ -45,9 +51,4 @@ public:
      */
     bool CheckPos(glm::vec3 currentPos, glm::vec3 resultPos) const;
 
-private:
-    glm::vec3 endPos;
-    glm::vec3 startPos;
-    float fraction = 0.0f;
-    const float roundValue = 1.0f;
 };

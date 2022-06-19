@@ -24,6 +24,13 @@ class Collider;
  */
 class GameObject
 {
+private:
+    std::vector<Component *> components;
+    std::vector<GameObject*> children;
+
+protected:
+    TagEnum tagEnum = TagEnum::NONE;
+
 public:
     Transform &transform;
     GameObject();
@@ -121,12 +128,5 @@ public:
     [[nodiscard]] TagEnum getTagEnum() const;
 
     void setTagEnum(TagEnum newTagEnum);
-
-private:
-    std::vector<Component *> components;
-    std::vector<GameObject*> children;
-
-protected:
-    TagEnum tagEnum = TagEnum::NONE;
 };
 

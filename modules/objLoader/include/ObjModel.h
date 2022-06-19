@@ -16,6 +16,15 @@
  */
 class ObjModel
 {
+private:
+    /**
+     * @brief Loads all vertices from the @faces
+     */
+    void loadVertices();
+
+    std::vector<tigl::Vertex> vertices;
+    tigl::VBO* vbo;
+
 public:
 
     class Face
@@ -36,14 +45,5 @@ public:
     std::string toString();
 
     tigl::VBO *getVbo();
-
-private:
-    /**
-     * @brief Loads all vertices from the @faces
-     */
-    void loadVertices();
-
-    std::vector<tigl::Vertex> vertices;
-    tigl::VBO* vbo;
 };
 

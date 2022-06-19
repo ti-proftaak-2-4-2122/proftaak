@@ -17,6 +17,17 @@
  */
 class Scene
 {
+private:
+    inline static Scene* singleton = nullptr;
+
+    CurrencyManager currencyManager;
+
+    Scene() : currencyManager(CurrencyManager(2, 1.0f, 0.8f, 10.0f))
+    {
+        gameobjects = std::vector<GameObject *>();
+    }
+    ~Scene();
+
 public:
     /**
      * @brief Singleton getter, is protected against multi-threading
@@ -73,17 +84,5 @@ public:
      * @return the currency manager to be able to spawn a unit in.
      */
     CurrencyManager& getCurrencyManager();
-
-private:
-    inline static Scene* singleton = nullptr;
-
-    CurrencyManager currencyManager;
-
-    Scene() : currencyManager(CurrencyManager(2, 1.0f, 0.8f, 10.0f))
-    {
-        gameobjects = std::vector<GameObject *>();
-    }
-    ~Scene();
-
 };
 
