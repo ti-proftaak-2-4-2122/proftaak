@@ -98,6 +98,8 @@ cv::Mat CardDetector::UpdateCards(const cv::Mat &input_image)
     {
         temp2 = GetFilteredImage(&temp, color);
         detectedCards = FilterTheBlob(&temp2, color);
+        if(detectedCards.data())
+            break; //If a card has been detected break out of loop, draw it
     }
 
     this->cardsUpdateLock.lock();
