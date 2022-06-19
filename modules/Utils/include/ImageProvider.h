@@ -17,8 +17,23 @@
 #include "Component.h"
 #include "CardDetector.h"
 
+/**
+ * @class Gets the Image from the videoCapture, does this independently
+ * Passes OpenCV VideoCapture to CardDetector, to filter the cards based on colour and detect the card objects.
+ */
 class ImageProvider
 {
+public:
+    explicit ImageProvider(std::shared_ptr<cv::VideoCapture> capture);
+
+    void Awake();
+
+    void Update();
+
+    void Draw() const;
+
+    ~ImageProvider();
+
 private:
     std::shared_ptr<cv::VideoCapture> capture;
     CardDetector *detector = CardDetector::GetInstance();
@@ -35,18 +50,6 @@ private:
 
     bool isDestructing = false;
 
-public:
-    explicit ImageProvider(std::shared_ptr<cv::VideoCapture> capture);
-
-    void Awake();
-
-    void Update();
-
-    void Draw() const;
-
-    ~ImageProvider();
-
-private:
     void ImageUpdateTask();
     void ReadImage();
 

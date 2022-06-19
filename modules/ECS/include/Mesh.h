@@ -23,16 +23,28 @@ class GameObject;
 
 class ParentTransform;
 
+/**
+ * @class Mesh of GameObject a mesh can be defined as an object that renders enacts the GameObjects behaviour
+ */
 class Mesh : public Component
 {
 private:
     ObjModel *objModel;
     glm::vec4 color = {1.0f, 1.0f, 1.0f, 1.0f};
     ParentTransform* parentTransform = nullptr;
+
 public:
 
+    /**
+     * @brief
+     * @param _objmodel
+     */
     explicit Mesh(ObjModel *_objmodel);
 
+    /**
+     * @brief Sets colour of mesh based on ObjectLoader
+     * @param color
+     */
     void SetColor(const glm::vec4& color);
     void SetMesh(ObjModel* model);
     /**
@@ -41,6 +53,14 @@ public:
      */
     void SetAlpha(float alpha);
 
+    /**
+     * @brief Sets the @parentTransform.
+     */
     void Awake() override;
+
+    /**
+     * @brief Draws the mesh based on the incoming @objModel,
+     * Does the drawing with VBO to save performance.
+     */
     void Draw() override;
 };

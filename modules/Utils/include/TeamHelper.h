@@ -10,6 +10,9 @@
 #include "Transform.h"
 #include "glm/gtc/type_ptr.hpp"
 
+/**
+ * @class Helper class to get current team.
+ */
 class TeamHelper
 {
 public:

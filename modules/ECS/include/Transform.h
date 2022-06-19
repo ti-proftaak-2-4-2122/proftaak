@@ -15,6 +15,9 @@
 
 class GameObject;
 
+/**
+ * @brief Transform component to move, rotate and scale everything that owns this Componet e.g. any and every GameObject
+ */
 class Transform : public Component
 {
     glm::vec3 position{};

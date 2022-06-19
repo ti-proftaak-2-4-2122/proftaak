@@ -10,6 +10,9 @@
 #include "Component.h"
 #include "glm/glm.hpp"
 
+/**
+ * @struct Data struct for storing camera settings
+ */
 struct VCamRenderSettings
 {
     float fov;
@@ -18,6 +21,9 @@ struct VCamRenderSettings
     float farClipping;
 };
 
+/**
+ * @class To set the Virtual camera up based on predefined positions
+ */
 class VirtualCamera : public Component
 {
 public:

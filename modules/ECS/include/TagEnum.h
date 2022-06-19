@@ -10,6 +10,9 @@
 
 #pragma once
 
+/**
+ * @brief Unused Tag
+ */
 enum TagEnum {
     ENEMY,
     STATE,

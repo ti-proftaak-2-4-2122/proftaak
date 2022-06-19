@@ -4,6 +4,17 @@
 
 #ifndef PROFTAAK24_UNITTYPEENUM_H
 #define PROFTAAK24_UNITTYPEENUM_H
+
+/**
+ * @brief Type enum for all available units
+ * @FAST Unit type that attacks fast, but in return has lower attack damage
+ * @SLOW Unit type that attacks slow, but in return has high attack damage
+ * @LAND Unit type that is a balance between the first 2 units.
+ * @TOWER Unit type that is an objective for all other units to destroy,
+ * this Unit has high damage with decent attack speed to not instantly die,
+ * to other unit types.
+ */
+
 enum UnitTypeEnum {
     FAST,
     SLOW,
@@ -12,6 +23,11 @@ enum UnitTypeEnum {
     DUMMY_UNIT,
 };
 
+/**
+ * @brief Function that Returns a string of the current Unit type, to work around enumeration
+ * @param v Unit type that is to be printed to console
+ * @return Returns the string of the corresponding unit type
+ */
 inline const char* ToString(UnitTypeEnum v)
 {
     switch (v)

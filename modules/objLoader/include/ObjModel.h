@@ -11,15 +11,22 @@
 #include <glm/glm.hpp>
 #include "tigl.h"
 
+/**
+ * @class Data class for storing Objects that have been loaded from @ModelManager
+ */
 class ObjModel
 {
 private:
+    /**
+     * @brief Loads all vertices from the @faces
+     */
     void loadVertices();
 
     std::vector<tigl::Vertex> vertices;
     tigl::VBO* vbo;
 
 public:
+
     class Face
     {
     public:

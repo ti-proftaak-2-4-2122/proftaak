@@ -12,6 +12,9 @@
 
 class Mesh;
 
+/**
+ * @brief Animates objects that have animations within them.
+ */
 class Animator : public Component
 {
 private:
@@ -25,11 +28,12 @@ private:
     Mesh& mesh;
 
     void NextFrame();
+
 public:
     Animator(const std::string& folderName, Mesh& mesh, int fps);
 
-    void StartAnimation();
-    void StopAnimation();
+    void StartAnimation(); //Starts animation
+    void StopAnimation(); //Stops Animation
 
     void Update() override;
 };
