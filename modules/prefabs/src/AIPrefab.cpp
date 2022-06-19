@@ -27,13 +27,15 @@ AIPrefab::AIPrefab(Transform *transform, UnitTypeEnum type) : GameObject(transfo
 
     InitStats(type);
     InitCheckpoints();
-    AddComponent(this->characterStats);
 
-    this->strGuiComponent = new StrGuiComponent("");
-    this->strGuiComponent->setScale({0.5f, 0.5f, 0.5f});
+    std::cout << "Spawning prefab: " << this->characterStats->name << " Team: " << this->characterStats->team << std::endl;
+    AddComponent(this->characterStats);
 
     this->collider = new Collider(this->characterStats->range);
     AddComponent(collider);
+
+    this->strGuiComponent = new StrGuiComponent("");
+    this->strGuiComponent->setScale({0.5f, 0.5f, 0.5f});
     AddComponent(this->strGuiComponent);
 
     lerpController->Move(this->transform.getPosition(), checkPoints[0],
@@ -44,15 +46,16 @@ void AIPrefab::onTriggerEnter(Collider *other)
 {
     GameObject::onTriggerEnter(other);
 
-    lerpController->Move(this->transform.getPosition(), this->transform.getPosition(),characterStats->moveSpeed);
-    otherStats = other->getGameObject()->FindComponent<CharacterStats>();
+    std::cout << "Colliding with: " << other->getGameObject()->FindComponent<CharacterStats>()->name << std::endl;
 
-    if (otherStats && (this->characterStats->team != otherStats->team))
+    this->lerpController->Move(this->transform.getPosition(), this->transform.getPosition(),this->characterStats->moveSpeed);
+    this->otherStats = other->getGameObject()->FindComponent<CharacterStats>();
+
+    if (this->otherStats && (this->characterStats->team != this->otherStats->team))
     {
         //Start combat
-        StartCombat(otherStats);
+        StartCombat(this->otherStats);
     }
-
 }
 
 void AIPrefab::onTriggerExit(Collider *other)
@@ -100,7 +103,7 @@ void AIPrefab::DoDamage()
     currentTime += GameTimer::getDeltaTime();
     if (currentTime >= this->characterStats->attackSpeed)
     {
-        otherStats->TakeDamage(this->characterStats->damage);
+        otherStats->health -= this->characterStats->damage;
         currentTime = 0;
     }
     if (otherStats->health <= 0)
@@ -122,13 +125,13 @@ void AIPrefab::InitStats(UnitTypeEnum type)
     switch (type)
     {
         case FAST:
-            this->characterStats = new CharacterStats{"FAST prefab",2.f, 100.0f, 3.0f, 0.5f, 0.5f, LAND};
+            this->characterStats = new CharacterStats{"FAST prefab",2.f, 100.0f, 2.0f, 0.5f, 0.5f, LAND};
             break;
         case SLOW:
-            this->characterStats = new CharacterStats{"SLOW prefab",2.f, 100.0f, 10.0f, 0.2f, 1.f, LAND};
+            this->characterStats = new CharacterStats{"SLOW prefab",2.f, 100.0f, 5.0f, 0.2f, 1.f, LAND};
             break;
         case LAND:
-            this->characterStats = new CharacterStats{"LAND prefab",2.f, 100.0f, 10.0f, 0.5f, 1.0f, LAND};
+            this->characterStats = new CharacterStats{"LAND prefab",2.f, 100.0f, 3.0f, 0.35f, 0.8f, LAND};
             break;
         case DUMMY_UNIT:
             this->characterStats = new CharacterStats{"DUMMY prefab",2.f, 100.0f, 1.0f, 0.5f, 5.0f, DUMMY_UNIT};

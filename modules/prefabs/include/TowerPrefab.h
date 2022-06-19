@@ -36,6 +36,8 @@ public:
 
     void onTriggerEnter(Collider* other) override;
 
+    void onTriggerExit(Collider* other) override;
+
     void Update() override;
 
 

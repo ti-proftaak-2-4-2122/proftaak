@@ -162,9 +162,6 @@ void worldInit()
 
     AIPrefab* aiPrefab = new AIPrefab(new Transform({15.0f, 0.0f, -12.0f}, {0,0,0}, {1.0f,1.0f,1.0f}), UnitTypeEnum::DUMMY_UNIT);
 
-//    AIPrefab* aiPrefab2 = new AIPrefab(new Transform({-9.0f, 0.0f, -12.0f}, {0,0,0}, {1.0f,1.0f,1.0f}), UnitTypeEnum::SLOW);
-
-
     TowerPrefab *towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f), glm::vec3(0, 0, 0), glm::vec3(1.0f, 1.0f, 1.0f)),
                                                "RechtsBoven");
     TowerPrefab *towerPrefab1 = new TowerPrefab(new Transform(glm::vec3(-30.0f, 0.0f, 12.0f), glm::vec3(0, 0, 0), glm::vec3(1.0f, 1.0f, 1.0f)),

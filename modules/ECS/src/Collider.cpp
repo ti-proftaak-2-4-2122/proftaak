@@ -42,6 +42,7 @@ void Collider::Update()
     {
         if (other == this)
             continue;
+
         CheckCollision(other);
     }
 }

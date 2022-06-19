@@ -49,17 +49,17 @@ void Spawner::Spawn()
         if(currentCard.color == 0) {
             type = FAST;
             //std::cout << "type = fast\n";
-            requiredMoney = 1.0f;
+            requiredMoney = 2.0f;
         }
         if(currentCard.color == 1) {
             type = SLOW;
             //std::cout << "type = slow\n";
-            requiredMoney = 1.0f;
+            requiredMoney = 4.0f;
         }
         if(currentCard.color == 2) {
             type = LAND;
             //std::cout << "type = land\n";
-            requiredMoney = 1.0f;
+            requiredMoney = 3.0f;
         }
         //std::cout << ToString(type) << std::endl;
         short currentTeam = TeamHelper::getTeamByPosition(glPos);
@@ -139,7 +139,7 @@ GameObject* Spawner::getPreviewGameObjectForCard(const CardDetector::Card& card)
             if(this->greenPoolIndex == this->greenPreviewPool.size()) {
                 // Create new
                 auto* charGameObject = new GameObject();
-                auto* mesh = new Mesh(ModelManager::getModel("../resource/models/tower.obj"));
+                auto* mesh = new Mesh(ModelManager::getModel("../resource/models/box.obj"));
 
                 mesh->SetColor(GREEN_ANDROID);
                 mesh->SetAlpha(0.7f);
@@ -156,7 +156,7 @@ GameObject* Spawner::getPreviewGameObjectForCard(const CardDetector::Card& card)
             if(this->redPoolIndex == this->redPreviewPool.size()) {
                 // Create new
                 auto* charGameObject = new GameObject();
-                auto* mesh = new Mesh(ModelManager::getModel("../resource/models/tower.obj"));
+                auto* mesh = new Mesh(ModelManager::getModel("../resource/models/box.obj"));
 
                 mesh->SetColor(RED_BERRY);
                 mesh->SetAlpha(0.7f);
@@ -173,7 +173,7 @@ GameObject* Spawner::getPreviewGameObjectForCard(const CardDetector::Card& card)
             if(this->yellowPoolIndex == this->yellowPreviewPool.size()) {
                 // Create new
                 auto* charGameObject = new GameObject();
-                auto* mesh = new Mesh(ModelManager::getModel("../resource/models/tower.obj"));
+                auto* mesh = new Mesh(ModelManager::getModel("../resource/models/box.obj"));
 
                 mesh->SetColor(YELLOW_SUNFLOWER);
                 mesh->SetAlpha(0.7f);
