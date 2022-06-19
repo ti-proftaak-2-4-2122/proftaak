@@ -99,7 +99,6 @@ bool Scene::checkPlayerWinCondition()
     return false;
 }
 
-
 CurrencyManager& Scene::getCurrencyManager()
 {
     return this->currencyManager;

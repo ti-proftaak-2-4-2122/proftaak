@@ -10,6 +10,9 @@
 #include <map>
 #include "glad/glad.h"
 
+/**
+ * @class Simple TextureLoader to cache textures
+ */
 class textureLoader
 {
 private:

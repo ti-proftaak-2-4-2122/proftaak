@@ -11,6 +11,9 @@
 #include <string>
 #include "ObjModel.h"
 
+/**
+ * @class Manager to cache the Model of the objects from the @Mesh of a GameObject
+ */
 class ModelManager
 {
 

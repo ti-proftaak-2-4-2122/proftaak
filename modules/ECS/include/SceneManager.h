@@ -10,6 +10,9 @@
 #include "Scene.h"
 #include "Collider.h"
 
+/**
+ * @brief Manager To load the scene and update the necessary GameObjects withing the scene
+ */
 class SceneManager
 {
 public:

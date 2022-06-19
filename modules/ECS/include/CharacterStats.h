@@ -8,8 +8,13 @@
 #ifndef PROFTAAK24_CHARACTERSTATS_H
 #define PROFTAAK24_CHARACTERSTATS_H
 
+#include <utility>
+
 #include "UnitTypeEnum.h"
 
+/**
+ * @brief Data class for storing stats of units and towers
+ */
 struct CharacterStats : public Component
 {
     std::string name;
@@ -23,7 +28,7 @@ struct CharacterStats : public Component
 
     CharacterStats(std::string name, float range, float health, float damage, float moveSpeed, float attackSpeed,
                    UnitTypeEnum typeEnum)
-    : name(name),
+    : name(std::move(name)),
     range(range),
     health(health),
     damage(damage),
@@ -32,10 +37,5 @@ struct CharacterStats : public Component
     attackSpeed
     (attackSpeed),
     type(typeEnum) {}
-
-    void TakeDamage(const float& damageTaken)
-    {
-        this->health -= damageTaken;
-    }
 };
 #endif //PROFTAAK24_CHARACTERSTATS_H

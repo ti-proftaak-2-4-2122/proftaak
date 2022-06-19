@@ -9,19 +9,12 @@
 #include "glm/glm.hpp"
 #include <glad/glad.h>
 
+/**
+ * @class Gui Component which display necessary data,
+ * such as a cost and health onto the screen.
+ */
 class StrGuiComponent : public Component
 {
-private:
-    glm::vec3 position{};
-    glm::vec3 scale{};
-    GLuint fontTxId;
-
-    glm::vec4 color { 0.0f, 0.0f, 0.0f, 1.0f };
-
-    static void DrawChar(glm::mat4 &modelMatrix, char characteristic);
-
-    std::string text;
-
 public:
     void UpdateAfterDraw() override;
 
@@ -42,6 +35,17 @@ public:
     void setText(const std::string &text);
 
     void setColor(const glm::vec4 color);
+
+private:
+    glm::vec3 position{};
+    glm::vec3 scale{};
+    GLuint fontTxId;
+
+    glm::vec4 color { 0.0f, 0.0f, 0.0f, 1.0f };
+
+    static void DrawChar(glm::mat4 &modelMatrix, char characteristic);
+
+    std::string text;
 };
 
 

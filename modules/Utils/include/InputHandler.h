@@ -17,6 +17,10 @@ struct InputState {
     int keyaction;
 };
 
+/**
+ * @class InputHandler manages all the GLFW key callbacks that are added within the environment.
+ * Also abides by the singleton structure
+ */
 class InputHandler
 {
 public:

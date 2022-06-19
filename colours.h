@@ -3,7 +3,12 @@
 //
 #pragma once
 
-//SOURCE: https://flatuicolors.com/palette/nl 
+/**
+ * @brief A colour palette to choose for our prefabs
+ * @see Spawner for e.g.
+ * @link https://flatuicolors.com/palette/nl
+ */
+
 #define ALPHA 1.0f
 #define YELLOW_SUNFLOWER glm::vec4(1, 0.764f, 0.070f, ALPHA)
 #define YELLOW_RADIANT glm::vec4(0.968f, 0.623f, 0.121f, ALPHA)
