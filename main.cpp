@@ -1,8 +1,8 @@
-#include <glad/glad.h>
+#include <tigl.h>
+
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
-#include <tigl.h>
 #include <cs/CelShader.h>
 #include <opencv2/highgui.hpp>
 #include <memory>
@@ -15,17 +15,11 @@
 #include "SceneManager.h"
 #include "Transform.h"
 #include "GameTimer.h"
-#include "Collider.h"
-#include "ImageProvider.h"
-#include "CharacterStats.h"
 
 #include "user-config.h"
 #include "Spawner.h"
-#include "AIPrefab.h"
 #include "TowerPrefab.h"
-#include "UnitTypeEnum.h"
 #include "InputHandler.h"
-#include "Animator.h"
 #include "colours.h"
 #include "CurrencyDisplayPrefab.h"
 
@@ -46,12 +40,9 @@ void draw();
 
 void worldInit();
 
-void createMapObject(const std::string &filePath, glm::vec4 color);
-
 int currentWidth;
 int currentHeight;
 
-//VirtualCamera* virtualCamera;
 int main()
 {
     //Init GLFW
@@ -67,7 +58,7 @@ int main()
     }
     glfwMakeContextCurrent(window);
 
-    if(!CONFIG_FPS_VSYNC)
+    if (!CONFIG_FPS_VSYNC)
         glfwSwapInterval(0);
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress))
@@ -160,7 +151,7 @@ void worldInit()
 {
     InputHandler::getSingleton().AddCallback(GLFW_KEY_ESCAPE, GLFW_PRESS, closeWindow);
 
-    AIPrefab* aiPrefab = new AIPrefab(new Transform({15.0f, 0.0f, -12.0f}, {0,0,0}, {1.0f,1.0f,1.0f}), UnitTypeEnum::DUMMY_UNIT);
+    //AIPrefab* aiPrefab = new AIPrefab(new Transform({15.0f, 0.0f, -12.0f}, {0,0,0}, {1.0f,1.0f,1.0f}), UnitTypeEnum::DUMMY_UNIT);
 
     TowerPrefab *towerPrefab = new TowerPrefab(new Transform(glm::vec3(30.0f, 0.0f, -12.0f), glm::vec3(0, 0, 0), glm::vec3(1.0f, 1.0f, 1.0f)),
                                                "RechtsBoven");
@@ -183,8 +174,7 @@ void worldInit()
 
     float mapAlpha = CONFIG_PLAYFIELD_ALPHA;
 
-    Scene::getSingleton().AddGameObject(aiPrefab);
-//    Scene::getSingleton().AddGameObject(aiPrefab2);
+    //Scene::getSingleton().AddGameObject(aiPrefab);
     Scene::getSingleton().AddGameObject(towerPrefab);
     Scene::getSingleton().AddGameObject(towerPrefab1);
     Scene::getSingleton().AddGameObject(towerPrefab2);
@@ -200,15 +190,6 @@ void worldInit()
 
     Scene::getSingleton().AddGameObject(new CurrencyDisplayPrefab());
 
-//    GameObject* gangGangStyleGang = new GameObject(new Transform());
-//    Mesh* mesh = new Mesh(ModelManager::getModel("../resource/models/box.obj"));
-//    mesh->SetColor(TEAL_TURKISH);
-//    Animator* animator = new Animator("../resource/models/animation", *mesh, 30);
-//    gangGangStyleGang->AddComponent(mesh);
-//    gangGangStyleGang->AddComponent(animator);
-//    animator->StartAnimation();
-//    Scene::getSingleton().AddGameObject(gangGangStyleGang);
-
     SceneManager::LoadScene(Scene::getSingleton());
 }
 
@@ -222,27 +203,28 @@ void update()
     GameTimer::update(glfwGetTime());
     Scene::getSingleton().update();
 
-    if(CONFIG_FPS_COUNTER) {
+    if (CONFIG_FPS_COUNTER)
+    {
         frameCount++;
 
-        if(lastFramePrint > 0)
+        if (lastFramePrint > 0)
         {
             double deltaTime = GameTimer::getCurrentTime() - lastFramePrint;
-            if(deltaTime >= CONFIG_FPS_COUNTER_ACCURACY) {
-                std::cout << "Avg Frametime: " << (deltaTime / (double)frameCount) * 1000.0 << "ms;"
-                      "\tAvg FPS: " << frameCount / deltaTime << std::endl;
+            if (deltaTime >= CONFIG_FPS_COUNTER_ACCURACY)
+            {
+                std::cout << "Avg Frametime: " << (deltaTime / (double) frameCount) * 1000.0 << "ms;"
+                                                                                                "\tAvg FPS: " << frameCount / deltaTime << std::endl;
 
                 frameCount = 0;
                 lastFramePrint = GameTimer::getCurrentTime();
             }
-        }
-        else
+        } else
         {
             lastFramePrint = GameTimer::getCurrentTime();
         }
     }
 
-    if(Scene::getSingleton().checkPlayerWinCondition())
+    if (Scene::getSingleton().checkPlayerWinCondition())
     {
         closeWindow();
     }
@@ -292,23 +274,4 @@ void draw()
 
     // Draw 3D Scene
     SceneManager::UpdatePoll(Scene::getSingleton());
-}
-
-void createMapObject(const std::string &filePath, glm::vec4 color)
-{
-    auto *map_object = new GameObject(new Transform);
-
-    map_object->AddComponent(new Mesh(ModelManager::getModel(filePath)));
-
-    map_object->transform.setPosition(CONFIG_PLAYFIELD_POSITION);
-    map_object->transform.setRotation(CONFIG_PLAYFIELD_ROTATION);
-    map_object->transform.setScale(CONFIG_PLAYFIELD_SCALE);
-
-    auto mesh_map_object = map_object->FindComponent<Mesh>();
-    if (mesh_map_object)
-    {
-        mesh_map_object->SetColor(color);
-    }
-
-    scene->AddGameObject(map_object);
 }
